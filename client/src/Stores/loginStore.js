@@ -7,7 +7,7 @@ const useIsLoginStore = create(set => ({
 
 const useLoginInfoStore = create(set => ({
   loginInfo: {
-    email: '',
+    id: '',
     password: '',
   },
   setLoginInfo: state => set(() => ({ loginInfo: state })),
