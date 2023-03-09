@@ -3,11 +3,22 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useIsLoginStore, useLoginInfoStore } from '../Stores/loginStore';
 
+const REST_API_KEY = '46d7b3692a51eff3138a1580dccdd6c0';
+const REDIRECT_URI = 'http://localhost:8080/oauth2/code/kakao';
+
 const Login = () => {
   const navigate = useNavigate();
   const { loginInfo, setLoginInfo } = useLoginInfoStore(state => state);
   const { setIsLogin } = useIsLoginStore(state => state);
   const [setErrorMessage] = useState('');
+
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  const kakaoLoginHandler = () => {
+    window.location.assign(KAKAO_AUTH_URL);
+    console.log(window.location.href);
+    navigate('/');
+  };
 
   // Input 정보 처리
   const handleInputValue = key => e => {
@@ -78,6 +89,9 @@ const Login = () => {
             로그인
           </button>
         </div>
+        <button type="submit" onClick={() => kakaoLoginHandler()}>
+          <span>카카오 로그인</span>
+        </button>
       </form>
       <div>
         <Link
