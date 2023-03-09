@@ -57,7 +57,7 @@ public class Member extends Auditable {
 
     public enum MemberState {
         ACTIVE("활동중"),
-        INACTIVE("휴먼"),
+        INACTIVE("휴면"),
         WITHDRAW("탈퇴")
         ;
         @Getter
