@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const HeaderWrap = styled.header`
   position: fixed;
+  background: #fff;
   z-index: 900;
   left: 0;
   right: 0;
