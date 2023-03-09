@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,9 +63,20 @@ public class MemberController {
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
     }
 
+//    @GetMapping("/info")
+//    public ResponseEntity<?> getMemberInfo(@RequestBody MemberPostDto memberPostDto) {
+//        Member member = memberService.findMemberInfo(memberPostDto.getMemberEmail());
+//        return new ResponseEntity<>(
+//                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+//    }
+
     @GetMapping("/info")
-    public ResponseEntity<?> getMemberInfo(@RequestBody MemberPostDto memberPostDto) {
-        Member member = memberService.findMemberInfo(memberPostDto.getMemberEmail());
+    public ResponseEntity getMemberInfo(Authentication authentication) {
+        if (authentication == null) {
+            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
+        }
+        Member member = memberService.findMemberInfo(authentication.getName());
+
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
     }
