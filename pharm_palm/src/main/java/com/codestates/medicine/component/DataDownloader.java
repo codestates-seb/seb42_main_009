@@ -20,9 +20,9 @@ import java.util.List;
 
 @Component
 public class DataDownloader implements CommandLineRunner {
-    private MedicineRepository medicineRepository;
+    private final MedicineRepository medicineRepository;
 
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     public DataDownloader(MedicineRepository medicineRepository, RestTemplateBuilder restTemplateBuilder) {
         this.medicineRepository = medicineRepository;
@@ -85,6 +85,8 @@ public class DataDownloader implements CommandLineRunner {
                 useMethodQesitm = useMethodQesitm.replaceAll("<br />", "");
                 useMethodQesitm = useMethodQesitm.replaceAll("<sub>", "");
                 useMethodQesitm = useMethodQesitm.replaceAll("</sub>", "");
+                useMethodQesitm = useMethodQesitm.replaceAll("<sup>", "");
+                useMethodQesitm = useMethodQesitm.replaceAll("</sup>", "");
                 useMethodQesitm = useMethodQesitm.replaceAll("\\n", "");
                 medicine.setMedicineUse(useMethodQesitm);
 
