@@ -12,6 +12,6 @@ public class MemberResponseDto {
     private String memberName;
 //    private String memberPwd; reponse에 pwd가 필요한가?
     private Member.MemberGender memberGender;
-    private Integer memberAge;
+    private String memberBirthday;
     private Member.MemberState memberState;
 }

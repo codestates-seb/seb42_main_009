@@ -48,8 +48,8 @@ public class MemberService {
         Optional.ofNullable(member.getMemberGender())
                 .ifPresent(findMember::setMemberGender);
 
-        Optional.ofNullable(member.getMemberAge())
-                .ifPresent(findMember::setMemberAge);
+        Optional.ofNullable(member.getMemberBirthday())
+                .ifPresent(findMember::setMemberBirthday);
 
         Optional.ofNullable(member.getMemberState())
                 .ifPresent(findMember::setMemberState);

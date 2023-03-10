@@ -32,7 +32,7 @@ public class Member extends Auditable {
     private MemberGender memberGender = MemberGender.PRIVATE;
 
     @Column
-    private Integer memberAge;
+    private String memberBirthday;
 
     @Enumerated(EnumType.STRING)
     private MemberState memberState = MemberState.ACTIVE;
