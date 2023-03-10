@@ -1,10 +1,10 @@
-package com.codestates.medicine.controller;
+package com.codestates.member.controller.medicine.controller;
 
 import com.codestates.dto.MultiResponseDto;
 import com.codestates.dto.SingleResponseDto;
-import com.codestates.medicine.entity.Medicine;
-import com.codestates.medicine.mapper.MedicineMapper;
-import com.codestates.medicine.service.MedicineService;
+import com.codestates.member.controller.medicine.entity.Medicine;
+import com.codestates.member.controller.medicine.mapper.MedicineMapper;
+import com.codestates.member.controller.medicine.service.MedicineService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

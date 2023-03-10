@@ -1,7 +1,7 @@
-package com.codestates.medicine.component;
+package com.codestates.member.controller.medicine.component;
 
-import com.codestates.medicine.entity.Medicine;
-import com.codestates.medicine.repository.MedicineRepository;
+import com.codestates.member.controller.medicine.entity.Medicine;
+import com.codestates.member.controller.medicine.repository.MedicineRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;

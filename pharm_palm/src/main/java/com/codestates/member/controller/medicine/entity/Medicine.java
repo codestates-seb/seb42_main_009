@@ -1,4 +1,4 @@
-package com.codestates.medicine.entity;
+package com.codestates.member.controller.medicine.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

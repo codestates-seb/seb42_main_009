@@ -1,7 +1,7 @@
-package com.codestates.medicine.mapper;
+package com.codestates.member.controller.medicine.mapper;
 
-import com.codestates.medicine.dto.MedicineResponseDto;
-import com.codestates.medicine.entity.Medicine;
+import com.codestates.member.controller.medicine.dto.MedicineResponseDto;
+import com.codestates.member.controller.medicine.entity.Medicine;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

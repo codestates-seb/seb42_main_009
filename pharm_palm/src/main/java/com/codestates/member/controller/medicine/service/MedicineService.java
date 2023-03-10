@@ -1,9 +1,9 @@
-package com.codestates.medicine.service;
+package com.codestates.member.controller.medicine.service;
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
-import com.codestates.medicine.entity.Medicine;
-import com.codestates.medicine.repository.MedicineRepository;
+import com.codestates.member.controller.medicine.entity.Medicine;
+import com.codestates.member.controller.medicine.repository.MedicineRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

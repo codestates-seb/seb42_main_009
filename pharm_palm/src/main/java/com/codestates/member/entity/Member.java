@@ -1,6 +1,7 @@
 package com.codestates.member.entity;
 
 import com.codestates.audit.Auditable;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,17 +26,42 @@ public class Member extends Auditable {
     @Column(length = 16, nullable = false)
     private String memberName;
 
-    @Column(length = 100, nullable = false)
+    @Column
+    private String picture;
+
+    @Column(length = 100)
     private String memberPwd;
 
-    @Enumerated(EnumType.STRING)
-    private MemberGender memberGender = MemberGender.PRIVATE;
+    //    @Enumerated(EnumType.STRING)
+//    private MemberGender memberGender = MemberGender.PRIVATE;
+    @Column
+    private String memberGender;
 
     @Column
-    private String memberBirthday;
+    private String memberAge;
 
     @Enumerated(EnumType.STRING)
     private MemberState memberState = MemberState.ACTIVE;
+
+    @Builder
+    public Member (String memberEmail, String memberName, String picture, String memberGender, String memberAge, List<String> roles) {
+        this.memberEmail = memberEmail;
+        this.memberName = memberName;
+        this.picture = picture;
+        this.memberGender = memberGender;
+        this.memberAge = memberAge;
+        this.roles = roles;
+    }
+
+    public Member update (String memberEmail, String memberName, String picture, String memberGender, String memberAge) {
+        this.memberEmail = memberEmail;
+        this.memberName = memberName;
+        this.picture = picture;
+        this.memberGender = memberGender;
+        this.memberAge = memberAge;
+
+        return this;
+    }
 
     //diseaseId 와 medicineId 나중에 추가
 
