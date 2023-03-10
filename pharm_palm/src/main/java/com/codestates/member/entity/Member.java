@@ -43,26 +43,6 @@ public class Member extends Auditable {
     @Enumerated(EnumType.STRING)
     private MemberState memberState = MemberState.ACTIVE;
 
-    @Builder
-    public Member (String memberEmail, String memberName, String picture, String memberGender, String memberBirthday, List<String> roles) {
-        this.memberEmail = memberEmail;
-        this.memberName = memberName;
-        this.picture = picture;
-        this.memberGender = memberGender;
-        this.memberBirthday = memberBirthday;
-        this.roles = roles;
-    }
-
-    public Member update (String memberEmail, String memberName, String picture, String memberGender, String memberBirthday) {
-        this.memberEmail = memberEmail;
-        this.memberName = memberName;
-        this.picture = picture;
-        this.memberGender = memberGender;
-        this.memberBirthday = memberBirthday;
-
-        return this;
-    }
-
     //diseaseId 와 medicineId 나중에 추가
 
     @ElementCollection(fetch = FetchType.EAGER)
