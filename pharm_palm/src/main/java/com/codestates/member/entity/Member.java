@@ -35,10 +35,12 @@ public class Member extends Auditable {
     //    @Enumerated(EnumType.STRING)
 //    private MemberGender memberGender = MemberGender.PRIVATE;
     @Column
+    @Getter
+    @Setter
     private String memberGender;
 
     @Column
-    private String memberAge;
+    private String memberBirthday;
 
     @Enumerated(EnumType.STRING)
     private MemberState memberState = MemberState.ACTIVE;
@@ -49,7 +51,7 @@ public class Member extends Auditable {
         this.memberName = memberName;
         this.picture = picture;
         this.memberGender = memberGender;
-        this.memberAge = memberAge;
+        this.memberBirthday = memberBirthday;
         this.roles = roles;
     }
 
@@ -58,7 +60,7 @@ public class Member extends Auditable {
         this.memberName = memberName;
         this.picture = picture;
         this.memberGender = memberGender;
-        this.memberAge = memberAge;
+        this.memberBirthday = memberBirthday;
 
         return this;
     }
