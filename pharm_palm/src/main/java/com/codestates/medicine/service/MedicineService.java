@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -32,5 +33,9 @@ public class MedicineService {
                 new BusinessLogicException(ExceptionCode.MEDICINE_NOT_FOUND));
 
         return findMedicine;
+    }
+
+    public List<Medicine> findMedicineByMedicineNameLike(String medicineName) {
+        return medicineRepository.findByMedicineNameLike("%" + medicineName + "%");
     }
 }

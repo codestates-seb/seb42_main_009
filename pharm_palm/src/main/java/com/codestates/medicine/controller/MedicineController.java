@@ -50,4 +50,13 @@ public class MedicineController {
                 new SingleResponseDto<>(mapper.medicineToMedicineResponseDto(medicine))
                 , HttpStatus.OK);
     }
+
+    @GetMapping("/medicineName")
+    public ResponseEntity getMedicineByMedicinNameLike(@RequestParam String medicineName) {
+        List<Medicine> medicines = medicineService.findMedicineByMedicineNameLike(medicineName);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.medicinesToMedicineResponse(medicines)),
+                HttpStatus.OK);
+    }
 }
