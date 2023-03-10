@@ -29,14 +29,12 @@ public class Member extends Auditable {
     @Column
     private String picture;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String memberPwd;
 
     //    @Enumerated(EnumType.STRING)
 //    private MemberGender memberGender = MemberGender.PRIVATE;
     @Column
-    @Getter
-    @Setter
     private String memberGender;
 
     @Column
@@ -46,7 +44,7 @@ public class Member extends Auditable {
     private MemberState memberState = MemberState.ACTIVE;
 
     @Builder
-    public Member (String memberEmail, String memberName, String picture, String memberGender, String memberAge, List<String> roles) {
+    public Member (String memberEmail, String memberName, String picture, String memberGender, String memberBirthday, List<String> roles) {
         this.memberEmail = memberEmail;
         this.memberName = memberName;
         this.picture = picture;
@@ -55,7 +53,7 @@ public class Member extends Auditable {
         this.roles = roles;
     }
 
-    public Member update (String memberEmail, String memberName, String picture, String memberGender, String memberAge) {
+    public Member update (String memberEmail, String memberName, String picture, String memberGender, String memberBirthday) {
         this.memberEmail = memberEmail;
         this.memberName = memberName;
         this.picture = picture;
