@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import { BiSearchAlt } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
-import { HeaderWrap,Flexbox,Logo,Menu,Search,ButtonWrap,HeaderBtn,MobileBtn,PanelBg,Panel,PanelBtn,PanelMenu } from '../styles/s-header';
+import {
+  HeaderWrap,
+  Flexbox,
+  Logo,
+  Menu,
+  Search,
+  ButtonWrap,
+  HeaderBtn,
+  MobileBtn,
+  PanelBg,
+  Panel,
+  PanelBtn,
+  PanelMenu,
+} from '../styles/s-header';
 
 const Header = () => {
   const navigate = useNavigate();

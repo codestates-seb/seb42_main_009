@@ -6,6 +6,7 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
 import List from './Pages/List';
+import MyPage from './Pages/MyPage';
 import Header from './components/Header';
 
 function App() {
@@ -13,12 +14,13 @@ function App() {
     <BrowserRouter>
       <GlobalStyle />
       <div className="App">
-        <Header/>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="list" element={<List />} />
+          <Route path="mypage" element={<MyPage />} />
         </Routes>
       </div>
     </BrowserRouter>
