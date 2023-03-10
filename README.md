@@ -2,7 +2,7 @@
 
 * [사용자 요구사항 명세서](https://docs.google.com/spreadsheets/d/1uAmwpCabhF3UgcaC4mjddU54Ge-pdsUlFcKsP8p1-RE/edit#gid=0)
 
-### commit convention
+### Commit convention
 -  Feat = 새로운 기능 추가
 -  Fix = 버그 수정
 -  Revise = 오타, 코드 수정
