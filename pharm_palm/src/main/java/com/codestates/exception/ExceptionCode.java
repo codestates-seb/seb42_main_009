@@ -6,7 +6,7 @@ public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "Member not found"),
     MEMBER_EXISTS(409, "Member exists"),
     DISEASE_NOT_FOUND(404, "Disease not found"),
-    MEDICINE_FOUND(404, "Medicine found"),
+    MEDICINE_NOT_FOUND(404, "Medicine not found"),
     REVIEW_NOT_FOUND(404, "Review not found")
     ;
 
