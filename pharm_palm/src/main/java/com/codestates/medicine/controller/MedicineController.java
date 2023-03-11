@@ -52,11 +52,19 @@ public class MedicineController {
     }
 
     @GetMapping("/medicineName")
-    public ResponseEntity getMedicineByMedicinNameLike(@RequestParam String medicineName) {
-        List<Medicine> medicines = medicineService.findMedicineByMedicineNameLike(medicineName);
+    public ResponseEntity getMedicineByMedicineNameLike(@RequestParam(required = false) String medicineName) {
 
+        if (medicineName == null || medicineName.isEmpty()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Medicine> medicines = medicineService.findMedicineByMedicineNameLike(medicineName);
+        if(medicines.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.medicinesToMedicineResponse(medicines)),
                 HttpStatus.OK);
     }
+
 }
