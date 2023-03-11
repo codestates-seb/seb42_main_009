@@ -35,7 +35,7 @@ export const GlobalStyle = createGlobalStyle`
     color: var(--bl-5);
   }
   .bodywrap {
-    max-width: 1430px;
+    max-width: 1230px;
     width: 100%;
     padding: 80px 15px;
     margin: 0 auto;
@@ -44,4 +44,3 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 `;
-

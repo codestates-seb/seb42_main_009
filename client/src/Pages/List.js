@@ -1,26 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
+import { FaRegThumbsUp } from 'react-icons/fa';
 import Banner from '../components/Banner';
 import dummy from '../data/dummy.json';
+import Search from '../components/Search';
 
-const SearchBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 80px;
-  label {
-    font-size: var(--fz-md);
-    padding-right: 20px;
-  }
-  input {
-    width: 350px;
-    height: 40px;
-    border-radius: 6px;
-    border: 1px solid var(--bl-2);
-    padding: 0 10px;
-  }
-`;
 const ContentList = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -72,38 +56,27 @@ const ContentBox = styled.div`
   }
 `;
 
-const List = () => {
-  const [searchTxt, setSearchTxt] = useState('');
-
-  return (
-    <>
-      <Banner />
-      <div className="bodywrap">
-        <SearchBox>
-          <label htmlFor="search">의약품 검색</label>
-          <input
-            type="text"
-            id="search"
-            title="의약품 검색"
-            value={searchTxt}
-            onChange={setSearchTxt}
-          />
-        </SearchBox>
-        <ContentList>
-          {dummy.map((item, idx) => (
-            <ContentBox key={idx}>
-              <img src={item.itemImage} alt={item.itemName} />
-              <h3>{item.itemName}</h3>
-              <div>{item.efcyQesitm}</div>
-              <span>
-                <FaThumbsUp /> <FaRegThumbsUp />
-              </span>
-            </ContentBox>
-          ))}
-        </ContentList>
-      </div>
-    </>
-  );
-};
+const List = () => (
+  <>
+    <Banner>
+      <div>의약품조회</div>
+    </Banner>
+    <div className="bodywrap">
+      <Search />
+      <ContentList>
+        {dummy.map((item, idx) => (
+          <ContentBox key={idx}>
+            <img src={item.itemImage} alt={item.itemName} />
+            <h3>{item.itemName}</h3>
+            <div>{item.efcyQesitm}</div>
+            <span>
+              <FaRegThumbsUp /> 234
+            </span>
+          </ContentBox>
+        ))}
+      </ContentList>
+    </div>
+  </>
+);
 
 export default List;
