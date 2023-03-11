@@ -38,4 +38,8 @@ public class MedicineService {
     public List<Medicine> findMedicineByMedicineNameLike(String medicineName) {
         return medicineRepository.findByMedicineNameLike("%" + medicineName + "%");
     }
+
+    public List<Medicine> findMedicineByMedicineIngredientLike(String medicineIngredient) {
+        return medicineRepository.findByMedicineIngredientLike("%" + medicineIngredient + "%");
+    }
 }
