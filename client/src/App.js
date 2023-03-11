@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
 import './styles/variable.css';
 import { GlobalStyle } from './styles/globalStyle';
 import Home from './Pages/Home';

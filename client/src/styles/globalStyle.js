@@ -35,10 +35,12 @@ export const GlobalStyle = createGlobalStyle`
     color: var(--bl-5);
   }
   .bodywrap {
-    max-width: 1530px;
-    padding: 0 15px;
+    max-width: 1230px;
     width: 100%;
-    margin: 80px auto 0;
+    padding: 80px 15px;
+    margin: 0 auto;
+    @media (max-width: 768px){
+      padding: 30px 15px;
+    }
   }
 `;
-
