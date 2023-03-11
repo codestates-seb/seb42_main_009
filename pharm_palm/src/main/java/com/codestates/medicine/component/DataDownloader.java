@@ -63,7 +63,7 @@ public class DataDownloader implements CommandLineRunner {
 
 
 
-            if (dataNode == null || dataNode.size() == 0 || totalCount > 4400) {
+            if (dataNode == null || dataNode.size() == 0 || totalCount > 1000) {
                 break;
             }
 

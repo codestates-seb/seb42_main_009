@@ -50,4 +50,35 @@ public class MedicineController {
                 new SingleResponseDto<>(mapper.medicineToMedicineResponseDto(medicine))
                 , HttpStatus.OK);
     }
+
+    @GetMapping("/name")
+    public ResponseEntity getMedicineByMedicineNameLike(@RequestParam(required = false) String medicineName) {
+
+        if (medicineName == null || medicineName.isEmpty()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Medicine> medicines = medicineService.findMedicineByMedicineNameLike(medicineName);
+        if(medicines.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.medicinesToMedicineResponse(medicines)),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/ingredient")
+    public ResponseEntity getMedicineByMedicineIngredientLike(@RequestParam(required = false) String medicineIngredient) {
+        if (medicineIngredient == null || medicineIngredient.isEmpty()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Medicine> medicines = medicineService.findMedicineByMedicineIngredientLike(medicineIngredient);
+        if(medicines.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.medicinesToMedicineResponse(medicines)),
+                HttpStatus.OK);
+    }
 }
