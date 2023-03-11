@@ -51,7 +51,7 @@ public class MedicineController {
                 , HttpStatus.OK);
     }
 
-    @GetMapping("/medicineName")
+    @GetMapping("/search")
     public ResponseEntity getMedicineByMedicineNameLike(@RequestParam(required = false) String medicineName) {
 
         if (medicineName == null || medicineName.isEmpty()) {
