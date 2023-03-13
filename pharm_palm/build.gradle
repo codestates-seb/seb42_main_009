@@ -38,6 +38,8 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.28'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+	implementation 'org.json:json:20200518'
+
 }
 
 tasks.named('test') {
