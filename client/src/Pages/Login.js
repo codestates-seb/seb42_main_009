@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useIsLoginStore, useLoginInfoStore } from '../Stores/loginStore';
+import kakaoLoginImage from '../images/kakao_login_medium_narrow.png';
+import Input from '../components/Ui/Input';
 
 const REST_API_KEY = '46d7b3692a51eff3138a1580dccdd6c0';
-const REDIRECT_URI = 'http://localhost:8080/oauth2/code/kakao';
+const REDIRECT_URI = 'http://localhost:8080/login/oauth2/code/kakao';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,12 +15,6 @@ const Login = () => {
   const [setErrorMessage] = useState('');
 
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-  const kakaoLoginHandler = () => {
-    window.location.assign(KAKAO_AUTH_URL);
-    console.log(window.location.href);
-    navigate('/');
-  };
 
   // Input 정보 처리
   const handleInputValue = key => e => {
@@ -34,9 +30,13 @@ const Login = () => {
     }
 
     axios
-      .post(`${process.env.REACT_APP_API_URL}/auth/login`, loginInfo, {
-        withCredentials: true,
-      })
+      .post(
+        `http://ec2-3-38-166-142.ap-northeast-2.compute.amazonaws.com:8080/pp/login`,
+        loginInfo,
+        {
+          withCredentials: true,
+        },
+      )
       .then(res => {
         setIsLogin(true);
         // data 확인
@@ -59,11 +59,11 @@ const Login = () => {
 
   return (
     <div className="content justify-center flex flex-col stack-gray place-content-center h-screen items-center">
-      <h1>pharm palm에 로그인하세요</h1>
+      <h1 className="font-semibold text-2xl mb-4">pharm palm에 로그인하세요</h1>
 
       <form className="loginForm my-1.5">
         <div className="flex flex-col w-full mb-4`">
-          <input
+          <Input
             id="id"
             type="text"
             placeholder="아이디"
@@ -71,14 +71,14 @@ const Login = () => {
           />
         </div>
         <div className="flex flex-col w-full mb-4`">
-          <input
+          <Input
             id="password"
             type="password"
             placeholder="비밀번호"
             onChange={handleInputValue('password')}
           />
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-2">
           <button
             className="login-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
@@ -89,24 +89,25 @@ const Login = () => {
             로그인
           </button>
         </div>
-        <button type="submit" onClick={() => kakaoLoginHandler()}>
-          <span>카카오 로그인</span>
-        </button>
+
+        <div className="flex flex-row justify-between">
+          <Link
+            className="inline-block items-end font-semibold text-sm hover:text-blue-800 ml-2"
+            to="/signup"
+          >
+            아이디·비밀번호 찾기
+          </Link>
+          <Link
+            className="inline-block items-end font-semibold text-sm hover:text-blue-800 mr-4"
+            to="/signup"
+          >
+            회원가입
+          </Link>
+        </div>
       </form>
-      <div>
-        <Link
-          className="inline-block items-end font-light text-sm text-blue-500 hover:text-blue-800 ml-2"
-          to="/signup"
-        >
-          아이디·비밀번호 찾기
-        </Link>
-        <Link
-          className="inline-block items-end font-light text-sm text-blue-500 hover:text-blue-800 ml-2"
-          to="/signup"
-        >
-          회원가입
-        </Link>
-      </div>
+      <Link className="kakao-link" to={KAKAO_AUTH_URL}>
+        <img src={kakaoLoginImage} alt="kakao-login" />
+      </Link>
     </div>
   );
 };
