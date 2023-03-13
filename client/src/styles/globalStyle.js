@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
   * {margin: 0;padding: 0;border: none;background: none;font-size: 100%;font-family: 'Poppins', sans-serif;box-sizing: border-box;-webkit-tap-highlight-color: transparent;}
@@ -42,5 +42,21 @@ export const GlobalStyle = createGlobalStyle`
     @media (max-width: 768px){
       padding: 30px 15px;
     }
+  }
+`;
+export const SmBtn = styled.button`
+  padding: 4px 6px; border-radius: 4px;
+  text-align: center;
+  font-size: var(--fz-sm);
+  border: ${props=>props.border||'1px solid var(--mainbl)'};
+  background: ${props=>props.background||'#fff'};
+  color: ${props=>props.color||'var(--mainbl)'};
+  margin-left: ${props=>props.marginLeft};
+  margin-right: ${props=>props.marginRight};
+  transition: .4s;
+  &:hover {
+    background: ${props=>props.hoverBg||'var(--mainbl)'};
+    color: ${props=>props.hoverColor||'#fff'};
+    transition: .4s;
   }
 `;
