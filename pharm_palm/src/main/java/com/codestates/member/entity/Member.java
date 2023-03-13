@@ -1,6 +1,7 @@
 package com.codestates.member.entity;
 
 import com.codestates.audit.Auditable;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,35 +26,50 @@ public class Member extends Auditable {
     @Column(length = 16, nullable = false)
     private String memberName;
 
-    @Column(length = 100, nullable = false)
+    @Column
+    private String picture;
+
+    @Column(length = 100)
     private String memberPwd;
 
-    @Enumerated(EnumType.STRING)
-    private MemberGender memberGender = MemberGender.PRIVATE;
+    //    @Enumerated(EnumType.STRING)
+//    private MemberGender memberGender = MemberGender.PRIVATE;
+    @Column
+    private String memberGender;
 
     @Column
-    private Integer memberAge;
+    private String memberAge;
 
     @Enumerated(EnumType.STRING)
     private MemberState memberState = MemberState.ACTIVE;
+
+    public Member update (String memberEmail, String memberName, String picture, String memberGender, String memberAge) {
+        this.memberEmail = memberEmail;
+        this.memberName = memberName;
+        this.picture = picture;
+        this.memberGender = memberGender;
+        this.memberAge = memberAge;
+
+        return this;
+    }
 
     //diseaseId 와 medicineId 나중에 추가
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    public enum MemberGender {
-        FEMALE("여성"),
-        MALE("남성"),
-        PRIVATE("비밀")
-        ;
-        @Getter
-        private String gender;
-
-        MemberGender(String gender) {
-            this.gender = gender;
-        }
-    }
+//    public enum MemberGender {
+//        FEMALE("여성"),
+//        MALE("남성"),
+//        PRIVATE("비밀")
+//        ;
+//        @Getter
+//        private String gender;
+//
+//        MemberGender(String gender) {
+//            this.gender = gender;
+//        }
+//    }
 
     public enum MemberState {
         ACTIVE("활동중"),
