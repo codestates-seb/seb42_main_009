@@ -51,8 +51,8 @@ const SignUp = () => {
           memberEmail: userId,
           memberName: username,
           memberPwd: password,
-          // member_age: birth,
-          // member_gender: gender,
+          memberBirthday: birth,
+          memberGender: gender,
           // created_at: createdAt,
         },
       )
@@ -61,7 +61,7 @@ const SignUp = () => {
         console.log('Well done!');
         console.log('User profile', res.data);
         setErrorMessage('');
-        // navigate('/login');
+        navigate('/login');
       })
       .catch(err => {
         // Handle error.
