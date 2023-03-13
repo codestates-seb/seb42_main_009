@@ -1,4 +1,4 @@
-package com.codestates.member.controller.medicine.dto;
+package com.codestates.medicine.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

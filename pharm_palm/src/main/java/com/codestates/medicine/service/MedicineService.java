@@ -1,15 +1,16 @@
-package com.codestates.member.controller.medicine.service;
+package com.codestates.medicine.service;
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
-import com.codestates.member.controller.medicine.entity.Medicine;
-import com.codestates.member.controller.medicine.repository.MedicineRepository;
+import com.codestates.medicine.repository.MedicineRepository;
+import com.codestates.medicine.entity.Medicine;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -32,5 +33,13 @@ public class MedicineService {
                 new BusinessLogicException(ExceptionCode.MEDICINE_NOT_FOUND));
 
         return findMedicine;
+    }
+
+    public List<Medicine> findMedicineByMedicineNameLike(String medicineName) {
+        return medicineRepository.findByMedicineNameLike("%" + medicineName + "%");
+    }
+
+    public List<Medicine> findMedicineByMedicineIngredientLike(String medicineIngredient) {
+        return medicineRepository.findByMedicineIngredientLike("%" + medicineIngredient + "%");
     }
 }

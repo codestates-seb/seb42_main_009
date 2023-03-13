@@ -1,7 +1,7 @@
-package com.codestates.member.controller.medicine.component;
+package com.codestates.medicine.component;
 
-import com.codestates.member.controller.medicine.entity.Medicine;
-import com.codestates.member.controller.medicine.repository.MedicineRepository;
+import com.codestates.medicine.repository.MedicineRepository;
+import com.codestates.medicine.entity.Medicine;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
@@ -63,7 +63,11 @@ public class DataDownloader implements CommandLineRunner {
 
 
 
+<<<<<<< HEAD:pharm_palm/src/main/java/com/codestates/member/controller/medicine/component/DataDownloader.java
             if (dataNode == null || dataNode.size() == 0 || totalCount > 2000) {
+=======
+            if (dataNode == null || dataNode.size() == 0 || totalCount > 1000) {
+>>>>>>> ff462ca35fbaa3d106d6104db435c601196cd146:pharm_palm/src/main/java/com/codestates/medicine/component/DataDownloader.java
                 break;
             }
 
