@@ -8,6 +8,7 @@ import SignUp from './Pages/SignUp';
 import List from './Pages/List';
 import MyPage from './Pages/MyPage';
 import Item from './Pages/Item';
+import EditInfo from './Pages/EditInfo';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="list" element={<List />} />
           <Route path="mypage" element={<MyPage />} />
           <Route path="item" element={<Item />} />
+          <Route path="editinfo" element={<EditInfo />} />
         </Routes>
       </div>
     </BrowserRouter>
