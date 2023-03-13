@@ -9,6 +9,7 @@ import List from './Pages/List';
 import MyPage from './Pages/MyPage';
 import Item from './Pages/Item';
 import EditInfo from './Pages/EditInfo';
+import MyPharm from './Pages/MyPharm';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="mypage" element={<MyPage />} />
           <Route path="item" element={<Item />} />
           <Route path="editinfo" element={<EditInfo />} />
+          <Route path="mypharm" element={<MyPharm />} />
         </Routes>
       </div>
     </BrowserRouter>
