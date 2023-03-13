@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -29,6 +28,9 @@ public class Medicine {
 
     @Column(columnDefinition = "BIGINT default 0")
     private Long medicineLike;
+
+    @Column
+    private String medicineImg;
 
 
     //매핑 oneToMany
