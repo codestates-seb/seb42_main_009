@@ -7,6 +7,7 @@ import SignUp from './Pages/SignUp';
 import List from './Pages/List';
 import MyPage from './Pages/MyPage';
 import Header from './components/Header';
+import EditInfo from './Pages/EditInfo';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="signup" element={<SignUp />} />
           <Route path="list" element={<List />} />
           <Route path="mypage" element={<MyPage />} />
+          <Route path="editinfo" element={<EditInfo />} />
         </Routes>
       </div>
     </BrowserRouter>
