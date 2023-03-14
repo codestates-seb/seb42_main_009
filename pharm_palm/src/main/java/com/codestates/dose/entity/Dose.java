@@ -1,11 +1,13 @@
 package com.codestates.dose.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Time;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,18 +19,18 @@ public class Dose {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long doseId;
 
-    @Column
+    @Column(nullable = false)
     private Long memberId;
 
-    @Column
-    private Long medicine_id;
+    @Column(nullable = false)
+    private String medicineName;
 
-    @Column
+    @Column(nullable = false)
     private int doseMount;
 
-    @Column
+    @Column(nullable = false)
     private int doseNumber;
 
     @Column
-    private int doseTime;
+    private String doseTime;
 }
