@@ -9,6 +9,7 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,5 +34,11 @@ public class DoseService {
     private void verifyExistsDose(Long memberId, String medicineName) {
         Optional<Dose> optionalDose = doseRepository.findByMemberIdAndMedicineName(memberId, medicineName);
         if(optionalDose.isPresent()) throw new BusinessLogicException(ExceptionCode.DOSE_ALREADY_EXISTS);
+    }
+
+    public List<DoseResponseDto> findDoses(long memberId) {
+        List<Dose> doses = doseRepository.findAllByMemberId(memberId);
+        List<DoseResponseDto> doseResponses = mapper.dosesToDoseResponses(doses);
+        return doseResponses;
     }
 }
