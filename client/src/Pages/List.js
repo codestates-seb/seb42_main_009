@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FaRegThumbsUp } from 'react-icons/fa';
+import axios from 'axios';
 import Banner from '../components/Banner';
 import dummy from '../data/dummy.json';
 import Search from '../components/Search';
@@ -55,28 +56,55 @@ const ContentBox = styled.div`
     transition: box-shadow 0.2s;
   }
 `;
+const ContentTit = styled.h3`
+  font-size: var(--fz-base);
+  margin: 10px 0;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+const LikeCount = styled.div`
+  position: absolute;
+  right: 10px; bottom: 10px; display: flex; justify-content: flex-end; align-items: center;
+`;
 
-const List = () => (
-  <>
-    <Banner>
-      <div>의약품조회</div>
-    </Banner>
-    <div className="bodywrap">
-      <Search />
-      <ContentList>
-        {dummy.map((item, idx) => (
-          <ContentBox key={idx}>
-            <img src={item.itemImage} alt={item.itemName} />
-            <h3>{item.itemName}</h3>
-            <div>{item.efcyQesitm}</div>
-            <span>
-              <FaRegThumbsUp /> 234
-            </span>
-          </ContentBox>
-        ))}
-      </ContentList>
-    </div>
-  </>
-);
+const List = () => {
+  const URI = process.env.REACT_APP_API_URL;
+  const [ itemList, setItemList ] = useState([]);
+  // const [ itemCount, setItemCount ] = useState(8)
+
+  useEffect(()=>{
+    const getItemList=async()=>{
+      const initItems = await axios.get(`${URI}/pp/medicines`)
+      setItemList(initItems)
+    }
+    getItemList()
+  },[])
+  console.log(itemList)
+
+  return (
+    <>
+      <Banner>
+        <div>의약품조회</div>
+      </Banner>
+      <div className="bodywrap">
+        <Search />
+        <ContentList>
+          {dummy.map((item, idx) => (
+            <ContentBox key={idx}>
+              <img src={item.itemImage} alt={item.itemName} />
+              <ContentTit>{item.itemName}</ContentTit>
+              <div>{item.efcyQesitm}</div>
+              <LikeCount>
+                <FaRegThumbsUp /> 234
+              </LikeCount>
+            </ContentBox>
+          ))}
+        </ContentList>
+      </div>
+    </>
+  )
+}
 
 export default List;
