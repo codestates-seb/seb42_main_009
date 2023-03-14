@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import ReactPaginate from 'react-paginate';
+// import { useNavigate } from 'react-router-dom';
+
 import styled from 'styled-components';
 import { FaRegThumbsUp } from 'react-icons/fa';
 import axios from 'axios';
@@ -91,20 +94,45 @@ const LikeCount = styled.div`
   }
 `;
 
+const handleImageError = e => {
+  e.target.src = '/pharmpalm.png';
+};
+
 const List = () => {
   const URI = process.env.REACT_APP_API_URL;
   const [itemList, setItemList] = useState([]);
 
+  // 1. currentPage 초기값은 0으로 설정
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalLength, setTotalLength] = useState(0);
+
+  const PER_PAGE = 8;
+  const pageCount = Math.ceil(totalLength / PER_PAGE);
+
+  const handlerPageClick = event => {
+    setCurrentPage(event.selected + 1);
+  };
+
   useEffect(() => {
-    const getMedList = async () => {
-      const items = await axios({
-        method: 'get',
-        url: `${URI}/pp/medicines?page=1&size=8`,
+    // const getMedList = async () => {
+    //   const items = await axios({
+    //     method: 'get',
+    //     url: `${URI}/pp/medicines?page=3&size=8`,
+    //   });
+    //   setItemList(items.data.data);
+    // };
+    // getMedList();
+
+    axios
+      .get(`${URI}/pp/medicines?page=${currentPage}&size=${PER_PAGE}`)
+      .then(res => {
+        setTotalLength(res.data.pageInfo.totalElements);
+        setItemList(res.data.data);
+      })
+      .catch(err => {
+        console.log(err);
       });
-      setItemList(items.data.data);
-    };
-    getMedList();
-  }, []);
+  }, [currentPage]);
   console.log(itemList);
 
   return (
@@ -117,7 +145,11 @@ const List = () => {
         <ContentList>
           {itemList.map((item, idx) => (
             <ContentBox key={idx}>
-              <img src={item.medicineImg} alt={item.medicineName} />
+              <img
+                src={item.medicineImg}
+                alt={item.medicineName}
+                onError={handleImageError}
+              />
               <ContentTit>{item.medicineName}</ContentTit>
               <ContentText>{item.medicineUse}</ContentText>
               <LikeCount>
@@ -126,6 +158,23 @@ const List = () => {
             </ContentBox>
           ))}
         </ContentList>
+        {/* Pagination */}
+        <div className="flex justify-center pt-5 ">
+          <ReactPaginate
+            previousLabel="<"
+            nextLabel=">"
+            breakLabel="..."
+            pageCount={pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlerPageClick}
+            // 밑 props는 style을 위한 className 지정 해주는 역할
+            containerClassName="flex space-x-2 p-2 m-4 text-center"
+            // containerClassName="pagination"
+            subContainerClassName="pages pagination"
+            activeClassName="active"
+          />
+        </div>
       </div>
     </>
   );
