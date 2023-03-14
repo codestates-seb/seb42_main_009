@@ -64,7 +64,7 @@ public class MemberController {
         if (authentication == null) {
             throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
         }
-        memberService.findMemberInfo(authentication.getName());
+
         memberPatchDto.setMemberEmail(authentication.getName());
         Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
 
@@ -78,13 +78,6 @@ public class MemberController {
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
     }
-
-//    @GetMapping("/info")
-//    public ResponseEntity<?> getMemberInfo(@RequestBody MemberPostDto memberPostDto) {
-//        Member member = memberService.findMemberInfo(memberPostDto.getMemberEmail());
-//        return new ResponseEntity<>(
-//                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
-//    }
 
     @GetMapping("/info")
     public ResponseEntity getMemberInfo(Authentication authentication) {
@@ -111,6 +104,16 @@ public class MemberController {
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
         memberService.deleteMember(memberId);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/info")
+    public ResponseEntity withdrawMember(Authentication authentication) {
+        if (authentication == null) {
+            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
+        }
+        memberService.withdrawMember(authentication.getName());
+
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
