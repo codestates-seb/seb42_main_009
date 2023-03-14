@@ -55,6 +55,10 @@ public class DataDownloader implements CommandLineRunner {
                     .build(true)
                     .toUri();
             ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
+            //restTemplate 날 것 x -> 가공해서, 인터페이스화, wrapper 클래스  ==> 에러핸들링 공통처리.
+            //요청할 때 여러 정보들을 공통으로 제어 할 수 있다면, 다른 사람이 재사용하기 좋다.
+            // if 하루에 한번씩 업데이트 될 수 있다면? ==> DB의 기존데이터와 체크 ==> 바뀐 것만 수정하고 싶다면?, 새로 싹 밀고 받기
+
 
             //API 응답 데이터 처리
             ObjectMapper objectMapper = new ObjectMapper();
@@ -79,16 +83,17 @@ public class DataDownloader implements CommandLineRunner {
                     medicine.setMedicineIngredient(itemName);
                     medicine.setMedicineName(itemName);
                 }
-                String useMethodQesitm = row.get("useMethodQesitm").asText();
-                useMethodQesitm = useMethodQesitm.replaceAll("<p>", "");
-                useMethodQesitm = useMethodQesitm.replaceAll("</p>", "");
-                useMethodQesitm = useMethodQesitm.replaceAll("<br />", "");
-                useMethodQesitm = useMethodQesitm.replaceAll("<sub>", "");
-                useMethodQesitm = useMethodQesitm.replaceAll("</sub>", "");
-                useMethodQesitm = useMethodQesitm.replaceAll("<sup>", "");
-                useMethodQesitm = useMethodQesitm.replaceAll("</sup>", "");
-                useMethodQesitm = useMethodQesitm.replaceAll("\\n", "");
-                medicine.setMedicineUse(useMethodQesitm);
+                String efcyQesitm = row.get("efcyQesitm").asText();
+                efcyQesitm = efcyQesitm.replaceAll("이 약은 ", "");
+                efcyQesitm = efcyQesitm.replaceAll("<p>", "");
+                efcyQesitm = efcyQesitm.replaceAll("</p>", "");
+                efcyQesitm = efcyQesitm.replaceAll("<br />", "");
+                efcyQesitm = efcyQesitm.replaceAll("<sub>", "");
+                efcyQesitm = efcyQesitm.replaceAll("</sub>", "");
+                efcyQesitm = efcyQesitm.replaceAll("<sup>", "");
+                efcyQesitm = efcyQesitm.replaceAll("</sup>", "");
+                efcyQesitm = efcyQesitm.replaceAll("\\n", "");
+                medicine.setMedicineUse(efcyQesitm);
 
                 medicine.setMedicineLike(0L);
                 medicine.setMedicineImg(row.get("itemImage").asText());

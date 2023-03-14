@@ -7,7 +7,8 @@ public enum ExceptionCode {
     MEMBER_EXISTS(409, "Member exists"),
     DISEASE_NOT_FOUND(404, "Disease not found"),
     MEDICINE_NOT_FOUND(404, "Medicine not found"),
-    REVIEW_NOT_FOUND(404, "Review not found")
+    REVIEW_NOT_FOUND(404, "Review not found"),
+    DOSE_ALREADY_EXISTS(409,"Dose already exists")
     ;
 
     @Getter
