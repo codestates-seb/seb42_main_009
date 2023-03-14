@@ -107,6 +107,7 @@ const List = () => {
   }, []);
   console.log(itemList);
 
+
   return (
     <>
       <Banner>
