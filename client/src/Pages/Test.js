@@ -1,3 +1,4 @@
+import Profile from '../components/Profile';
 import Input from '../components/Ui/Input';
 
 const Test = () => {
@@ -6,6 +7,7 @@ const Test = () => {
   return (
     <div className="mt-20">
       <Input />
+      <Profile />
     </div>
   );
 };
