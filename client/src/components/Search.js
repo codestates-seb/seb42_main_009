@@ -28,7 +28,13 @@ const SearchBox = styled.div`
     }
   }
 `;
+const SearchBtn = styled.button`
+  margin-left: 10px;
+  height: 40px; width: 80px; border-radius: 6px; background-color: var(--mainbl);
+  text-align: center; color: #fff;
+`;
 const Search = () => {
+  const URI=process.env.REACT_APP_API_URL
   const [searchTxt, setSearchTxt] = useState('');
   const searchHandler = e => {
     const txt = e.target.value;
@@ -38,7 +44,7 @@ const Search = () => {
     if (e.key === 'Enter') {
       axios({
         method: 'post',
-        url: 'http://localhost:3000',
+        url: `${URI}/pp/medicines`,
       });
       setSearchTxt('');
     }
@@ -54,6 +60,7 @@ const Search = () => {
         onChange={searchHandler}
         onKeyDown={searchSubmit}
       />
+      <SearchBtn>검색</SearchBtn>
     </SearchBox>
   );
 };

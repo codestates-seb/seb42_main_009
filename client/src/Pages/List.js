@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { FaRegThumbsUp } from 'react-icons/fa';
 import axios from 'axios';
 import Banner from '../components/Banner';
-import dummy from '../data/dummy.json';
 import Search from '../components/Search';
 
 const ContentList = styled.div`
@@ -58,32 +57,53 @@ const ContentBox = styled.div`
 `;
 const ContentTit = styled.h3`
   font-size: var(--fz-base);
-  margin: 10px 0;
+  margin: 15px 0 10px;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--mainbl);
+  font-weight: 500;
+`;
+const ContentText = styled.div`
+  width: 100%;
+  overflow: hidden;
+  font-size: var(--fz-sm);
+  line-height: 20px;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 `;
 const LikeCount = styled.div`
   position: absolute;
-  right: 10px;
-  bottom: 10px;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  right: 10px;
+  top: 10px;
+  color: var(--mainbl);
+  > p {
+    font-size: 12px;
+    padding-top: 3px;
+  }
 `;
 
 const List = () => {
   const URI = process.env.REACT_APP_API_URL;
   const [itemList, setItemList] = useState([]);
-  // const [ itemCount, setItemCount ] = useState(8)
 
   useEffect(() => {
-    const getItemList = async () => {
-      const initItems = await axios.get(`${URI}/pp/medicines`);
-      setItemList(initItems);
+    const getMedList = async () => {
+      const items = await axios({
+        method: 'get',
+        url: `${URI}/pp/medicines?page=1&size=8`,
+      });
+      setItemList(items.data.data);
     };
-    getItemList();
+    getMedList();
   }, []);
   console.log(itemList);
 
@@ -95,13 +115,13 @@ const List = () => {
       <div className="bodywrap">
         <Search />
         <ContentList>
-          {dummy.map((item, idx) => (
+          {itemList.map((item, idx) => (
             <ContentBox key={idx}>
-              <img src={item.itemImage} alt={item.itemName} />
-              <ContentTit>{item.itemName}</ContentTit>
-              <div>{item.efcyQesitm}</div>
+              <img src={item.medicineImg} alt={item.medicineName} />
+              <ContentTit>{item.medicineName}</ContentTit>
+              <ContentText>{item.medicineUse}</ContentText>
               <LikeCount>
-                <FaRegThumbsUp /> 234
+                <FaRegThumbsUp /> <p>234</p>
               </LikeCount>
             </ContentBox>
           ))}
