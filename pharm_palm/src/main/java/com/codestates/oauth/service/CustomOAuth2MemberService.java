@@ -2,6 +2,7 @@ package com.codestates.oauth.service;
 
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
+
 import com.codestates.oauth.attributes.OAuthAttributes;
 import com.codestates.oauth.session.SessionMember;
 import lombok.RequiredArgsConstructor;

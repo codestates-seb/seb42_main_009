@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+                new UsernamePasswordAuthenticationToken(loginDto.getId(), loginDto.getPassword());
 
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -58,7 +58,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         JSONObject tokenJson = new JSONObject();
         tokenJson.put("accessToken", accessToken);
         tokenJson.put("refreshToken", refreshToken);
-        tokenJson.put("expiresAt", jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes()));
+        tokenJson.put("accessToken_expiresAt", jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes()));
+        tokenJson.put("refreshToken_expiresAt", jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes()));
 
         // JSON 형태의 토큰 정보를 문자열로 변환하여 응답 바디에 추가
         response.getWriter().write(tokenJson.toString());
@@ -67,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("username", member.getMemberEmail());
+        claims.put("id", member.getMemberEmail());
         claims.put("roles", member.getRoles());
 
         String subject = member.getMemberEmail();

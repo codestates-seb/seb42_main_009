@@ -43,7 +43,7 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
-        Member findMember = findVerifiedMemberId(member.getMemberId());
+        Member findMember = findVerifiedMemberEmail(member.getMemberEmail());
 
         Optional.ofNullable(member.getMemberName())
                 .ifPresent(findMember::setMemberName);
