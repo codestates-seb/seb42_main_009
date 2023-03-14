@@ -13,7 +13,6 @@ public class ReviewPatchDto {
     private String reviewContent;
     private String reviewImg;
     private String reviewOtherMedicine;
-    private Long memberId;
 
     public void setReviewId(Long reviewId) {
         this.reviewId = reviewId;
