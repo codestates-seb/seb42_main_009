@@ -66,22 +66,26 @@ const ContentTit = styled.h3`
 `;
 const LikeCount = styled.div`
   position: absolute;
-  right: 10px; bottom: 10px; display: flex; justify-content: flex-end; align-items: center;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
 const List = () => {
   const URI = process.env.REACT_APP_API_URL;
-  const [ itemList, setItemList ] = useState([]);
+  const [itemList, setItemList] = useState([]);
   // const [ itemCount, setItemCount ] = useState(8)
 
-  useEffect(()=>{
-    const getItemList=async()=>{
-      const initItems = await axios.get(`${URI}/pp/medicines`)
-      setItemList(initItems)
-    }
-    getItemList()
-  },[])
-  console.log(itemList)
+  useEffect(() => {
+    const getItemList = async () => {
+      const initItems = await axios.get(`${URI}/pp/medicines`);
+      setItemList(initItems);
+    };
+    getItemList();
+  }, []);
+  console.log(itemList);
 
   return (
     <>
@@ -104,7 +108,7 @@ const List = () => {
         </ContentList>
       </div>
     </>
-  )
-}
+  );
+};
 
 export default List;
