@@ -56,6 +56,8 @@ public class SecurityConfiguration {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .apply(new CustomFilterConfigurer())
+                .and()
                 .authorizeRequests(authorize -> authorize
                         .antMatchers("/", "/css/", "/images/", "/js/", "/h2-console/").permitAll()
                         .anyRequest().permitAll()
@@ -68,7 +70,7 @@ public class SecurityConfiguration {
                 .userService(customOAuth2MemberService)
                 .and()
                 .and()
-                .addFilterBefore((Filter) new CustomFilterConfigurer(), AbstractPreAuthenticatedProcessingFilter.class)
+                .addFilterBefore((Filter) new CustomFilterConfigurer2(), AbstractPreAuthenticatedProcessingFilter.class)
                 .formLogin().disable()
                 .httpBasic().disable();
         return http.build();
@@ -87,30 +89,38 @@ public class SecurityConfiguration {
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));
         configuration.setAllowCredentials(true);
 
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
-    public class CustomFilterConfigurer extends GenericFilterBean implements Filter, ApplicationContextAware {
-
-        private ApplicationContext applicationContext;
-        private AuthenticationManager authenticationManager;
-
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         @Override
-        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        public void configure(HttpSecurity builder) throws Exception {
+            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
             jwtAuthenticationFilter.setFilterProcessesUrl("/pp/login");
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
 
+            builder
+                    .addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+        }
+    }
+
+    public class CustomFilterConfigurer2 extends GenericFilterBean implements Filter, ApplicationContextAware {
+        private ApplicationContext applicationContext;
+        private AuthenticationManager authenticationManager;
+        @Override
+        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
             List<SecurityFilterChain> filterChains = new ArrayList<>();
             filterChains.add(new DefaultSecurityFilterChain(
-                    new AntPathRequestMatcher("/**"), // RequestMatcher 객체 생성
-                    jwtAuthenticationFilter,
-                    jwtVerificationFilter));
-
+                    new AntPathRequestMatcher("/**") // RequestMatcher 객체 생성
+                   ));
             FilterChainProxy filterChainProxy = new FilterChainProxy(filterChains);
 
             filterChainProxy.doFilter(request, response, chain);
