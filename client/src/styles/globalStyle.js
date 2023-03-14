@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
   input,
   select,
   textarea,
-  button {appearance: none;-webkit-appearance: none;outline: none;background: none;border: none;border-radius: 0;margin: 0;padding: 0;line-height: 1;}
+  button { outline: none;background: none;border: none;border-radius: 0;margin: 0;padding: 0;line-height: 1;}
   input:-webkit-autofill, 
   input:-webkit-autofill:hover, 
   input:-webkit-autofill:focus, 
