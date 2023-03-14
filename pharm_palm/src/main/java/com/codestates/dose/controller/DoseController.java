@@ -41,4 +41,10 @@ public class DoseController {
         return new ResponseEntity(
                 new SingleResponseDto<>(doseResponses), HttpStatus.OK);
     }
+
+    @DeleteMapping("{dose-id}")
+    public ResponseEntity deleteDose(@PathVariable("dose-id") @Positive long doseId) {
+        doseService.deleteDose(doseId);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
 }

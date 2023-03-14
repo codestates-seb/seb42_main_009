@@ -41,4 +41,16 @@ public class DoseService {
         List<DoseResponseDto> doseResponses = mapper.dosesToDoseResponses(doses);
         return doseResponses;
     }
+
+    public void deleteDose(long doseId) {
+        Dose findDose = findDose(doseId);
+        doseRepository.delete(findDose);
+    }
+
+    private Dose findDose(long doseId) {
+       Optional<Dose> optionalDose = doseRepository.findById(doseId);
+
+        return optionalDose.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.DOSE_NOT_FOUND));
+    }
 }
