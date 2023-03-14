@@ -66,8 +66,10 @@ const ContentTit = styled.h3`
   font-weight: 500;
 `;
 const ContentText = styled.div`
-  width: 100%; overflow: hidden;
-  font-size: var(--fz-sm); line-height: 20px;
+  width: 100%;
+  overflow: hidden;
+  font-size: var(--fz-sm);
+  line-height: 20px;
   display: -webkit-box;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -75,26 +77,35 @@ const ContentText = styled.div`
   -webkit-box-orient: vertical;
 `;
 const LikeCount = styled.div`
-  position: absolute; display: flex; flex-direction: column; justify-content: center; align-items: center;
-  right: 10px; top: 10px; color: var(--mainbl);
-  > p {font-size: 12px; padding-top: 3px;}
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  right: 10px;
+  top: 10px;
+  color: var(--mainbl);
+  > p {
+    font-size: 12px;
+    padding-top: 3px;
+  }
 `;
 
 const List = () => {
   const URI = process.env.REACT_APP_API_URL;
-  const [ itemList, setItemList ] = useState([]);
+  const [itemList, setItemList] = useState([]);
 
-  useEffect(()=>{
-    const getMedList = async()=>{
+  useEffect(() => {
+    const getMedList = async () => {
       const items = await axios({
-        method:'get',
-        url:`${URI}/pp/medicines?page=1&size=8`
+        method: 'get',
+        url: `${URI}/pp/medicines?page=1&size=8`,
       });
-      setItemList(items.data.data)
-    }
-    getMedList()
-  },[])
-  console.log(itemList)
+      setItemList(items.data.data);
+    };
+    getMedList();
+  }, []);
+  console.log(itemList);
 
 
   return (
@@ -118,7 +129,7 @@ const List = () => {
         </ContentList>
       </div>
     </>
-  )
-}
+  );
+};
 
 export default List;
