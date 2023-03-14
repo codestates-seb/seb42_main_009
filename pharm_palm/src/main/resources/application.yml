@@ -54,10 +54,9 @@ server:
   servlet:
     encoding:
       force-response: true
+jwt:
+  access-token-expiration-minutes: 60
+  refresh-token-expiration-minutes: 90
 mail:
   address:
-    admin: admin@gmail.com
-jwt:
-  key:
-  access-token-expiration-minutes: 30
-  refresh-token-expiration-minutes: 420
+    admin: example@admin.com
