@@ -43,7 +43,7 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
-        Member findMember = findVerifiedMemberId(member.getMemberId());
+        Member findMember = findVerifiedMemberEmail(member.getMemberEmail());
 
         Optional.ofNullable(member.getMemberName())
                 .ifPresent(findMember::setMemberName);
@@ -75,6 +75,12 @@ public class MemberService {
 
     public void deleteMember(long memberId) {
         Member findMember = findVerifiedMemberId(memberId);
+
+        memberRepository.delete(findMember);
+    }
+
+    public void withdrawMember(String memberEmail) {
+        Member findMember = findVerifiedMemberEmail(memberEmail);
         findMember.setMemberState(Member.MemberState.WITHDRAW);
         memberRepository.save(findMember);
     }

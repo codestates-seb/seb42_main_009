@@ -5,6 +5,7 @@ import com.codestates.auth.filter.JwtAuthenticationFilter;
 import com.codestates.auth.filter.JwtVerificationFilter;
 import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.auth.utils.CustomAuthorityUtils;
+
 import com.codestates.oauth.service.CustomOAuth2MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeansException;
@@ -25,6 +26,7 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -41,6 +43,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@CrossOrigin
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
@@ -49,17 +52,19 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .headers().frameOptions().sameOrigin()
+        http
+                .headers().frameOptions().sameOrigin()//h2 웹 콘솔 사용하기 위한 코드
                 .and()
+                .csrf().disable()
                 .cors(withDefaults())
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .formLogin().disable()
+                .httpBasic().disable()
                 .apply(new CustomFilterConfigurer())
                 .and()
-                .authorizeRequests(authorize -> authorize
-                        .antMatchers("/", "/css/", "/images/", "/js/", "/h2-console/").permitAll()
+                .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll()
                 )
                 .logout()
@@ -70,9 +75,7 @@ public class SecurityConfiguration {
                 .userService(customOAuth2MemberService)
                 .and()
                 .and()
-                .addFilterBefore((Filter) new CustomFilterConfigurer2(), AbstractPreAuthenticatedProcessingFilter.class)
-                .formLogin().disable()
-                .httpBasic().disable();
+                .addFilterBefore((Filter) new CustomFilterConfigurer2(), AbstractPreAuthenticatedProcessingFilter.class);
         return http.build();
     }
 
