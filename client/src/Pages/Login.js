@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// import moment from 'moment';
 import { useIsLoginStore, useLoginInfoStore } from '../Stores/loginStore';
 import kakaoLoginImage from '../images/kakao_login_medium_narrow.png';
 import Input from '../components/Ui/Input';
@@ -40,16 +41,27 @@ const Login = () => {
       .then(res => {
         setIsLogin(true);
         // data 확인
-        console.log(res);
+        console.log(res.data);
         // local storage에 token 저장
-        localStorage.setItem('token', res.data.jwt);
+        localStorage.setItem('accessToken', res.data.accessToken);
+        localStorage.setItem('refreshToken', res.data.refreshToken);
+        localStorage.setItem(
+          'accessToken_expiresAt',
+          res.data.accessToken_expiresAt,
+        );
+        localStorage.setItem(
+          'refreshToken_expiresAt',
+          res.data.refreshToken_expiresAt,
+        );
+
         // 로그인 성공시 홈페이지 이동
-        axios.defaults.headers.common.Authorization = `Bearer ${res.data.jwt}`;
+        axios.defaults.headers.common.Authorization = `Bearer ${res.data.accessToken}`;
         navigate('/');
         setErrorMessage('');
         window.location.reload();
       })
       .catch(err => {
+        console.log(err);
         if (err.response.status === 401) {
           setErrorMessage('로그인에 실패했습니다.');
           navigate('/404');

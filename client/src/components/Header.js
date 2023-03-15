@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BiSearchAlt } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
+import { useIsLoginStore } from '../Stores/loginStore';
 import {
   HeaderWrap,
   Flexbox,
@@ -18,19 +19,28 @@ import {
 
 const Header = () => {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
+  const { isLogin, setIsLogin } = useIsLoginStore(state => state);
   const [searchOn, setSearchOn] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const searchOpen = () => {
     setSearchOn(!searchOn);
   };
   const tempLogin = () => {
-    setIsLogin(!isLogin);
+    // setIsLogin(!isLogin);
+    navigate('/');
   };
   const panelOpen = () => {
     setMobileOpen(!mobileOpen);
   };
   const menu = ['의약품 조회', '내 약 관리', '복약루틴', 'NEWS'];
+
+  const logoutHandler = () => {
+    setIsLogin(false);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessToken_expiresAt');
+    localStorage.removeItem('refreshToken_expiresAt');
+  };
 
   return (
     <>
@@ -56,6 +66,7 @@ const Header = () => {
             <ButtonWrap>
               <HeaderBtn width="80px">My Page</HeaderBtn>
               <HeaderBtn
+                onClick={() => logoutHandler()}
                 border="var(--mainbl)"
                 color="var(--mainbl)"
                 background="#fff"
@@ -94,7 +105,11 @@ const Header = () => {
               <HeaderBtn background="#fff" color="var(--mainbl)" width="80px">
                 My Page
               </HeaderBtn>
-              <HeaderBtn background="#fff" color="var(--mainbl)">
+              <HeaderBtn
+                background="#fff"
+                color="var(--mainbl)"
+                onClick={() => logoutHandler()}
+              >
                 Logout
               </HeaderBtn>
             </PanelBtn>
