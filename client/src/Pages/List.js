@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 // import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { FaRegThumbsUp } from 'react-icons/fa';
-import axios from 'axios';
+
+import { useListSearchStore } from '../Stores/listSearchStore';
 import Banner from '../components/Banner';
 import Search from '../components/Search';
 
@@ -101,6 +103,9 @@ const handleImageError = e => {
 const List = () => {
   const URI = process.env.REACT_APP_API_URL;
   const [itemList, setItemList] = useState([]);
+  const { listSearch } = useListSearchStore(state => state);
+
+  console.log(URI);
 
   // 1. currentPage 초기값은 0으로 설정
   const [currentPage, setCurrentPage] = useState(1);
@@ -123,18 +128,39 @@ const List = () => {
     // };
     // getMedList();
 
-    axios
-      .get(`${URI}/pp/medicines?page=${currentPage}&size=${PER_PAGE}`)
-      .then(res => {
-        setTotalLength(res.data.pageInfo.totalElements);
-        setItemList(res.data.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, [currentPage]);
+    if (listSearch === '') {
+      axios
+        .get(`${URI}/pp/medicines?page=${currentPage}&size=${PER_PAGE}`)
+        .then(res => {
+          console.log(res);
+          setTotalLength(res.data.pageInfo.totalElements);
+          setItemList(res.data.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .get(`${URI}/pp/medicines/name?medicineName=${listSearch}`)
+        .then(res => {
+          console.log(res);
+          // 검색한 아이템이 없으면, 빈 배열 출력
+          if (!res.data) {
+            setItemList([]);
+            setTotalLength(0);
+          }
+          // 검색한 아이템이 있으면, 해당 아이템 출력
+          else {
+            setItemList(res.data.data);
+            setTotalLength(res.data.data.length);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [currentPage, listSearch]);
   console.log(itemList);
-
 
   return (
     <>

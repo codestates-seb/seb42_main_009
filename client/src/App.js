@@ -7,9 +7,10 @@ import {
 } from 'react-router-dom';
 import { useEffect } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import './styles/variable.css';
 import { GlobalStyle } from './styles/globalStyle';
-import { useIsLoginStore } from './Stores/loginStore';
+// import { useIsLoginStore } from './Stores/loginStore';
 import { useUserInfoStore } from './Stores/userInfoStore';
 import Header from './components/Header';
 import Home from './Pages/Home';
@@ -22,9 +23,8 @@ import EditInfo from './Pages/EditInfo';
 import Test from './Pages/Test';
 import MyPharm from './Pages/MyPharm';
 
-
 function App() {
-  const { setIsLogin } = useIsLoginStore(state => state);
+  // const { setIsLogin } = useIsLoginStore(state => state);
   const { setUserInfo } = useUserInfoStore(state => state);
 
   // const kakaoLogin = () => {
@@ -35,20 +35,24 @@ function App() {
   // };
 
   const authHandler = () => {
+    console.log(localStorage.getItem('accessToken'));
+    const expireAt = localStorage.getItem('accessToken_expiresAt');
+    console.log(expireAt);
+    if (moment(expireAt).diff(moment()) < 0) console.log('토큰 만료!!');
+
     axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/members/userInfo`,
+      .get(
+        `${process.env.REACT_APP_API_URL}/pp/members/info`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             withCredentials: true,
           },
         },
       )
       .then(res => {
         console.log(res);
-        setIsLogin(true);
         setUserInfo(res.data.data);
       })
       .catch(err => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
+import { useListSearchStore } from '../Stores/listSearchStore';
 
 const SearchBox = styled.div`
   display: flex;
@@ -30,11 +30,15 @@ const SearchBox = styled.div`
 `;
 const SearchBtn = styled.button`
   margin-left: 10px;
-  height: 40px; width: 80px; border-radius: 6px; background-color: var(--mainbl);
-  text-align: center; color: #fff;
+  height: 40px;
+  width: 80px;
+  border-radius: 6px;
+  background-color: var(--mainbl);
+  text-align: center;
+  color: #fff;
 `;
 const Search = () => {
-  const URI=process.env.REACT_APP_API_URL
+  const { setListSearch } = useListSearchStore(state => state);
   const [searchTxt, setSearchTxt] = useState('');
   const searchHandler = e => {
     const txt = e.target.value;
@@ -42,11 +46,7 @@ const Search = () => {
   };
   const searchSubmit = e => {
     if (e.key === 'Enter') {
-      axios({
-        method: 'post',
-        url: `${URI}/pp/medicines`,
-      });
-      setSearchTxt('');
+      setListSearch(searchTxt);
     }
   };
   return (
@@ -60,7 +60,13 @@ const Search = () => {
         onChange={searchHandler}
         onKeyDown={searchSubmit}
       />
-      <SearchBtn>검색</SearchBtn>
+      <SearchBtn
+        onClick={() => {
+          setListSearch(searchTxt);
+        }}
+      >
+        검색
+      </SearchBtn>
     </SearchBox>
   );
 };
