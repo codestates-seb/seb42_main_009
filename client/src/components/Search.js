@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useListSearchStore } from '../Stores/listSearchStore';
+import {
+  useSearchTextStore,
+  useSearchSelectedStore,
+  useSearchApiStore,
+} from '../Stores/listSearchStore';
 
 const SearchBox = styled.div`
   display: flex;
@@ -38,20 +42,37 @@ const SearchBtn = styled.button`
   color: #fff;
 `;
 const Search = () => {
-  const { setListSearch } = useListSearchStore(state => state);
+  const { setSearchText } = useSearchTextStore(state => state);
+  const { setSearchSelected } = useSearchSelectedStore(state => state);
+  const { setSearchApi } = useSearchApiStore(state => state);
+
   const [searchTxt, setSearchTxt] = useState('');
   const searchHandler = e => {
     const txt = e.target.value;
     setSearchTxt(txt);
   };
+  const selectHandler = e => {
+    const selected = e.target.value;
+    if (selected === 'name') {
+      setSearchApi('medicineName');
+    } else if (selected === 'ingredient') {
+      setSearchApi('medicineIngredient');
+    }
+    setSearchSelected(selected);
+  };
+
   const searchSubmit = e => {
     if (e.key === 'Enter') {
-      setListSearch(searchTxt);
+      setSearchText(searchTxt);
     }
   };
   return (
     <SearchBox>
       <label htmlFor="search">의약품 검색</label>
+      <select className="searchs" onChange={selectHandler}>
+        <option value="name">제품명</option>
+        <option value="ingredient">성분</option>
+      </select>
       <input
         type="text"
         id="search"
@@ -62,7 +83,7 @@ const Search = () => {
       />
       <SearchBtn
         onClick={() => {
-          setListSearch(searchTxt);
+          setSearchText(searchTxt);
         }}
       >
         검색

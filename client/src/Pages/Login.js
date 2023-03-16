@@ -7,7 +7,7 @@ import kakaoLoginImage from '../images/kakao_login_medium_narrow.png';
 import Input from '../components/Ui/Input';
 
 const REST_API_KEY = '46d7b3692a51eff3138a1580dccdd6c0';
-const REDIRECT_URI = 'http://localhost:8080/login/oauth2/code/kakao';
+const REDIRECT_URI = 'http://localhost:3000/login/oauth2/code/kakao';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -57,7 +57,6 @@ const Login = () => {
         // 로그인 성공시 홈페이지 이동
         axios.defaults.headers.common.Authorization = `Bearer ${res.data.accessToken}`;
         navigate('/');
-        setErrorMessage('');
         window.location.reload();
       })
       .catch(err => {
