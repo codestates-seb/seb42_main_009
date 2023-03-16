@@ -1,8 +1,18 @@
 import { create } from 'zustand';
 
-const useListSearchStore = create(set => ({
-  listSearch: '',
-  setListSearch: state => set(() => ({ listSearch: state })),
+const useSearchTextStore = create(set => ({
+  searchText: '',
+  setSearchText: state => set(() => ({ searchText: state })),
 }));
 
-export { useListSearchStore };
+const useSearchSelectedStore = create(set => ({
+  searchSelected: '',
+  setSearchSelected: state => set(() => ({ searchSelected: state })),
+}));
+
+const useSearchApiStore = create(set => ({
+  searchApi: '',
+  setSearchApi: state => set(() => ({ searchApi: state })),
+}));
+
+export { useSearchTextStore, useSearchSelectedStore, useSearchApiStore };

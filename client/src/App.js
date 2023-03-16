@@ -10,7 +10,7 @@ import axios from 'axios';
 import moment from 'moment';
 import './styles/variable.css';
 import { GlobalStyle } from './styles/globalStyle';
-// import { useIsLoginStore } from './Stores/loginStore';
+import { useIsLoginStore } from './Stores/loginStore';
 import { useUserInfoStore } from './Stores/userInfoStore';
 import Header from './components/Header';
 import Home from './Pages/Home';
@@ -24,7 +24,7 @@ import Test from './Pages/Test';
 import MyPharm from './Pages/MyPharm';
 
 function App() {
-  // const { setIsLogin } = useIsLoginStore(state => state);
+  const { setIsLogin } = useIsLoginStore(state => state);
   const { setUserInfo } = useUserInfoStore(state => state);
 
   // const kakaoLogin = () => {
@@ -37,7 +37,9 @@ function App() {
   const authHandler = () => {
     console.log(localStorage.getItem('accessToken'));
     const expireAt = localStorage.getItem('accessToken_expiresAt');
+    setIsLogin(true);
     console.log(expireAt);
+
     if (moment(expireAt).diff(moment()) < 0) console.log('토큰 만료!!');
 
     axios
@@ -63,7 +65,9 @@ function App() {
   };
 
   useEffect(() => {
-    // kakaoLogin();
+    const url = new URL(window.location.href);
+    const authorizationCode = url.searchParams.get('code');
+    console.log(authorizationCode);
     authHandler();
   }, []);
 

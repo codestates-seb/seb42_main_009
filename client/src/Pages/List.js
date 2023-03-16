@@ -6,7 +6,11 @@ import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
 import { FaRegThumbsUp } from 'react-icons/fa';
 
-import { useListSearchStore } from '../Stores/listSearchStore';
+import {
+  useSearchApiStore,
+  useSearchSelectedStore,
+  useSearchTextStore,
+} from '../Stores/listSearchStore';
 import Banner from '../components/Banner';
 import Search from '../components/Search';
 
@@ -103,7 +107,9 @@ const handleImageError = e => {
 const List = () => {
   const URI = process.env.REACT_APP_API_URL;
   const [itemList, setItemList] = useState([]);
-  const { listSearch } = useListSearchStore(state => state);
+  const { searchText } = useSearchTextStore(state => state);
+  const { searchSelected } = useSearchSelectedStore(state => state);
+  const { searchApi } = useSearchApiStore(state => state);
 
   console.log(URI);
 
@@ -128,22 +134,23 @@ const List = () => {
     // };
     // getMedList();
 
-    if (listSearch === '') {
+    if (searchText === '') {
       axios
         .get(`${URI}/pp/medicines?page=${currentPage}&size=${PER_PAGE}`)
         .then(res => {
           console.log(res);
-          setTotalLength(res.data.pageInfo.totalElements);
           setItemList(res.data.data);
+          setTotalLength(res.data.pageInfo.totalElements);
         })
         .catch(err => {
           console.log(err);
         });
     } else {
       axios
-        .get(`${URI}/pp/medicines/name?medicineName=${listSearch}`)
+        .get(
+          `${URI}/pp/medicines/${searchSelected}?${searchApi}=${searchText}&page=${currentPage}&size=${PER_PAGE}`,
+        )
         .then(res => {
-          console.log(res);
           // 검색한 아이템이 없으면, 빈 배열 출력
           if (!res.data) {
             setItemList([]);
@@ -152,6 +159,7 @@ const List = () => {
           // 검색한 아이템이 있으면, 해당 아이템 출력
           else {
             setItemList(res.data.data);
+            console.log(res.data);
             setTotalLength(res.data.data.length);
           }
         })
@@ -159,7 +167,7 @@ const List = () => {
           console.log(err);
         });
     }
-  }, [currentPage, listSearch]);
+  }, [currentPage, searchText, searchSelected]);
   console.log(itemList);
 
   return (
