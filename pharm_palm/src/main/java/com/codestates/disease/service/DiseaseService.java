@@ -21,11 +21,12 @@ public class DiseaseService {
         this.mapper = mapper;
     }
 
-    @PostConstruct
-    public void defaultDiseases(DiseasesData diseasesData) {
-        List<Disease> diseases = diseasesData.getDiseaseList();
-        diseaseRepository.saveAll(diseases);
-    }
+//    @PostConstruct
+//    public void defaultDiseases(DiseasesData diseasesData) {
+//        List<Disease> diseases = diseasesData.getDiseaseList();
+//        diseaseRepository.saveAll(diseases);
+//    }
+
 
     public Disease findDisease () {
         return null;
