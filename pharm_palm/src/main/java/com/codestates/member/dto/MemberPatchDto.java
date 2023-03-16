@@ -14,7 +14,7 @@ public class MemberPatchDto {
     private String memberName;
 //    private String memberPwd;
     private String memberGender;
-    private Integer memberAge;
+    private String memberAge;
     private Member.MemberState memberState;
 
     public void setMemberId(long memberId) {

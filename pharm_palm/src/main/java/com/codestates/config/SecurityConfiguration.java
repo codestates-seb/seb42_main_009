@@ -3,6 +3,10 @@ package com.codestates.config;
 import com.codestates.AppConfig;
 import com.codestates.auth.filter.JwtAuthenticationFilter;
 import com.codestates.auth.filter.JwtVerificationFilter;
+import com.codestates.auth.handler.MemberAccessDeniedHandler;
+import com.codestates.auth.handler.MemberAuthenticationEntryPoint;
+import com.codestates.auth.handler.MemberAuthenticationFailureHandler;
+import com.codestates.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.auth.utils.CustomAuthorityUtils;
 
@@ -47,7 +51,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-
     private final CustomOAuth2MemberService customOAuth2MemberService;
 
     @Bean
@@ -62,6 +65,10 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .accessDeniedHandler(new MemberAccessDeniedHandler())
+                .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
@@ -105,6 +112,9 @@ public class SecurityConfiguration {
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
             jwtAuthenticationFilter.setFilterProcessesUrl("/pp/login");
+
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
 
