@@ -73,16 +73,8 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll()
-                )
-                .logout()
-                .logoutSuccessUrl("/")
-                .and()
-                .oauth2Login()
-                .userInfoEndpoint()
-                .userService(customOAuth2MemberService)
-                .and()
-                .and()
-                .addFilterBefore((Filter) new CustomFilterConfigurer2(), AbstractPreAuthenticatedProcessingFilter.class);
+                );
+
         return http.build();
     }
 
@@ -121,28 +113,6 @@ public class SecurityConfiguration {
             builder
                     .addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
-        }
-    }
-
-    public class CustomFilterConfigurer2 extends GenericFilterBean implements Filter, ApplicationContextAware {
-        private ApplicationContext applicationContext;
-        private AuthenticationManager authenticationManager;
-        @Override
-        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-            List<SecurityFilterChain> filterChains = new ArrayList<>();
-            filterChains.add(new DefaultSecurityFilterChain(
-                    new AntPathRequestMatcher("/**") // RequestMatcher 객체 생성
-                   ));
-            FilterChainProxy filterChainProxy = new FilterChainProxy(filterChains);
-
-            filterChainProxy.doFilter(request, response, chain);
-        }
-
-        @Override
-        public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-            this.applicationContext = applicationContext;
-            this.authenticationManager = applicationContext.getBean(AuthenticationManager.class);
         }
     }
 }
