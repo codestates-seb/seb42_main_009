@@ -20,7 +20,6 @@ import java.util.List;
 @Validated
 @Slf4j
 public class MedicineController {
-    private final static String MEDICINE_DEFAULT_URL = "/pp/medicines";
     private final MedicineService medicineService;
     private final MedicineMapper mapper;
 
@@ -52,33 +51,43 @@ public class MedicineController {
     }
 
     @GetMapping("/name")
-    public ResponseEntity getMedicineByMedicineNameLike(@RequestParam(required = false) String medicineName) {
+    public ResponseEntity getMedicineByMedicineNameLike(@RequestParam(required = false) String medicineName,
+                                                        @Positive @RequestParam int page,
+                                                        @Positive @RequestParam int size) {
 
         if (medicineName == null || medicineName.isEmpty()) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        List<Medicine> medicines = medicineService.findMedicineByMedicineNameLike(medicineName);
+        Page<Medicine> pageMedicines = medicineService.findByMedicineNameLike(medicineName, page -1, size);
+        List<Medicine> medicines = pageMedicines.getContent();
+
         if(medicines.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
+
         return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.medicinesToMedicineResponse(medicines)),
+                new MultiResponseDto<>(mapper.medicinesToMedicineResponse(medicines),
+                        pageMedicines),
                 HttpStatus.OK);
     }
 
     @GetMapping("/ingredient")
-    public ResponseEntity getMedicineByMedicineIngredientLike(@RequestParam(required = false) String medicineIngredient) {
+    public ResponseEntity getMedicineByMedicineIngredientLike(@RequestParam(required = false) String medicineIngredient,
+                                                              @Positive @RequestParam int page,
+                                                              @Positive @RequestParam int size) {
+
         if (medicineIngredient == null || medicineIngredient.isEmpty()) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-
-        List<Medicine> medicines = medicineService.findMedicineByMedicineIngredientLike(medicineIngredient);
+        Page<Medicine> pageMedicines = medicineService.findByMedicineIngredientLike(medicineIngredient, page -1, size);
+        List<Medicine> medicines = pageMedicines.getContent();
         if(medicines.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.medicinesToMedicineResponse(medicines)),
+                new MultiResponseDto<>(mapper.medicinesToMedicineResponse(medicines),
+                        pageMedicines),
                 HttpStatus.OK);
     }
 }

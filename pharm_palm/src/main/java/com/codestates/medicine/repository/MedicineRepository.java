@@ -1,12 +1,14 @@
 package com.codestates.medicine.repository;
 
 import com.codestates.medicine.entity.Medicine;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {
-    List<Medicine> findByMedicineNameLike(String medicineName);
+    Page<Medicine> findByMedicineNameLike(String medicineName, Pageable pageable);
 
-    List<Medicine> findByMedicineIngredientLike(String medicineIngredient);
+    Page<Medicine> findByMedicineIngredientLike(String medicineIngredient, Pageable pageable);
 }
