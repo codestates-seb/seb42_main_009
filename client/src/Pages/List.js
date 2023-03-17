@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { FaRegThumbsUp } from 'react-icons/fa';
@@ -100,18 +100,13 @@ const LikeCount = styled.div`
   }
 `;
 
-const handleImageError = e => {
-  e.target.src = '/pharmpalm.png';
-};
-
 const List = () => {
   const URI = process.env.REACT_APP_API_URL;
   const [itemList, setItemList] = useState([]);
   const { searchText } = useSearchTextStore(state => state);
   const { searchSelected } = useSearchSelectedStore(state => state);
   const { searchApi } = useSearchApiStore(state => state);
-
-  console.log(URI);
+  const navigate = useNavigate();
 
   // 1. currentPage 초기값은 0으로 설정
   const [currentPage, setCurrentPage] = useState(1);
@@ -124,6 +119,10 @@ const List = () => {
     setCurrentPage(event.selected + 1);
   };
 
+  const handleImageError = e => {
+    e.target.src = '/pharmpalm.png';
+  };
+
   useEffect(() => {
     // const getMedList = async () => {
     //   const items = await axios({
@@ -133,7 +132,6 @@ const List = () => {
     //   setItemList(items.data.data);
     // };
     // getMedList();
-
     if (searchText === '') {
       axios
         .get(`${URI}/pp/medicines?page=${currentPage}&size=${PER_PAGE}`)
@@ -146,6 +144,8 @@ const List = () => {
           console.log(err);
         });
     } else {
+      console.log('검색 성공');
+      console.log(searchText);
       axios
         .get(
           `${URI}/pp/medicines/${searchSelected}?${searchApi}=${searchText}&page=${currentPage}&size=${PER_PAGE}`,
@@ -159,8 +159,7 @@ const List = () => {
           // 검색한 아이템이 있으면, 해당 아이템 출력
           else {
             setItemList(res.data.data);
-            console.log(res.data);
-            setTotalLength(res.data.data.length);
+            setTotalLength(res.data.pageInfo.totalElements);
           }
         })
         .catch(err => {
@@ -168,7 +167,11 @@ const List = () => {
         });
     }
   }, [currentPage, searchText, searchSelected]);
-  console.log(itemList);
+
+  const itemOnClickHandler = medicineId => {
+    navigate(`/item/${medicineId}`);
+    // window.location.reload();
+  };
 
   return (
     <>
@@ -179,7 +182,10 @@ const List = () => {
         <Search />
         <ContentList>
           {itemList.map((item, idx) => (
-            <ContentBox key={idx}>
+            <ContentBox
+              key={idx}
+              onClick={() => itemOnClickHandler(item.medicineId)}
+            >
               <img
                 src={item.medicineImg}
                 alt={item.medicineName}

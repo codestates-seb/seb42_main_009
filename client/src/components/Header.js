@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BiSearchAlt } from 'react-icons/bi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useIsLoginStore } from '../Stores/loginStore';
 import {
   HeaderWrap,
@@ -32,7 +32,12 @@ const Header = () => {
   const panelOpen = () => {
     setMobileOpen(!mobileOpen);
   };
-  const menu = ['의약품 조회', '내 약 관리', '복약루틴', 'NEWS'];
+  const menuList = [
+    { title: '의약품 조회', linkSrc: '/list' },
+    { title: '내 약 관리', linkSrc: '/' },
+    { title: '복약루틴', linkSrc: '/' },
+    { title: 'NEWS', linkSrc: '/' },
+  ];
 
   const logoutHandler = () => {
     setIsLogin(false);
@@ -50,8 +55,10 @@ const Header = () => {
             <img src="/pharmpalm.png" alt="pharm palm logo" />
           </Logo>
           <Menu>
-            {menu.map((item, idx) => (
-              <li key={idx}>{item}</li>
+            {menuList.map((item, idx) => (
+              <li key={idx}>
+                <Link to={item.linkSrc}>{item.title}</Link>
+              </li>
             ))}
           </Menu>
         </Flexbox>
@@ -124,8 +131,10 @@ const Header = () => {
             </PanelBtn>
           )}
           <PanelMenu>
-            {menu.map((item, idx) => (
-              <li key={idx}>{item}</li>
+            {menuList.map((item, idx) => (
+              <Link to={item.linkSrc}>
+                <li key={idx}>{item.title}</li>
+              </Link>
             ))}
           </PanelMenu>
         </Panel>

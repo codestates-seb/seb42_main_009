@@ -6,13 +6,23 @@ const useSearchTextStore = create(set => ({
 }));
 
 const useSearchSelectedStore = create(set => ({
-  searchSelected: '',
+  searchSelected: 'name',
   setSearchSelected: state => set(() => ({ searchSelected: state })),
 }));
 
 const useSearchApiStore = create(set => ({
-  searchApi: '',
+  searchApi: 'medicineName',
   setSearchApi: state => set(() => ({ searchApi: state })),
 }));
 
-export { useSearchTextStore, useSearchSelectedStore, useSearchApiStore };
+const useSearchIsUpdateStore = create(set => ({
+  searchIsUpdate: '',
+  setSearchIsUpdate: state => set(() => ({ searchIsUpdate: state })),
+}));
+
+export {
+  useSearchTextStore,
+  useSearchSelectedStore,
+  useSearchApiStore,
+  useSearchIsUpdateStore,
+};
