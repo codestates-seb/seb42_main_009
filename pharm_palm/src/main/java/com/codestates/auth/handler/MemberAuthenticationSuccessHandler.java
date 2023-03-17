@@ -1,5 +1,6 @@
 package com.codestates.auth.handler;
 
+import com.codestates.member.entity.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -20,8 +21,9 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
+        Member member = (Member) authentication.getPrincipal();
 
-        log.info("# Authenticated successfully!");
+        log.info("# 로그인 인증 성공! : {}", member.getMemberEmail());
 
     }
 }

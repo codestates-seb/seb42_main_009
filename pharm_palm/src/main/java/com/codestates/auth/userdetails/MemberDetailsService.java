@@ -34,10 +34,10 @@ public class MemberDetailsService implements UserDetailsService {
 
     private final class MemberDetails extends Member implements UserDetails {
         MemberDetails(Member member) {
-            setMemberId(member.getMemberId());
-            setMemberEmail(member.getMemberEmail());
-            setMemberPwd(member.getMemberPwd());
-            setRoles(member.getRoles());
+            this.setMemberId(member.getMemberId());
+            this.setMemberEmail(member.getMemberEmail());
+            this.setMemberPwd(member.getMemberPwd());
+            this.setRoles(member.getRoles());
         }
 
         @Override
