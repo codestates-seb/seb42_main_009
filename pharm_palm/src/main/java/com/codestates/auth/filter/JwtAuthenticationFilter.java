@@ -3,6 +3,7 @@ package com.codestates.auth.filter;
 import com.codestates.auth.dto.JwtConvertor;
 import com.codestates.auth.dto.LoginDto;
 import com.codestates.auth.jwt.JwtTokenizer;
+import com.codestates.auth.utils.TimeConvertor;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,10 +65,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String accessToken = delegateAccessToken(findMember);
         String refreshToken = delegateRefreshToken(findMember);
-        Date accessTokenExpiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-        Date refreshTokenExpiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
+//        //토큰 만료시간 한국시간으로 변환
+//        ZonedDateTime expiresAtUtc = ZonedDateTime.now(ZoneOffset.UTC)
+//                .plusMinutes(jwtTokenizer.getAccessTokenExpirationMinutes());
+//        ZonedDateTime expiresAtKst = expiresAtUtc.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
 
-        sendJwtToken(response, accessToken, refreshToken, accessTokenExpiresAt, refreshTokenExpiresAt);
+//        Date accessToken_expiresAt = Date.from(expiresAtKst.toInstant());
+
+        Date accessToken_expiresAt = timeConvertor(jwtTokenizer.getAccessTokenExpirationMinutes());
+
+        Date refreshToken_expiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
+
+        sendJwtToken(response, accessToken, refreshToken, accessToken_expiresAt, refreshToken_expiresAt);
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
@@ -105,4 +118,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 accessTokenExpiresAt, refreshTokenExpiresAt), JwtConvertor.class));
 
     }
+
+    private Date timeConvertor(int expiresTime) {
+        ZonedDateTime expiresAtUtc = ZonedDateTime.now(ZoneOffset.UTC)
+                .plusMinutes(expiresTime);
+
+        ZonedDateTime expiresAtKst = expiresAtUtc.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
+
+        return Date.from(expiresAtKst.toInstant());
+    }
+
 }
