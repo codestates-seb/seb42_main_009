@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 import { BsFillBalloonHeartFill } from 'react-icons/bs';
 import styled, { keyframes } from 'styled-components';
@@ -6,6 +8,7 @@ import Search from '../components/Search';
 import Banner from '../components/Banner';
 import ItemInfo from '../components/ItemInfo';
 import ItemReview from '../components/ItemReview';
+import { useMedicineItemStore } from '../Stores/medicineItemStore';
 
 const ItemWrap = styled.div`
   display: flex;
@@ -151,7 +154,11 @@ const Tab = styled.ul`
 const Item = () => {
   const [curTab, setCurTab] = useState(0);
   const [like, setLike] = useState(false);
-  const [likeCount, setLikeCount] = useState(139);
+  const { medicineItem, setMedicineItem, setLikeIncrease, setLikeDecrease } =
+    useMedicineItemStore(state => state);
+
+  const location = useLocation();
+  const medicineId = location.pathname.split('/')[2];
 
   const tabArr = ['상세정보', '사용자리뷰'];
   const tabHandler = idx => {
@@ -159,9 +166,29 @@ const Item = () => {
   };
   const likeHandler = () => {
     setLike(!like);
-    if (like) setLikeCount(likeCount - 1);
-    else setLikeCount(likeCount + 1);
+    if (like) {
+      setLikeDecrease();
+    } else {
+      setLikeIncrease();
+    }
   };
+  const handleImageError = e => {
+    e.target.src = '/pharmpalm.png';
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/pp/medicines/${medicineId}`)
+      .then(res => {
+        console.log(res.data);
+        setMedicineItem(res.data.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
+  console.log(medicineItem);
 
   return (
     <>
@@ -183,25 +210,24 @@ const Item = () => {
                     <BsFillBalloonHeartFill />
                   </span>
                 </button>
-                <p>{likeCount}</p>
+                <p>{medicineItem.medicineLike}</p>
               </LikeWrap>
-              <h3>
-                타치온정50밀리그램(글루타티온(환원형))asdfasdfasdfasdfasdf
-              </h3>
+              <h3>{medicineItem.medicineName}</h3>
             </ItemTitle>
             <ItemOverview>
               <img
-                src="https://picsum.photos/300/200"
-                alt="https://picsum.photos/300/200"
+                src={medicineItem.medicineImg}
+                alt={medicineItem.medicineName}
+                onError={handleImageError}
               />
               <ul>
                 <li>
                   <span>의약품명</span>
-                  <div>타치온정50밀리그램(글루타티온(환원형))</div>
+                  <div>{medicineItem.medicineName}</div>
                 </li>
                 <li>
                   <span>복용방법</span>
-                  <div>성인은 1회 1~2정(50~100 mg), 1일 1~3회 복용합니다.</div>
+                  <div>{medicineItem.medicineUse}</div>
                 </li>
               </ul>
             </ItemOverview>
@@ -212,11 +238,11 @@ const Item = () => {
               {tabArr.map((item, idx) => (
                 <li
                   onClick={() => tabHandler(idx)}
-                  onKeyUp = {item.tabHandler}
-                  onKeyDown = {item.tabHandler}
+                  onKeyUp={item.tabHandler}
+                  onKeyDown={item.tabHandler}
                   key={idx}
                   className={idx === curTab ? 'active tabmenu' : 'tabmenu'}
-                  role='tab'
+                  role="tab"
                 >
                   {item}
                 </li>

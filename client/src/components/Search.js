@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   useSearchTextStore,
@@ -45,6 +46,7 @@ const Search = () => {
   const { setSearchText } = useSearchTextStore(state => state);
   const { setSearchSelected } = useSearchSelectedStore(state => state);
   const { setSearchApi } = useSearchApiStore(state => state);
+  const navigate = useNavigate();
 
   const [searchTxt, setSearchTxt] = useState('');
   const searchHandler = e => {
@@ -63,7 +65,9 @@ const Search = () => {
 
   const searchSubmit = e => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       setSearchText(searchTxt);
+      navigate('/list');
     }
   };
   return (
@@ -82,8 +86,10 @@ const Search = () => {
         onKeyDown={searchSubmit}
       />
       <SearchBtn
-        onClick={() => {
+        onClick={e => {
+          e.preventDefault();
           setSearchText(searchTxt);
+          navigate('/list');
         }}
       >
         검색

@@ -41,7 +41,7 @@ const Login = () => {
       .then(res => {
         setIsLogin(true);
         // data 확인
-        console.log(res.data);
+        console.log(res);
         // local storage에 token 저장
         localStorage.setItem('accessToken', res.data.accessToken);
         localStorage.setItem('refreshToken', res.data.refreshToken);

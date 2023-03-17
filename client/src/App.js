@@ -43,7 +43,7 @@ function App() {
     if (moment(expireAt).diff(moment()) < 0) console.log('토큰 만료!!');
 
     axios
-      .get(
+      .post(
         `${process.env.REACT_APP_API_URL}/pp/members/info`,
         {},
         {
@@ -69,6 +69,22 @@ function App() {
     const authorizationCode = url.searchParams.get('code');
     console.log(authorizationCode);
     authHandler();
+    axios
+      .post(
+        `http://localhost:3000/login/oauth2/code/kakao`,
+        {
+          grant_type: 'authorization_code',
+          client_id: `46d7b3692a51eff3138a1580dccdd6c0`,
+          redirect_uri: `http://localhost:3000/login/oauth2/code/kakao`,
+          code: `${authorizationCode}`,
+        },
+        {
+          headers: {
+            ContentType: 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then(res => console.log(res));
   }, []);
 
   return (
@@ -82,7 +98,7 @@ function App() {
           <Route path="signup" element={<SignUp />} />
           <Route path="list" element={<List />} />
           <Route path="mypage" element={<MyPage />} />
-          <Route path="item" element={<Item />} />
+          <Route path="item/:itemId" element={<Item />} />
           <Route path="editinfo" element={<EditInfo />} />
           <Route path="test" element={<Test />} />
           <Route path="mypharm" element={<MyPharm />} />
