@@ -32,6 +32,12 @@ public class Medicine {
     @Column
     private String medicineImg;
 
+    @Column(length = 2000, nullable = false)
+    private String medicineWarn;
+    @Column
+    private String medicineEntp;
+    @Column(length = 2000, nullable = false)
+    private String medicineDeposit;
 
     //매핑 oneToMany
     //private Long reviewId

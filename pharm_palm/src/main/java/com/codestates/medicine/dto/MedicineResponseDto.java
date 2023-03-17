@@ -17,4 +17,7 @@ public class MedicineResponseDto {
     private String medicineUse;
     private Long medicineLike;
     private String medicineImg;
+    private String medicineWarn;
+    private String medicineEntp;
+    private String medicineDeposit;
 }

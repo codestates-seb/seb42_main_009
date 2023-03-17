@@ -95,8 +95,22 @@ public class DataDownloader implements CommandLineRunner {
                 efcyQesitm = efcyQesitm.replaceAll("\\n", "");
                 medicine.setMedicineUse(efcyQesitm);
 
+
                 medicine.setMedicineLike(0L);
                 medicine.setMedicineImg(row.get("itemImage").asText());
+                medicine.setMedicineEntp(row.get("entpName").asText());
+
+                String atpnQesitm = row.get("atpnQesitm").asText();
+                atpnQesitm = atpnQesitm.replaceAll("<p>", "");
+                atpnQesitm = atpnQesitm.replaceAll("</p>", "");
+                atpnQesitm = atpnQesitm.replaceAll("\\n", "");
+                medicine.setMedicineWarn(atpnQesitm);
+
+                String depositMethodQesitm = row.get("depositMethodQesitm").asText();
+                depositMethodQesitm = depositMethodQesitm.replaceAll("<p>", "");
+                depositMethodQesitm = depositMethodQesitm.replaceAll("</p>", "");
+                depositMethodQesitm = depositMethodQesitm.replaceAll("\\n", "");
+                medicine.setMedicineDeposit(depositMethodQesitm);
 
                 medicines.add(medicine);
             }
