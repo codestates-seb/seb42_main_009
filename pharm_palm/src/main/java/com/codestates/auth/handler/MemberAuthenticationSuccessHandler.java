@@ -20,19 +20,8 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-        // 인증 성공 후, 사용자 정보를 response로 전송.
+
         log.info("# Authenticated successfully!");
-        String username = authentication.getName();
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        // 응답 작성
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-
-        PrintWriter out = response.getWriter();
-        out.write("{ \"id\": \"" + username + "\", \"authorities\": " + authorities + "}");
-        out.flush();
-        out.close();
     }
 }
