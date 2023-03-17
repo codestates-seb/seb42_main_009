@@ -10,6 +10,6 @@ import java.util.Date;
 public class JwtConvertor {
     private String accessToken;
     private String refreshToken;
-    private String accessToken_expiresAt;
-    private String refreshToken_expiresAt;
+    private Date accessToken_expiresAt;
+    private Date refreshToken_expiresAt;
 }

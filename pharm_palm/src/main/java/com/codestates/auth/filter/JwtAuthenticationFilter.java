@@ -63,12 +63,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = delegateAccessToken(findMember);
         String refreshToken = delegateRefreshToken(findMember);
 
-        Date acToken_expiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-        Date reToken_expiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
-        //Date를 String타입으로 변환
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String accessToken_expiresAt = sdf.format(acToken_expiresAt);
-        String refreshToken_expiresAt = sdf.format(reToken_expiresAt);
+        Date accessToken_expiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+        Date refreshToken_expiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
 
         sendJwtToken(response, accessToken, refreshToken, accessToken_expiresAt, refreshToken_expiresAt);
 
@@ -104,7 +100,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private void sendJwtToken(HttpServletResponse response,
                               String accessToken,
                               String refreshToken,
-                              String accessTokenExpiresAt, String refreshTokenExpiresAt) throws IOException {
+                              Date accessTokenExpiresAt, Date refreshTokenExpiresAt) throws IOException {
 
         Gson gson = new Gson();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
