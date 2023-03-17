@@ -55,8 +55,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()));
 
         return claims;
     }
@@ -64,7 +63,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     private void setAuthenticationToContext(Map<String, Object> claims) {
         String username = (String) claims.get("id");
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

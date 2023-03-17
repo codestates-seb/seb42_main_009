@@ -9,7 +9,8 @@ public enum ExceptionCode {
     MEDICINE_NOT_FOUND(404, "Medicine not found"),
     REVIEW_NOT_FOUND(404, "Review not found"),
     DOSE_ALREADY_EXISTS(409,"Dose already exists"),
-    DOSE_NOT_FOUND(404,"Dose not found")
+    DOSE_NOT_FOUND(404,"Dose not found"),
+    WRONG_TOKEN_INPUT(403, "Wrong token inputted"),
     ;
 
     @Getter

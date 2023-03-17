@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
+@Getter
 public class JwtTokenizer {
     @Getter
     private String secretKey = generateRandomSecretKey();
@@ -61,14 +62,14 @@ public class JwtTokenizer {
                 .compact();
     }
 
-    public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
+    public Map<String, Object> getClaims(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
-        Jws<Claims> claims = Jwts.parserBuilder()
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(jws);
-        return claims;
+                .parseClaimsJws(jws)
+                .getBody();
     }
 
     public void verifySignature(String jws, String base64EncodedSecretKey) {

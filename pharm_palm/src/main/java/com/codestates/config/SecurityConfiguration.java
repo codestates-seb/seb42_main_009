@@ -54,10 +54,9 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
-                .accessDeniedHandler(new MemberAccessDeniedHandler())
-                .and()
+                .exceptionHandling(excep -> {excep.authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                        .accessDeniedHandler(new MemberAccessDeniedHandler());
+                })
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
