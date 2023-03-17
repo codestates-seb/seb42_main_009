@@ -79,6 +79,7 @@ public class SecurityConfiguration {
         configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com"));
 
         configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("*"));
 
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);

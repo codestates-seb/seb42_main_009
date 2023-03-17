@@ -3,7 +3,6 @@ package com.codestates.auth.filter;
 import com.codestates.auth.dto.JwtConvertor;
 import com.codestates.auth.dto.LoginDto;
 import com.codestates.auth.jwt.JwtTokenizer;
-import com.codestates.auth.utils.TimeConvertor;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,9 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -65,16 +62,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String accessToken = delegateAccessToken(findMember);
         String refreshToken = delegateRefreshToken(findMember);
-//        //토큰 만료시간 한국시간으로 변환
-//        ZonedDateTime expiresAtUtc = ZonedDateTime.now(ZoneOffset.UTC)
-//                .plusMinutes(jwtTokenizer.getAccessTokenExpirationMinutes());
-//        ZonedDateTime expiresAtKst = expiresAtUtc.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
 
-//        Date accessToken_expiresAt = Date.from(expiresAtKst.toInstant());
-
-        Date accessToken_expiresAt = timeConvertor(jwtTokenizer.getAccessTokenExpirationMinutes());
-
-        Date refreshToken_expiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
+        Date acToken_expiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+        Date reToken_expiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
+        //Date를 String타입으로 변환
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String accessToken_expiresAt = sdf.format(acToken_expiresAt);
+        String refreshToken_expiresAt = sdf.format(reToken_expiresAt);
 
         sendJwtToken(response, accessToken, refreshToken, accessToken_expiresAt, refreshToken_expiresAt);
 
@@ -110,7 +104,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private void sendJwtToken(HttpServletResponse response,
                               String accessToken,
                               String refreshToken,
-                              Date accessTokenExpiresAt, Date refreshTokenExpiresAt) throws IOException {
+                              String accessTokenExpiresAt, String refreshTokenExpiresAt) throws IOException {
 
         Gson gson = new Gson();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -118,14 +112,4 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 accessTokenExpiresAt, refreshTokenExpiresAt), JwtConvertor.class));
 
     }
-
-    private Date timeConvertor(int expiresTime) {
-        ZonedDateTime expiresAtUtc = ZonedDateTime.now(ZoneOffset.UTC)
-                .plusMinutes(expiresTime);
-
-        ZonedDateTime expiresAtKst = expiresAtUtc.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
-
-        return Date.from(expiresAtKst.toInstant());
-    }
-
 }
