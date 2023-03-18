@@ -2,6 +2,8 @@ import { create } from 'zustand';
 
 const useMedicineItemStore = create(set => ({
   medicineItem: {
+    medicineDeposit: '',
+    medicineEntp: '',
     medicineId: 0,
     medicineImg: '',
     medicineIngredient: '',
