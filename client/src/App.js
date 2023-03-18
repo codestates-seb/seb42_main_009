@@ -22,6 +22,7 @@ import Item from './Pages/Item';
 import EditInfo from './Pages/EditInfo';
 import Test from './Pages/Test';
 import MyPharm from './Pages/MyPharm';
+import Chart from './Pages/Chart';
 
 function App() {
   const { setIsLogin } = useIsLoginStore(state => state);
@@ -102,6 +103,7 @@ function App() {
           <Route path="editinfo" element={<EditInfo />} />
           <Route path="test" element={<Test />} />
           <Route path="mypharm" element={<MyPharm />} />
+          <Route path="chart" element={<Chart />} />
         </Routes>
       </div>
     </BrowserRouter>

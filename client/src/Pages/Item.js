@@ -42,7 +42,7 @@ const Item = () => {
       .get(`${process.env.REACT_APP_API_URL}/pp/medicines/${medicineId}`)
       .then(res => {
         console.log(res.data);
-        setMedicineItem(res.data.data);
+        setMedicineItem(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -54,7 +54,7 @@ const Item = () => {
   return (
     <>
       <Banner>
-        <div>aasfadsf</div>
+        <div>의약품 정보</div>
       </Banner>
       <div className="bodywrap">
         <Search />
