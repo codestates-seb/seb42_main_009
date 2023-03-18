@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useIsLoginStore, useLoginInfoStore } from '../Stores/loginStore';
 import kakaoLoginImage from '../images/kakao_login_medium_narrow.png';
 import Input from '../components/Ui/Input';
+import { HeaderBtn } from '../styles/s-header';
 
 const REST_API_KEY = '46d7b3692a51eff3138a1580dccdd6c0';
 const REDIRECT_URI = 'http://localhost:3000/login/oauth2/code/kakao';
@@ -90,18 +91,21 @@ const Login = () => {
           />
         </div>
         <div className="flex items-center justify-between mb-2">
-          <button
-            className="login-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          <HeaderBtn
+            className='my-3'
+            width='100%'
+            height='34px'
+            marginLeft='0'
             type="button"
             onClick={() => {
               loginRequestHandler();
             }}
           >
             로그인
-          </button>
+          </HeaderBtn>
         </div>
 
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between my-4">
           <Link
             className="inline-block items-end font-semibold text-sm hover:text-blue-800 ml-2"
             to="/signup"
