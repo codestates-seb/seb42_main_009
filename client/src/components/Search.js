@@ -1,47 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import { FaChevronDown } from 'react-icons/fa';
 import {
   useSearchTextStore,
   useSearchSelectedStore,
   useSearchApiStore,
 } from '../Stores/listSearchStore';
+import {
+  SearchBox,
+  SearchSelBox,
+  SearchBtn,
+  SearchSelect,
+  SearchSelectDown,
+} from '../styles/s-top';
 
-const SearchBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  label {
-    font-size: var(--fz-md);
-    padding-right: 20px;
-  }
-  input {
-    width: 350px;
-    height: 40px;
-    border-radius: 6px;
-    border: 1px solid var(--bl-2);
-    padding: 0 10px;
-  }
-  @media (max-width: 768px) {
-    label {
-      font-size: var(--fz-base);
-      padding-right: 15px;
-    }
-    input {
-      width: 250px;
-      height: 34px;
-    }
-  }
-`;
-const SearchBtn = styled.button`
-  margin-left: 10px;
-  height: 40px;
-  width: 80px;
-  border-radius: 6px;
-  background-color: var(--mainbl);
-  text-align: center;
-  color: #fff;
-`;
 const Search = () => {
   const { setSearchText } = useSearchTextStore(state => state);
   const { setSearchSelected } = useSearchSelectedStore(state => state);
@@ -73,10 +45,15 @@ const Search = () => {
   return (
     <SearchBox>
       <label htmlFor="search">의약품 검색</label>
-      <select className="searchs" onChange={selectHandler}>
-        <option value="name">제품명</option>
-        <option value="ingredient">성분</option>
-      </select>
+      <SearchSelBox>
+        <SearchSelect onChange={selectHandler}>
+          <option value="name">제품명</option>
+          <option value="ingredient">성분</option>
+        </SearchSelect>
+        <SearchSelectDown>
+          <FaChevronDown />
+        </SearchSelectDown>
+      </SearchSelBox>
       <input
         type="text"
         id="search"

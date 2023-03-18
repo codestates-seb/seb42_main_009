@@ -14,16 +14,14 @@ import {
   FieldTooltip,
   Flexbox,
   MyPharmBtnWrap,
-  MyPharmSubmit,
-  ToggleWrap,
-  ToggleBox,
+  MyPharmSubmit
 } from '../styles/s-mypharmmodal';
 import TimeInput from './TimeInput';
 
 const MyPharmModal = ({ setModalOpen }) => {
   const [timeIpCount, setTimeIpCount] = useState([0]);
   const [timeTable, setTimeTable] = useState({});
-  const [toggleOn, setToggleOn] = useState(false);
+  
 
   const timeTableArray = Object.values(timeTable);
   console.log(timeTableArray);
@@ -37,9 +35,7 @@ const MyPharmModal = ({ setModalOpen }) => {
   const modalCloseBtn = () => {
     setModalOpen(false);
   };
-  const toggleHandler = () => {
-    setToggleOn(!toggleOn);
-  };
+
 
   return (
     <MyPharmWrap>
@@ -119,34 +115,6 @@ const MyPharmModal = ({ setModalOpen }) => {
                   />
                 ))}
               </Flexbox>
-            </FieldBox>
-            <FieldBox>
-              <label htmlFor="medicine_alarm">알림설정</label>
-              <ToggleWrap>
-                <ToggleBox onClick={toggleHandler}>
-                  <div
-                    className={`toggle-wrap ${
-                      toggleOn ? 'toggle-checked' : ''
-                    }`}
-                  >
-                    {}
-                  </div>
-                  <div
-                    className={`toggle-circle ${
-                      toggleOn ? 'toggle-checked' : ''
-                    }`}
-                  >
-                    {}
-                  </div>
-                </ToggleBox>
-                <p className={toggleOn ? 'toggle-checked' : null}>
-                  {toggleOn ? '알림 받기' : '알림 해제'}
-                </p>
-              </ToggleWrap>
-              <FieldTooltip>
-                <FaInfoCircle />
-                <p>복용 시간 알림을 받으려면 알림 받기로 설정하세요.</p>
-              </FieldTooltip>
             </FieldBox>
           </FieldSet>
           <MyPharmBtnWrap>
