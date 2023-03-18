@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ItemInfoTable } from '../styles/s-item';
 import { useMedicineItemStore } from '../Stores/medicineItemStore';
 
 const ItemInfoTable = styled.ul`

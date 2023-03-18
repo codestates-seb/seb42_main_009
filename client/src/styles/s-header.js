@@ -130,7 +130,7 @@ export const ButtonWrap = styled.div`
 `;
 export const HeaderBtn = styled.button`
   width: ${props => props.width || '60px'};
-  height: 30px;
+  height: ${props => props.height || '30px'};
   text-align: center;
   border-radius: 6px;
   background: ${props => props.background || 'var(--mainbl)'};
@@ -138,7 +138,7 @@ export const HeaderBtn = styled.button`
   border-width: 1px;
   border-style: solid;
   border-color: ${props => props.border || 'transparent'};
-  margin-left: 5px;
+  margin-left: ${props=>props.marginLeft||'5px'};
   transition: 0.4s;
   &:hover {
     background: ${props => props.hoverbg || 'var(--darkbl)'};

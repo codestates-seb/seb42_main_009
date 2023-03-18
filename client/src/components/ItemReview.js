@@ -1,183 +1,13 @@
 /* eslint-disable */
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { SmBtn } from '../styles/globalStyle';
 import { IoMdClose } from 'react-icons/io';
 import { FaPlus } from 'react-icons/fa';
+import { 
+  ReviewWrap,ReviewBtn,ReviewList,ReviewItem,ReviewContent,UserImage,
+  UserInputs,ReviewModalBack,ReviewModal,ReviewModalBox,ReviewImage,ReviewText,ReviewMedSelect,ReviewSubmitBtn
+} from '../styles/s-item';
 
-const ReviewWrap = styled.div`
-  margin-top: 15px;
-`;
-const ReviewBtn = styled.button`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0 7px;
-  height: 30px;
-  color: var(--mainbl);
-  background: var(--bl-1);
-  border-radius: 6px;
-  > span {
-    padding-left: 5px;
-    font-weight: 600;
-  }
-  &:hover {
-    background: var(--mainbl);
-    color: #fff;
-    transition: 0.4s;
-  }
-  @media (max-width: 768px) {
-    background: var(--mainbl);
-    color: #fff;
-  }
-`;
-const ReviewList = styled.ul`
-  margin-top: 15px;
-`;
-const ReviewItem = styled.li`
-  position: relative;
-  width: 100%;
-  border-radius: 6px;
-  background: var(--palebl);
-  padding: 20px;
-  margin-bottom: 10px;
-  height: 120px;
-  &.review-open {
-    height: auto;
-  }
-  .btn-wrap {
-    position: absolute;
-    right: 10px;
-    top: 15px;
-  }
-  .btn-more {
-    position: absolute;
-    right: 10px;
-    bottom: 15px;
-    color: var(--mainbl);
-    font-weight: 600;
-    cursor: pointer;
-  }
-`;
-const ReviewContent = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-`;
-const UserImage = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  flex: none;
-  overflow: hidden;
-  margin-top: 5px;
-  > img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
-const UserInputs = styled.div`
-  width: calc(100% - 120px);
-  margin-left: 10px;
-  padding-top: 10px;
-  .writedate {
-    padding-left: 10px;
-    color: var(--bl-2);
-    font-size: var(--fz-sm);
-  }
-  div {
-    width: 100%;
-    margin-top: 15px;
-    line-height: 20px;
-    display: -webkit-box;
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    ${ReviewItem}.review-open & {
-      display: block;
-      text-overflow: initial;
-      -webkit-line-clamp: initial;
-      overflow: visible;
-    }
-  }
-`;
-
-const ReviewModalBack = styled.div`
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background: rgba(34, 34, 34, 0.6);
-  z-index: 9999;
-`;
-const ReviewModal = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 500px;
-  height: 60vh;
-  padding: 50px 20px;
-  border-radius: 12px;
-  background: #fff;
-  > .close {
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    font-size: 24px;
-    cursor: pointer;
-  }
-`;
-const ReviewImage = styled.div`
-  width: 100%;
-  height: 100px;
-  border: 1px dashed var(--bl-2);
-  border-radius: 6px;
-`;
-const ReviewText = styled.textarea`
-  margin-top: 15px;
-  width: 100%;
-  height: 130px;
-  resize: none;
-  border: 1px solid var(--mainbl);
-  border-radius: 6px;
-  padding: 10px;
-  font-size: var(--fz-sm);
-  line-height: 18px;
-`;
-const ReviewMedSelect = styled.div`
-  margin-top: 15px;
-  width: 100%;
-  background: var(--bl-1);
-  border-radius: 6px;
-  padding: 10px;
-  > input {
-    border-bottom: 1px solid var(--mainbl);
-  }
-  .entered-med {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-top: 15px;
-  }
-  p {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 3px 4px 4px 6px;
-    background: var(--lightbl);
-    border-radius: 4px;
-    margin-right: 4px;
-    cursor: pointer;
-    > span {
-      padding-right: 4px;
-    }
-  }
-`;
 
 const ItemReview = () => {
   const [reviewAddOpen, setReviewAddOpen] = useState(false);
@@ -360,7 +190,10 @@ const ItemReview = () => {
                   <span className="writedate">2023-09-13</span>
 
                   <div>
-                    <img src={item.reviewImg.preview_URL} />
+                    {
+                      item.reviewImg ? <img src={item.reviewImg.preview_URL} /> : null
+                    }
+                    
                     {item.reviewText}
                   </div>
                 </UserInputs>
@@ -372,98 +205,100 @@ const ItemReview = () => {
       {reviewAddOpen ? (
         <ReviewModalBack>
           <ReviewModal>
-            <button
-              onClick={reviewAddModalOpen}
-              className="close"
-              aria-label="modal close"
-            >
-              <IoMdClose />
-            </button>
-            <ReviewImage>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={saveImage}
-                onClick={e => (e.target.value = null)}
-              />
-              <img src={image.preview_URL} />
-            </ReviewImage>
-            <ReviewText
-              maxLength={500}
-              placeholder="복용 후기를 적어주세요."
-              onChange={handleInputValue('reviewText')}
-            ></ReviewText>
-            <ReviewMedSelect>
-              <input
-                type="text"
-                value={reviewMedInput}
-                onChange={reviewInputHandler}
-                onKeyDown={reviewInputEnter}
-              />
-              <div className="entered-med">
-                <p>
-                  <span>타이레놀</span>
-                  <IoMdClose />
-                </p>
-                <p>
-                  <span>아타치온정50밀리그램네모정</span>
-                  <IoMdClose />
-                </p>
-              </div>
-            </ReviewMedSelect>
-            <ReviewBtn onClick={reviewAddHandler}>
-              <FaPlus />
-              <span>추가하기</span>
-            </ReviewBtn>
+            <ReviewModalBox>
+              <button
+                onClick={reviewAddModalOpen}
+                className="close"
+                aria-label="modal close"
+              >
+                <IoMdClose />
+              </button>
+              <ReviewImage>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={saveImage}
+                  onClick={e => (e.target.value = null)}
+                />
+                <img src={image.preview_URL} />
+              </ReviewImage>
+              <ReviewText
+                maxLength={500}
+                placeholder="복용 후기를 적어주세요."
+                onChange={handleInputValue('reviewText')}
+              ></ReviewText>
+              <ReviewMedSelect>
+                <input
+                  type="text"
+                  value={reviewMedInput}
+                  onChange={reviewInputHandler}
+                  onKeyDown={reviewInputEnter}
+                />
+                <div className="entered-med">
+                  <p>
+                    <span>타이레놀</span>
+                    <IoMdClose />
+                  </p>
+                  <p>
+                    <span>아타치온정50밀리그램네모정</span>
+                    <IoMdClose />
+                  </p>
+                </div>
+              </ReviewMedSelect>
+              <ReviewSubmitBtn onClick={reviewAddHandler}>
+                리뷰쓰기
+              </ReviewSubmitBtn>
+            </ReviewModalBox>
           </ReviewModal>
         </ReviewModalBack>
       ) : null}
       {reviewUpdateOpen ? (
         <ReviewModalBack>
           <ReviewModal>
-            <button
-              onClick={reviewUpdateModalOpen}
-              className="close"
-              aria-label="modal close"
-            >
-              <IoMdClose />
-            </button>
-            <ReviewImage>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={saveImage}
-                onClick={e => (e.target.value = null)}
-              />
-              <img src={image.preview_URL} />
-            </ReviewImage>
-            <ReviewText
-              maxLength={500}
-              placeholder="복용 후기를 적어주세요."
-              onChange={handleInputValue('reviewText')}
-            ></ReviewText>
-            <ReviewMedSelect>
-              <input
-                type="text"
-                value={reviewMedInput}
-                onChange={reviewInputHandler}
-                onKeyDown={reviewInputEnter}
-              />
-              <div className="entered-med">
-                <p>
-                  <span>타이레놀</span>
-                  <IoMdClose />
-                </p>
-                <p>
-                  <span>아타치온정50밀리그램네모정</span>
-                  <IoMdClose />
-                </p>
-              </div>
-            </ReviewMedSelect>
-            <ReviewBtn onClick={reviewUpdateHandler}>
-              <FaPlus />
-              <span>수정하기</span>
-            </ReviewBtn>
+            <ReviewModalBox>
+              <button
+                onClick={reviewUpdateModalOpen}
+                className="close"
+                aria-label="modal close"
+              >
+                <IoMdClose />
+              </button>
+              <ReviewImage>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={saveImage}
+                  onClick={e => (e.target.value = null)}
+                />
+                <img src={image.preview_URL} />
+              </ReviewImage>
+              <ReviewText
+                maxLength={500}
+                placeholder="복용 후기를 적어주세요."
+                onChange={handleInputValue('reviewText')}
+              ></ReviewText>
+              <ReviewMedSelect>
+                <input
+                  type="text"
+                  value={reviewMedInput}
+                  onChange={reviewInputHandler}
+                  onKeyDown={reviewInputEnter}
+                />
+                <div className="entered-med">
+                  <p>
+                    <span>타이레놀</span>
+                    <IoMdClose />
+                  </p>
+                  <p>
+                    <span>아타치온정50밀리그램네모정</span>
+                    <IoMdClose />
+                  </p>
+                </div>
+              </ReviewMedSelect>
+              <ReviewSubmitBtn onClick={reviewUpdateHandler}>
+                수정하기
+              </ReviewSubmitBtn>
+            </ReviewModalBox>
           </ReviewModal>
         </ReviewModalBack>
       ) : null}
