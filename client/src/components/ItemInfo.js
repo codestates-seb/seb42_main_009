@@ -14,7 +14,7 @@ const Iteminfo = () => {
       </li>
       <li>
         <span>주의사항</span>
-        <div>{medicineItem.medicineDeposit}</div>
+        <div>{medicineItem.medicineWarn}</div>
       </li>
       <li>
         <span>제조사</span>
@@ -22,7 +22,7 @@ const Iteminfo = () => {
       </li>
       <li>
         <span>보관법</span>
-        <div>{medicineItem.medicineWarn}</div>
+        <div>{medicineItem.medicineDeposit}</div>
       </li>
       {/* <li>
         <span>성분,함량</span>
