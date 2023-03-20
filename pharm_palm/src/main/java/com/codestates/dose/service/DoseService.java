@@ -1,5 +1,6 @@
 package com.codestates.dose.service;
 
+import com.codestates.dose.dto.DosePatchDto;
 import com.codestates.dose.dto.DosePostDto;
 import com.codestates.dose.dto.DoseResponseDto;
 import com.codestates.dose.entity.Dose;
@@ -70,5 +71,16 @@ public class DoseService {
 
         return optionalDose.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.DOSE_NOT_FOUND));
+    }
+
+    public Dose updateDose(long doseId, DosePatchDto dosePatchDto) {
+        Dose findDose = findDose(doseId);
+        Optional.ofNullable(dosePatchDto.getDoseNumber())
+                .ifPresent(findDose::setDoseNumber);
+        Optional.ofNullable(dosePatchDto.getDoseMount())
+                .ifPresent(findDose::setDoseMount);
+        Optional.ofNullable(dosePatchDto.getDoseTimes())
+                .ifPresent(findDose::setDoseTimes);
+        return doseRepository.save(findDose);
     }
 }
