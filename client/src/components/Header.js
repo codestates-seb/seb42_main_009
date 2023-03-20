@@ -20,8 +20,8 @@ import {
 const Header = () => {
   const navigate = useNavigate();
   const { isLogin, setIsLogin } = useIsLoginStore(state => state);
-  const [ searchOn, setSearchOn ] = useState(false);
-  const [ mobileOpen, setMobileOpen ] = useState(false);
+  const [searchOn, setSearchOn] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const searchOpen = () => {
     setSearchOn(!searchOn);
   };
@@ -35,7 +35,7 @@ const Header = () => {
   const menuList = [
     { title: '의약품 조회', linkSrc: '/list' },
     { title: '내 약 관리', linkSrc: '/mypharm' },
-    { title: '차트데이터', linkSrc: '/' },
+    { title: '차트데이터', linkSrc: '/chart' },
     { title: 'NEWS', linkSrc: '/' },
   ];
   const logoutHandler = () => {

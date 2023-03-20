@@ -3,17 +3,29 @@ import React, { useState } from 'react';
 import { SmBtn } from '../styles/globalStyle';
 import { IoMdClose } from 'react-icons/io';
 import { FaPlus } from 'react-icons/fa';
-import { 
-  ReviewWrap,ReviewBtn,ReviewList,ReviewItem,ReviewContent,UserImage,
-  UserInputs,ReviewModalBack,ReviewModal,ReviewModalBox,ReviewImage,ReviewText,ReviewMedSelect,ReviewSubmitBtn
+import {
+  ReviewWrap,
+  ReviewBtn,
+  ReviewList,
+  ReviewItem,
+  ReviewContent,
+  UserImage,
+  UserInputs,
+  ReviewModalBack,
+  ReviewModal,
+  ReviewModalBox,
+  ReviewImage,
+  ReviewText,
+  ReviewMedSelect,
+  ReviewSubmitBtn,
 } from '../styles/s-item';
-
 
 const ItemReview = () => {
   const [reviewAddOpen, setReviewAddOpen] = useState(false);
   const [reviewUpdateOpen, setReviewUpdateOpen] = useState(false);
   const [updateIndex, setUpdateIndex] = useState(0);
   const [reviewMedInput, setReviewMedInput] = useState('');
+  const [reviewTags, setReviewTags] = useState([]);
   const [image, setImage] = useState({
     image_file: '',
     preview_URL: 'img/default_image.png',
@@ -75,15 +87,22 @@ const ItemReview = () => {
     setReviewUpdateOpen(!reviewUpdateOpen);
   };
 
-  const reviewInputHandler = e => {
+  const tagInputHandler = e => {
     const content = e.target.value;
     setReviewMedInput(content);
   };
-  const reviewInputEnter = e => {
-    if (e.key === ',') {
+
+  const tagDeleteHandler = id => {
+    setReviewTags(reviewTags.filter((item, idx) => idx !== id));
+  };
+
+  const tagInputEnter = e => {
+    if (e.key === 'Enter' || e.key === ',' || e.key === '+' || e.key === ' ') {
+      setReviewTags([...reviewTags, reviewMedInput]);
       setReviewMedInput('');
     }
   };
+
   const moreReview = id => {
     setReviewList(reviewList =>
       reviewList.map((item, idx) =>
@@ -102,6 +121,8 @@ const ItemReview = () => {
       image_file: '',
       preview_URL: 'img/default_image.png',
     });
+    setReviewMedInput('');
+    setReviewTags([]);
   };
 
   const reviewAddHandler = () => {
@@ -190,10 +211,10 @@ const ItemReview = () => {
                   <span className="writedate">2023-09-13</span>
 
                   <div>
-                    {
-                      item.reviewImg ? <img src={item.reviewImg.preview_URL} /> : null
-                    }
-                    
+                    {item.reviewImg ? (
+                      <img src={item.reviewImg.preview_URL} />
+                    ) : null}
+
                     {item.reviewText}
                   </div>
                 </UserInputs>
@@ -207,7 +228,10 @@ const ItemReview = () => {
           <ReviewModal>
             <ReviewModalBox>
               <button
-                onClick={reviewAddModalOpen}
+                onClick={e => {
+                  reviewAddModalOpen(e);
+                  initializeItem();
+                }}
                 className="close"
                 aria-label="modal close"
               >
@@ -231,18 +255,18 @@ const ItemReview = () => {
                 <input
                   type="text"
                   value={reviewMedInput}
-                  onChange={reviewInputHandler}
-                  onKeyDown={reviewInputEnter}
+                  onChange={tagInputHandler}
+                  onKeyDown={tagInputEnter}
                 />
                 <div className="entered-med">
-                  <p>
-                    <span>타이레놀</span>
-                    <IoMdClose />
-                  </p>
-                  <p>
-                    <span>아타치온정50밀리그램네모정</span>
-                    <IoMdClose />
-                  </p>
+                  {reviewTags.map((item, idx) => {
+                    return (
+                      <p key={idx}>
+                        <span>{item}</span>
+                        <IoMdClose onClick={() => tagDeleteHandler(idx)} />
+                      </p>
+                    );
+                  })}
                 </div>
               </ReviewMedSelect>
               <ReviewSubmitBtn onClick={reviewAddHandler}>
@@ -257,7 +281,10 @@ const ItemReview = () => {
           <ReviewModal>
             <ReviewModalBox>
               <button
-                onClick={reviewUpdateModalOpen}
+                onClick={e => {
+                  reviewAddModalOpen(e);
+                  initializeItem();
+                }}
                 className="close"
                 aria-label="modal close"
               >
@@ -281,18 +308,18 @@ const ItemReview = () => {
                 <input
                   type="text"
                   value={reviewMedInput}
-                  onChange={reviewInputHandler}
-                  onKeyDown={reviewInputEnter}
+                  onChange={tagInputHandler}
+                  onKeyDown={tagInputEnter}
                 />
                 <div className="entered-med">
-                  <p>
-                    <span>타이레놀</span>
-                    <IoMdClose />
-                  </p>
-                  <p>
-                    <span>아타치온정50밀리그램네모정</span>
-                    <IoMdClose />
-                  </p>
+                  {reviewTags.map((item, idx) => {
+                    return (
+                      <p key={idx}>
+                        <span>{item}</span>
+                        <IoMdClose onClick={() => tagDeleteHandler(idx)} />
+                      </p>
+                    );
+                  })}
                 </div>
               </ReviewMedSelect>
               <ReviewSubmitBtn onClick={reviewUpdateHandler}>
