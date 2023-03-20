@@ -6,9 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {
     Page<Medicine> findByMedicineNameLike(String medicineName, Pageable pageable);
 
     Page<Medicine> findByMedicineIngredientLike(String medicineIngredient, Pageable pageable);
+
+    Optional<Medicine> findByMedicineId(long medicineId);
 }

@@ -1,11 +1,14 @@
 package com.codestates.medicine.entity;
 
+import com.codestates.dose.entity.Dose;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,8 +39,25 @@ public class Medicine {
     private String medicineWarn;
     @Column
     private String medicineEntp;
-    @Column(length = 2000, nullable = false)
+    @Column
     private String medicineDeposit;
+
+
+    @OneToMany(mappedBy = "medicine")
+    private List<Dose> doses = new ArrayList<Dose>();
+
+    public void addDose(Dose dose) {
+        this.doses.add(dose);
+        if (dose.getMedicine() != this) {
+            dose.addMedicine(this);
+        }
+    }
+
+    public Medicine(Long medicineId, String medicineName) {
+        this.medicineId = medicineId;
+        this.medicineName = medicineName;
+    }
+
 
     //매핑 oneToMany
     //private Long reviewId

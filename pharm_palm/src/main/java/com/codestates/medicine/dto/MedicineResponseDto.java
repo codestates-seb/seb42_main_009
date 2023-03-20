@@ -1,9 +1,13 @@
 package com.codestates.medicine.dto;
 
+import com.codestates.dose.dto.DoseResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.Column;
+import java.util.List;
 
 
 @Getter
@@ -20,4 +24,6 @@ public class MedicineResponseDto {
     private String medicineWarn;
     private String medicineEntp;
     private String medicineDeposit;
+    private List<DoseResponseDto> doses;
+
 }

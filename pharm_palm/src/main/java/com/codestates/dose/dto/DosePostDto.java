@@ -7,20 +7,21 @@ import lombok.Getter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.sql.Time;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
 public class DosePostDto {
     @Positive
     private Long memberId;
-    @NotBlank
-    private String medicineName;
-
     @Positive
-    private int doseMount;
+    private Long medicineId;
 
+    @NotBlank
+    private String doseMount;
     @Positive
     private int doseNumber;
 
-    private String doseTime;
+    private String doseTimes;
+
 }

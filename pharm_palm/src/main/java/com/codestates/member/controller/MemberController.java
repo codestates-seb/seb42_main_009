@@ -7,6 +7,7 @@ import com.codestates.dto.MultiResponseDto;
 import com.codestates.dto.SingleResponseDto;
 import com.codestates.member.dto.MemberPatchDto;
 import com.codestates.member.dto.MemberPostDto;
+import com.codestates.member.dto.MemberResponseDto;
 import com.codestates.member.entity.Member;
 import com.codestates.member.mapper.MemberMapper;
 import com.codestates.member.service.MemberService;
@@ -99,6 +100,17 @@ public class MemberController {
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
     }
+    
+    @GetMapping("/doses/{member-id}")
+    public ResponseEntity getDoses(@PathVariable("member-id") @Positive long memberId) {
+
+        MemberResponseDto memberResponseDto = mapper.memberToMemberResponseDto( memberService.findMember(memberId));
+
+        return new ResponseEntity(
+                new SingleResponseDto<>(memberResponseDto), HttpStatus.OK);
+    }
+    
+
 
     @GetMapping("/mypage")
     public ResponseEntity getMemberInfo(Authentication authentication) {
@@ -112,6 +124,7 @@ public class MemberController {
     }
 
 
+
 //    @GetMapping
 //    public ResponseEntity getMembers(@Positive @RequestParam int page,
 //                                     @Positive @RequestParam int size) {
@@ -120,6 +133,7 @@ public class MemberController {
 //
 //        return new ResponseEntity<>(
 //                new MultiResponseDto<>(
+//                        mapper.membersToMemberResponseDto(members), pageMembers), HttpStatus.OK);
 //                        mapper.membersToMemberResponseDtos(members), pageMembers), HttpStatus.OK);
 //    }
 
