@@ -5,7 +5,7 @@ import com.codestates.exception.ExceptionCode;
 import com.codestates.medicine.entity.Medicine;
 import com.codestates.medicine.repository.MedicineRepository;
 import com.codestates.review.entity.Review;
-import com.codestates.review.mapper.repository.ReviewRepository;
+import com.codestates.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

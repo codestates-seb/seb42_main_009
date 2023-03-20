@@ -1,4 +1,4 @@
-package com.codestates.review.mapper.repository;
+package com.codestates.review.repository;
 
 import com.codestates.review.entity.Review;
 import org.springframework.data.domain.Page;
