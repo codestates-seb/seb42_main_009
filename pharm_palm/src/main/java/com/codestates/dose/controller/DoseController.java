@@ -1,5 +1,6 @@
 package com.codestates.dose.controller;
 
+import com.codestates.dose.dto.DosePatchDto;
 import com.codestates.dose.dto.DosePostDto;
 import com.codestates.dose.dto.DoseResponseDto;
 import com.codestates.dose.entity.Dose;
@@ -41,10 +42,17 @@ public class DoseController {
         return new ResponseEntity<>(doseResponseDto, HttpStatus.OK);
     }
 
-
     @DeleteMapping("/{dose-id}")
     public ResponseEntity deleteDose(@PathVariable("dose-id") @Positive long doseId) {
         doseService.deleteDose(doseId);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    @PatchMapping("/{dose-id}")
+    public ResponseEntity patchDose(@PathVariable("dose-id") @Positive long doseId,
+                                    @Valid @RequestBody DosePatchDto dosePatchDto) {
+        doseService.updateDose(doseId, dosePatchDto);
+
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 }
