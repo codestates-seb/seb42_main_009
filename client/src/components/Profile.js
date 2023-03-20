@@ -48,7 +48,7 @@ const ProfileImg = styled.div`
   }
   &.uploaded > label {opacity: 0;}
   > img {
-    width: 100%;
+    width: 90%;
     height: auto;
     object-fit: cover;
   }
