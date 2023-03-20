@@ -16,7 +16,7 @@ const ItemReview = () => {
   const [reviewMedInput, setReviewMedInput] = useState('');
   const [image, setImage] = useState({
     image_file: '',
-    preview_URL: 'img/default_image.png',
+    preview_URL: '',
   });
   const [reviewItem, setReviewItem] = useState({
     reviewImg: {},
@@ -66,10 +66,12 @@ const ItemReview = () => {
     setReviewItem({ ...reviewItem, [key]: e.target.value });
   };
 
+  // 리뷰새로추가 모달오픈
   const reviewAddModalOpen = e => {
     e.stopPropagation();
     setReviewAddOpen(!reviewAddOpen);
   };
+  // 리뷰수정 모달오픈
   const reviewUpdateModalOpen = e => {
     e.stopPropagation();
     setReviewUpdateOpen(!reviewUpdateOpen);
@@ -84,6 +86,7 @@ const ItemReview = () => {
       setReviewMedInput('');
     }
   };
+  // 더보기 닫기 여닫기
   const moreReview = id => {
     setReviewList(reviewList =>
       reviewList.map((item, idx) =>

@@ -52,6 +52,7 @@ export const ContentBox = styled.div`
 `;
 export const ContentTit = styled.h3`
   font-size: var(--fz-base);
+  line-height: 1.2;
   margin: 15px 0 10px;
   width: 100%;
   overflow: hidden;
@@ -83,5 +84,27 @@ export const LikeCount = styled.div`
   > p {
     font-size: 12px;
     padding-top: 3px;
+  }
+`;
+export const Pagination=styled.div`
+  display: flex; justify-content: center; align-items: center;
+  > ul {
+    display: flex; justify-content: center; align-items: center;
+    > li {
+      height: 25px; width: 25px;
+      display: flex; justify-content: center; align-items: center;
+      > a {display: flex; justify-content: center; align-items: center;
+      width: 100%; height: 100%;}
+      &.previous, &.next {
+        border-radius: 4px;
+        background: var(--mainbl);
+        color: #fff;
+        margin: 0 5px;
+      }
+      &.active {
+        background: var(--palebl);
+        font-weight: 600;
+      }
+    }
   }
 `;

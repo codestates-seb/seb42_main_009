@@ -3,7 +3,7 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { useNavigate } from 'react-router-dom';
 import { FaRegThumbsUp } from 'react-icons/fa';
-import { ContentList,ContentBox,ContentTit,ContentText,LikeCount } from '../styles/s-list';
+import { ContentList,ContentBox,ContentTit,ContentText,LikeCount,Pagination } from '../styles/s-list';
 import {
   useSearchApiStore,
   useSearchSelectedStore,
@@ -20,7 +20,6 @@ const List = () => {
   const { searchSelected } = useSearchSelectedStore(state => state);
   const { searchApi } = useSearchApiStore(state => state);
   const navigate = useNavigate();
-
   // 1. currentPage 초기값은 0으로 설정
   const [currentPage, setCurrentPage] = useState(1);
   const [totalLength, setTotalLength] = useState(0);
@@ -107,13 +106,13 @@ const List = () => {
               <ContentTit>{item.medicineName}</ContentTit>
               <ContentText>{item.medicineUse}</ContentText>
               <LikeCount>
-                <FaRegThumbsUp /> <p>234</p>
+                <FaRegThumbsUp /> <p>{item.medicineLike}</p>
               </LikeCount>
             </ContentBox>
           ))}
         </ContentList>
         {/* Pagination */}
-        <div className="flex justify-center pt-5 ">
+        <Pagination>
           <ReactPaginate
             previousLabel="<"
             nextLabel=">"
@@ -123,12 +122,12 @@ const List = () => {
             pageRangeDisplayed={5}
             onPageChange={handlerPageClick}
             // 밑 props는 style을 위한 className 지정 해주는 역할
-            containerClassName="flex space-x-2 p-2 m-4 text-center"
+            containerClassName=""
             // containerClassName="pagination"
-            subContainerClassName="pages pagination"
+            subContainerClassName=""
             activeClassName="active"
           />
-        </div>
+        </Pagination>
       </div>
     </>
   );
