@@ -22,12 +22,12 @@ public class Dose {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long doseId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @ManyToOne
-    @JoinColumn(name = "medicine_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "medicine_id", nullable = false )
     private Medicine medicine;
 
     @Column(nullable = false)

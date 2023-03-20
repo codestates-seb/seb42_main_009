@@ -40,7 +40,7 @@ public class DoseController {
         List<DoseResponseDto> doseResponseDto = doseService.findDoses(memberId);
         return new ResponseEntity<>(doseResponseDto, HttpStatus.OK);
     }
-    @GetMapping("/info/")
+
 
     @DeleteMapping("/{dose-id}")
     public ResponseEntity deleteDose(@PathVariable("dose-id") @Positive long doseId) {
