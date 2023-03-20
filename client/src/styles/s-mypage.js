@@ -97,14 +97,19 @@ export const MypageAlarm =styled.div`
   margin-bottom: 30px;
 `;
 // MyPills.js
+export const MyPillList = styled.ul`
+  display: flex; justify-content: flex-start; align-items: center;
+  flex-wrap: wrap;
+`;
 export const MyPillItem = styled.li`
-  width: 150px;
+  width: calc((100% - (15px*4))/5);
   margin-right: 15px;
+  margin-bottom: 15px;
   padding: 15px;
   border-radius: 6px;
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-  &:nth-of-type(6) {margin-right: 0;}
+  &:nth-of-type(5n) {margin-right: 0;}
 `;
 export const MyPill = styled.div`
   position: relative;
@@ -159,22 +164,35 @@ export const MyPillName = styled.div`
   }
   > p {
     position: absolute;
-    left: -2px; top: -2px;
+    left: 0px; top: 0px;
     opacity: 0; visibility: hidden;
-    width: 120px;
-    padding: 3px; background: rgba(255,255,255,.4);
+    width: 100%;
+    padding: 3px; background: var(--nightbl);
+    color: #fff;
     border-radius: 6px;
     font-size: 12px; line-height: 18px;
     word-break: break-all;
-    display: none;
-  } 
-  /* > h3 {
-    position: absolute;
-    left: 0; width: 100%; top: 0;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+    transition: .4s;
   }
-  */
-
+  ${MyPillItem}:hover & > p {
+    opacity: 1; visibility: visible;
+    transition: .4s;
+    cursor: default;
+  }
+`;
+export const PillAddBtn = styled.button`
+  display: block;
+  margin-bottom: 30px;
+  width: 120px;
+  height: 34px;
+  border-radius: 6px;
+  background: var(--mainbl);
+  color: #fff;
+  transition: 0.4s;
+  &:hover {
+    background: ${props => props.hoverbg || 'var(--darkbl)'};
+    color: ${props => props.hoberColor || '#fff'};
+    transition: 0.4s;
+    transform: translateY(-3px);
+  }
 `;
