@@ -1,4 +1,5 @@
 import { FaPen } from 'react-icons/fa';
+import { useIsModalOpen } from '../Stores/pharmModalStore';
 import {
   MyPillItem,
   MyPill,
@@ -8,11 +9,17 @@ import {
   MyPillName,
 } from '../styles/s-mypage';
 
-const MyPills = () => (
+const MyPills = () => {
+  const { modalOpen, setModalOpen } = useIsModalOpen(state => state);
+  const modalHandler = () => {
+    setModalOpen(!modalOpen);
+  };
+  
+  return (
   <MyPillItem>
     <MyPill>
       <MyPillImg src="/pill.png" alt="mypill" />
-      <MyPillEdit>
+      <MyPillEdit onClick={modalHandler}>
         <button className="edit-btn" aria-label="button">
           <FaPen />
         </button>
@@ -24,6 +31,7 @@ const MyPills = () => (
       <p>타이asdfasdfasdasdfasdff레놀</p>
     </MyPillName>
   </MyPillItem>
-);
+)
+}
 
 export default MyPills;

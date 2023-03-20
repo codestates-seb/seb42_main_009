@@ -15,12 +15,14 @@ export const ItemInfoTable = styled.ul`
       color: #fff;
       font-weight: 600;
       border-bottom: 1px solid #fff;
+      &:last-of-type {border-color: var(--mainbl);}
       @media (max-width: 768px) {
         padding: 10px;
       }
     }
     > div {
       width: calc(100% - 100px);
+      align-self: stretch;
       line-height: 20px;
       padding: 15px 10px;
       border-bottom: 1px solid var(--lightbl);
@@ -115,7 +117,7 @@ export const UserInputs = styled.div`
   img {
     width: auto; height: 50px; object-fit: cover; margin-bottom: 15px;
     ${ReviewItem}.review-open & {
-      width: 90%; height: auto;
+      width: 60%; height: auto;
     }
   }
   .writedate {

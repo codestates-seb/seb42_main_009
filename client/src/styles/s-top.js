@@ -77,6 +77,9 @@ export const SearchSelect = styled.select`
   width: 80px;
   height: 100%;
   padding: 0 25px 0 10px;
+  option {
+    color: var(--mainbl);
+  }
 `;
 export const SearchSelectDown = styled.span`
   position: absolute;
