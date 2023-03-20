@@ -1,6 +1,7 @@
 package com.codestates.medicine.entity;
 
 import com.codestates.dose.entity.Dose;
+import com.codestates.review.entity.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,6 +60,10 @@ public class Medicine {
     }
 
 
-    //매핑 oneToMany
-    //private Long reviewId
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Review> review;
+
+    public void addReview(Review review) {
+        this.review.add(review);
+    }
 }
