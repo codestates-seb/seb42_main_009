@@ -74,6 +74,9 @@ export const MyPillList = styled.ul`
         margin-right: 7px;
       }
     }
+    @media (max-width: 768px) {
+      width: 100%;
+    }
   }
 `;
 export const MyPharmAddDone = styled.button`

@@ -204,7 +204,8 @@ export const SearchList = styled.ul`
   border-radius: 6px;
   padding: 10px;
   &.list-open {
-    opacity: 1; visibility: visible;
+    opacity: 1;
+    visibility: visible;
   }
   > li {
     font-size: var(--fz-sm);

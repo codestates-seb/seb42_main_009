@@ -138,7 +138,7 @@ export const HeaderBtn = styled.button`
   border-width: 1px;
   border-style: solid;
   border-color: ${props => props.border || 'transparent'};
-  margin-left: ${props=>props.marginLeft||'5px'};
+  margin-left: ${props => props.marginLeft || '5px'};
   transition: 0.4s;
   &:hover {
     background: ${props => props.hoverbg || 'var(--darkbl)'};
@@ -252,12 +252,13 @@ export const PanelBtn = styled.div`
     margin-left: 10px;
   }
 `;
-export const PanelMenu = styled.ul`
+export const PanelMenu = styled.div`
   text-align: right;
   color: #fff;
   padding: 30px 0;
   font-size: var(--fz-md);
-  > li {
+  > a {
     line-height: 40px;
+    display: block;
   }
 `;
