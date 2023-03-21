@@ -70,7 +70,9 @@ const Header = () => {
           </Search>
           {isLogin ? (
             <ButtonWrap>
-              <HeaderBtn width="80px">My Page</HeaderBtn>
+              <HeaderBtn width="80px" onClick={() => navigate('/mypage')}>
+                My Page
+              </HeaderBtn>
               <HeaderBtn
                 onClick={() => logoutHandler()}
                 border="var(--mainbl)"
@@ -85,7 +87,7 @@ const Header = () => {
             <ButtonWrap>
               <HeaderBtn onClick={() => navigate('/login')}>Login</HeaderBtn>
               <HeaderBtn
-                onClick={() => navigate('/SignUp')}
+                onClick={() => navigate('/signup')}
                 border="var(--mainbl)"
                 color="var(--mainbl)"
                 background="#fff"
@@ -108,7 +110,12 @@ const Header = () => {
         <Panel className={mobileOpen ? 'open' : null}>
           {isLogin ? (
             <PanelBtn>
-              <HeaderBtn background="#fff" color="var(--mainbl)" width="80px">
+              <HeaderBtn
+                background="#fff"
+                color="var(--mainbl)"
+                width="80px"
+                onClick={() => navigate('/mypage')}
+              >
                 My Page
               </HeaderBtn>
               <HeaderBtn
@@ -121,10 +128,24 @@ const Header = () => {
             </PanelBtn>
           ) : (
             <PanelBtn>
-              <HeaderBtn background="#fff" color="var(--mainbl)">
+              <HeaderBtn
+                background="#fff"
+                color="var(--mainbl)"
+                onClick={() => {
+                  panelOpen();
+                  navigate('/login');
+                }}
+              >
                 Login
               </HeaderBtn>
-              <HeaderBtn background="#fff" color="var(--mainbl)">
+              <HeaderBtn
+                background="#fff"
+                color="var(--mainbl)"
+                onClick={() => {
+                  panelOpen();
+                  navigate('/signup');
+                }}
+              >
                 Join
               </HeaderBtn>
             </PanelBtn>
@@ -132,7 +153,9 @@ const Header = () => {
           <PanelMenu>
             {menuList.map((item, idx) => (
               <Link to={item.linkSrc}>
-                <li key={idx}>{item.title}</li>
+                <button key={idx} onClick={panelOpen}>
+                  {item.title}
+                </button>
               </Link>
             ))}
           </PanelMenu>

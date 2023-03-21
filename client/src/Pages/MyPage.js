@@ -129,7 +129,7 @@ const MyPage = () => {
                 <PillAddBtn onClick={modalHandler}>약 추가하기</PillAddBtn>
                 {
                   modalOpen 
-                  ? <MyPharmModal setModalOpen={setModalOpen} />
+                  ? <MyPharmModal className='새로넣는모달' setModalOpen={setModalOpen} />
                   : null
                 }
                 <MyPillList>

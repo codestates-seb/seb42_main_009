@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ContentList = styled.div`
   display: flex;
@@ -26,6 +26,9 @@ export const ContentBox = styled.div`
     height: 100px;
     object-fit: contain;
     margin: 0 auto;
+    @media (max-width: 768px) {
+      height: 80px;
+    }
   }
   @media (max-width: 930px) {
     width: calc((100% - 40px) / 3);
@@ -37,9 +40,13 @@ export const ContentBox = styled.div`
     }
   }
   @media (max-width: 768px) {
-    width: calc((100% - 20px) / 2);
+    width: calc(50% - 5px);
+    margin-right: 10px;
+    height: 220px;
+    margin-bottom: 10px;
+    padding: 15px;
     &:nth-of-type(3n) {
-      margin-right: 20px;
+      margin-right: 10px;
     }
     &:nth-of-type(2n) {
       margin-right: 0;
@@ -60,6 +67,9 @@ export const ContentTit = styled.h3`
   white-space: nowrap;
   color: var(--mainbl);
   font-weight: 500;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 `;
 export const ContentText = styled.div`
   width: 100%;
@@ -71,6 +81,9 @@ export const ContentText = styled.div`
   overflow: hidden;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  @media (max-width: 768px) {
+    -webkit-line-clamp: 3;
+  }
 `;
 export const LikeCount = styled.div`
   position: absolute;
@@ -85,17 +98,34 @@ export const LikeCount = styled.div`
     font-size: 12px;
     padding-top: 3px;
   }
+  @media (max-width: 768px) {
+    top: 100px;
+    right: 7px;
+  }
 `;
-export const Pagination=styled.div`
-  display: flex; justify-content: center; align-items: center;
+export const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   > ul {
-    display: flex; justify-content: center; align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     > li {
-      height: 25px; width: 25px;
-      display: flex; justify-content: center; align-items: center;
-      > a {display: flex; justify-content: center; align-items: center;
-      width: 100%; height: 100%;}
-      &.previous, &.next {
+      height: 25px;
+      width: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      > a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+      &.previous,
+      &.next {
         border-radius: 4px;
         background: var(--mainbl);
         color: #fff;
@@ -106,5 +136,8 @@ export const Pagination=styled.div`
         font-weight: 600;
       }
     }
+  }
+  @media (max-width: 768px) {
+    margin-top: 30px;
   }
 `;
