@@ -42,6 +42,8 @@ const Header = () => {
     setIsLogin(false);
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('KAKAO_accessToken');
+    localStorage.removeItem('NAVER_accessToken');
     localStorage.removeItem('accessToken_expiresAt');
     localStorage.removeItem('refreshToken_expiresAt');
   };
@@ -70,7 +72,9 @@ const Header = () => {
           </Search>
           {isLogin ? (
             <ButtonWrap>
-              <HeaderBtn width="80px">My Page</HeaderBtn>
+              <HeaderBtn width="80px" onClick={() => navigate('/mypage')}>
+                My Page
+              </HeaderBtn>
               <HeaderBtn
                 onClick={() => logoutHandler()}
                 border="var(--mainbl)"

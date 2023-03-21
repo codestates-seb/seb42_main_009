@@ -24,27 +24,23 @@ import Test from './Pages/Test';
 import MyPharm from './Pages/MyPharm';
 import Chart from './Pages/Chart';
 
+// 모든 요청에 withCredentials가 true로 설정됩니다.
+axios.defaults.withCredentials = true;
+
 function App() {
   const { setIsLogin } = useIsLoginStore(state => state);
   const { setUserInfo } = useUserInfoStore(state => state);
 
-  // const kakaoLogin = () => {
-  //   const location = useLocation();
-  //   // const navigate = useNavigate();
-  //   const KAKAO_CODE = location.search.split('=')[1];
-  //   console.log(KAKAO_CODE);
-  // };
-
   const authHandler = () => {
     console.log(localStorage.getItem('accessToken'));
     const expireAt = localStorage.getItem('accessToken_expiresAt');
-    setIsLogin(true);
+
     console.log(expireAt);
 
     if (moment(expireAt).diff(moment()) < 0) console.log('토큰 만료!!');
 
     axios
-      .post(
+      .get(
         `${process.env.REACT_APP_API_URL}/pp/members/info`,
         {},
         {
@@ -57,6 +53,7 @@ function App() {
       .then(res => {
         console.log(res);
         setUserInfo(res.data.data);
+        setIsLogin(true);
       })
       .catch(err => {
         if (err.response) {
@@ -65,27 +62,85 @@ function App() {
       });
   };
 
+  const kakaoAuthHandler = code => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/auth/kakao/callback?code=${code}`)
+      .then(res => {
+        localStorage.setItem('KAKAO_accessToken', res.data.access_token);
+
+        setTimeout(() => {
+          axios
+            .get(
+              `${
+                process.env.REACT_APP_API_URL
+              }/auth/kakao/info?token=${localStorage.getItem(
+                'KAKAO_accessToken',
+              )}`,
+              {},
+              {
+                headers: {
+                  withCredentials: true,
+                },
+              },
+            )
+            .then(response => {
+              console.log(response);
+              setIsLogin(true);
+            })
+            .catch(err => {
+              if (err.response) {
+                console.log(err.response);
+              }
+            });
+        });
+      }, 500);
+  };
+
+  const naverAuthHandler = code => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/auth/naver/callback?code=${code}`)
+      .then(res => {
+        localStorage.setItem('NAVER_accessToken', res.data.access_token);
+        console.log(localStorage.getItem('NAVER_accessToken'));
+        setTimeout(() => {
+          axios
+            .get(
+              `${
+                process.env.REACT_APP_API_URL
+              }/auth/naver/info?token=${localStorage.getItem(
+                'NAVER_accessToken',
+              )}`,
+              {},
+              {
+                headers: {
+                  withCredentials: true,
+                },
+              },
+            )
+            .then(response => {
+              setIsLogin(true);
+              setUserInfo(response.data.response);
+            })
+            .catch(err => {
+              if (err.response) {
+                console.log(err.response);
+              }
+            });
+        });
+      }, 500);
+  };
+
   useEffect(() => {
     const url = new URL(window.location.href);
     const authorizationCode = url.searchParams.get('code');
-    console.log(authorizationCode);
-    authHandler();
-    axios
-      .post(
-        `http://localhost:3000/login/oauth2/code/kakao`,
-        {
-          grant_type: 'authorization_code',
-          client_id: `46d7b3692a51eff3138a1580dccdd6c0`,
-          redirect_uri: `http://localhost:3000/login/oauth2/code/kakao`,
-          code: `${authorizationCode}`,
-        },
-        {
-          headers: {
-            ContentType: 'application/x-www-form-urlencoded',
-          },
-        },
-      )
-      .then(res => console.log(res));
+    console.log(url.pathname);
+    if (url.pathname.indexOf('kakao') !== -1) {
+      kakaoAuthHandler(authorizationCode);
+    } else if (url.pathname.indexOf('naver') !== -1) {
+      naverAuthHandler(authorizationCode);
+    } else {
+      authHandler();
+    }
   }, []);
 
   return (
@@ -94,7 +149,7 @@ function App() {
       <div className="App">
         <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="home" element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="list" element={<List />} />

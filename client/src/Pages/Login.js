@@ -4,11 +4,15 @@ import axios from 'axios';
 // import moment from 'moment';
 import { useIsLoginStore, useLoginInfoStore } from '../Stores/loginStore';
 import kakaoLoginImage from '../images/kakao_login_medium_narrow.png';
+import naverLoginImage from '../images/naver_login.png';
 import Input from '../components/Ui/Input';
 import { HeaderBtn } from '../styles/s-header';
 
-const REST_API_KEY = '46d7b3692a51eff3138a1580dccdd6c0';
-const REDIRECT_URI = 'http://localhost:3000/login/oauth2/code/kakao';
+const KAKAO_REST_API_KEY = '46d7b3692a51eff3138a1580dccdd6c0';
+const KAKAO_REDIRECT_URI = 'http://localhost:3000/auth/kakao/callback';
+
+const NAVER_CLIENT_ID = 'xycgRfAt8xXQwhRJjvno';
+const NAVER_REDIRECT_URI = 'http://localhost:3000/auth/naver/callback';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,7 +20,8 @@ const Login = () => {
   const { setIsLogin } = useIsLoginStore(state => state);
   const [setErrorMessage] = useState('');
 
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
+  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=STRING&redirect_uri=${NAVER_REDIRECT_URI}`;
 
   // Input 정보 처리
   const handleInputValue = key => e => {
@@ -92,10 +97,10 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-between mb-2">
           <HeaderBtn
-            className='my-3'
-            width='100%'
-            height='34px'
-            marginLeft='0'
+            className="my-3"
+            width="100%"
+            height="34px"
+            marginLeft="0"
             type="button"
             onClick={() => {
               loginRequestHandler();
@@ -122,6 +127,9 @@ const Login = () => {
       </form>
       <Link className="kakao-link" to={KAKAO_AUTH_URL}>
         <img src={kakaoLoginImage} alt="kakao-login" />
+      </Link>
+      <Link className="naver-link w-[183px] h-[45px] my-4" to={NAVER_AUTH_URL}>
+        <img src={naverLoginImage} alt="naver-login" />
       </Link>
     </div>
   );

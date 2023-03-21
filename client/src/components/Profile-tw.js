@@ -1,6 +1,5 @@
 const Profile = () => {
   console.log('프로필 컴포넌트');
-
   return (
     <div className="max-w-3xl w-full mx-auto z-10">
       <div className="flex flex-col">

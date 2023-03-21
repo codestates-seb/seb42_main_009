@@ -1,5 +1,8 @@
 /* eslint-disable */
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useMedicineItemStore } from '../Stores/medicineItemStore';
+import { useUserInfoStore } from '../Stores/userInfoStore';
 import { SmBtn } from '../styles/globalStyle';
 import { IoMdClose } from 'react-icons/io';
 import { FaPlus } from 'react-icons/fa';
@@ -21,6 +24,8 @@ import {
 } from '../styles/s-item';
 
 const ItemReview = () => {
+  const { medicineItem } = useMedicineItemStore(state => state);
+  const { userInfo } = useUserInfoStore(sate => sate);
   const [reviewAddOpen, setReviewAddOpen] = useState(false);
   const [reviewUpdateOpen, setReviewUpdateOpen] = useState(false);
   const [updateIndex, setUpdateIndex] = useState(0);
@@ -28,7 +33,7 @@ const ItemReview = () => {
   const [reviewTags, setReviewTags] = useState([]);
   const [image, setImage] = useState({
     image_file: '',
-    preview_URL: '',
+    preview_URL: 'img/default_image.png',
   });
   const [reviewItem, setReviewItem] = useState({
     reviewImg: {},
@@ -78,12 +83,10 @@ const ItemReview = () => {
     setReviewItem({ ...reviewItem, [key]: e.target.value });
   };
 
-  // 리뷰새로추가 모달오픈
   const reviewAddModalOpen = e => {
     e.stopPropagation();
     setReviewAddOpen(!reviewAddOpen);
   };
-  // 리뷰수정 모달오픈
   const reviewUpdateModalOpen = e => {
     e.stopPropagation();
     setReviewUpdateOpen(!reviewUpdateOpen);
@@ -128,8 +131,25 @@ const ItemReview = () => {
   };
 
   const reviewAddHandler = () => {
+    const postData = {
+      reviewContent: reviewItem.reviewText,
+      reviewImg: reviewItem.reviewImg.preview_URL,
+      reviewOtherMedicine: '',
+      memberId: 123,
+    };
+    console.log(postData);
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/pp/reviews/${medicineItem.medicineId}`,
+        postData,
+        {
+          withCredentials: true,
+        },
+      )
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+
     setReviewList([...reviewList, reviewItem]);
-    console.log(reviewList);
     setReviewAddOpen(!reviewAddOpen);
     initializeItem();
   };
