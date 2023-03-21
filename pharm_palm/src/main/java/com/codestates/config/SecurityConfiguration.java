@@ -95,15 +95,17 @@ public class SecurityConfiguration {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, memberRepository);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter =
-                    new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, memberRepository, refreshTokenRepository);
+//            JwtAuthenticationFilter jwtAuthenticationFilter =
+//                    new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, memberRepository, refreshTokenRepository);
             jwtAuthenticationFilter.setFilterProcessesUrl("/pp/login");
 
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
-
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, refreshTokenRepository);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+//
+//            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, refreshTokenRepository);
 
             builder
                     .addFilter(jwtAuthenticationFilter)
