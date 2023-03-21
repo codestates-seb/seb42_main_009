@@ -1,5 +1,6 @@
 package com.codestates.member.controller;
 
+import com.codestates.auth.dto.ClaimsToMember;
 import com.codestates.auth.utils.JwtToMemberInfoUtils;
 import com.codestates.dto.SingleResponseDto;
 import com.codestates.member.dto.MemberPatchDto;
@@ -52,11 +53,9 @@ public class MemberController {
             throw new MalformedJwtException("토큰의 형식이 올바르지 않습니다.");
         }
 
-        Long memberId = jwtToMemberInfoUtils.extractMemberIdFromToken(token);
+        ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
 
-        Member member = memberService.findMember(memberId);
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
     }
 
     @PostMapping
@@ -80,24 +79,24 @@ public class MemberController {
 //                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
 //    }
 
-    @PatchMapping("/info")
-    public ResponseEntity patchMemberInfo(@RequestHeader HttpHeaders httpHeaders,
-                                          @Valid @RequestBody MemberPatchDto memberPatchDto) {
-        String token;
-
-        try{
-            token = httpHeaders.get("Authorization").get(0);
-        }catch (NullPointerException exception){
-            throw new MalformedJwtException("");
-        }
-        Long memberId = jwtToMemberInfoUtils.extractMemberIdFromToken(token);
-
-        memberPatchDto.setMemberId(memberId);
-        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
-    }
+//    @PatchMapping("/info")
+//    public ResponseEntity patchMemberInfo(@RequestHeader HttpHeaders httpHeaders,
+//                                          @Valid @RequestBody MemberPatchDto memberPatchDto) {
+//        String token;
+//
+//        try{
+//            token = httpHeaders.get("Authorization").get(0);
+//        }catch (NullPointerException exception){
+//            throw new MalformedJwtException("");
+//        }
+//        Long memberId = jwtToMemberInfoUtils.extractMemberIdFromToken(token);
+//
+//        memberPatchDto.setMemberId(memberId);
+//        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
+//
+//        return new ResponseEntity<>(
+//                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+//    }
 
     @GetMapping("{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
