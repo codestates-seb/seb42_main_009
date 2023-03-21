@@ -191,4 +191,24 @@ export const TimeSelect = styled.div`
     align-self: flex-start;
   }
 `;
-
+export const SearchList = styled.ul`
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  z-index: 10;
+  left: 90px;
+  top: calc(100% - 15px);
+  background: #fff;
+  min-width: 160px;
+  border: 1px solid var(--mainbl);
+  border-radius: 6px;
+  padding: 10px;
+  &.list-open {
+    opacity: 1; visibility: visible;
+  }
+  > li {
+    font-size: var(--fz-sm);
+    line-height: 2;
+    cursor: pointer;
+  }
+`;
