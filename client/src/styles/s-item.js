@@ -1,4 +1,4 @@
-import styled,{keyframes} from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 // ItemInfo.js
 export const ItemInfoTable = styled.ul`
@@ -15,7 +15,9 @@ export const ItemInfoTable = styled.ul`
       color: #fff;
       font-weight: 600;
       border-bottom: 1px solid #fff;
-      &:last-of-type {border-color: var(--mainbl);}
+      &:last-of-type {
+        border-color: var(--mainbl);
+      }
       @media (max-width: 768px) {
         padding: 10px;
       }
@@ -107,7 +109,6 @@ export const UserImage = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-
   }
 `;
 export const UserInputs = styled.div`
@@ -115,9 +116,13 @@ export const UserInputs = styled.div`
   margin-left: 10px;
   padding-top: 10px;
   img {
-    width: auto; height: 50px; object-fit: cover; margin-bottom: 15px;
+    width: auto;
+    height: 50px;
+    object-fit: cover;
+    margin-bottom: 15px;
     ${ReviewItem}.review-open & {
-      width: 60%; height: auto;
+      width: 60%;
+      height: auto;
     }
   }
   .writedate {
@@ -161,6 +166,10 @@ export const ReviewModal = styled.div`
   padding: 10px;
   border-radius: 12px;
   background: #fff;
+  @media (max-width: 768px) {
+    width: calc(100% - 30px);
+    height: 60vh;
+  }
 `;
 export const ReviewModalBox = styled.div`
   position: relative;
@@ -245,7 +254,6 @@ export const ReviewSubmitBtn = styled.button`
     transform: translateY(-3px);
   }
 `;
-
 
 // Item.js
 export const likeClicked = keyframes`

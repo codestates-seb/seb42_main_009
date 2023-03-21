@@ -141,9 +141,11 @@ const MyPage = () => {
                 </MypageAlarm>
 
                 <PillAddBtn onClick={modalHandler}>약 추가하기</PillAddBtn>
+
                 {modalOpen ? (
                   <MyPharmModal setModalOpen={setModalOpen} />
                 ) : null}
+
                 <MyPillList>
                   <MyPills />
                   <MyPills />

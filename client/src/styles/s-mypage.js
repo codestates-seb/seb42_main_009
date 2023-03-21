@@ -81,35 +81,64 @@ export const ToggleBox = styled.div`
   }
 `;
 export const MypageWrap = styled.section`
-  display: flex; justify-content: flex-start; align-items: flex-start;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  @media (max-width: 768px) {
+    display: block;
+  }
 `;
 export const MypageContent = styled.div`
   width: calc(100% - 250px);
   padding-left: 30px;
+  @media (max-width: 768px) {
+    width: 100%;
+    padding-left: 0;
+    margin-top: 20px;
+  }
 `;
 export const MypageTabContent = styled.div`
   margin-top: 30px;
   padding: 15px;
+  @media (max-width: 768px) {
+    margin-top: 15px;
+  }
 `;
-export const MypageAlarm =styled.div`
+export const MypageAlarm = styled.div`
   position: relative;
-  display: flex; justify-content: flex-start; align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   margin-bottom: 30px;
 `;
 // MyPills.js
 export const MyPillList = styled.ul`
-  display: flex; justify-content: flex-start; align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   flex-wrap: wrap;
 `;
 export const MyPillItem = styled.li`
-  width: calc((100% - (15px*4))/5);
+  width: calc((100% - (15px * 4)) / 5);
   margin-right: 15px;
   margin-bottom: 15px;
   padding: 15px;
   border-radius: 6px;
   position: relative;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-  &:nth-of-type(5n) {margin-right: 0;}
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  &:nth-of-type(5n) {
+    margin-right: 0;
+  }
+  @media (max-width: 768px) {
+    width: calc((100% - (15px * 1)) / 2);
+    &:nth-of-type(5n) {
+      margin-right: 15px;
+    }
+    &:nth-of-type(2n) {
+      margin-right: 0;
+    }
+  }
 `;
 export const MyPill = styled.div`
   position: relative;
@@ -119,25 +148,40 @@ export const MyPill = styled.div`
   padding: 5px;
 `;
 export const MyPillImg = styled.img`
-  width: 100%; height: auto; object-fit: cover;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
   filter: none;
   &.grayscale {
     filter: grayscale(1);
   }
 `;
 export const MyPillEdit = styled.div`
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   position: absolute;
-  left: 0; right: 0; top: 0; bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   border-radius: 6px;
-  background-color: rgba(34,34,34,.56);
-  opacity: 0; visibility: hidden; transition: .4s;
+  background-color: rgba(34, 34, 34, 0.56);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.4s;
   > .edit-btn {
-    position: absolute; z-index: 1;
-    left: 50%; top: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 24px;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 24px;
   }
   ${MyPill}:hover & {
-    opacity: 1; visibility: visible; transition: .4s;
+    opacity: 1;
+    visibility: visible;
+    transition: 0.4s;
   }
 `;
 export const MyPillTag = styled.p`
@@ -164,19 +208,24 @@ export const MyPillName = styled.div`
   }
   > p {
     position: absolute;
-    left: 0px; top: 0px;
-    opacity: 0; visibility: hidden;
+    left: 0px;
+    top: 0px;
+    opacity: 0;
+    visibility: hidden;
     width: 100%;
-    padding: 3px; background: var(--nightbl);
+    padding: 3px;
+    background: var(--nightbl);
     color: #fff;
     border-radius: 6px;
-    font-size: 12px; line-height: 18px;
+    font-size: 12px;
+    line-height: 18px;
     word-break: break-all;
-    transition: .4s;
+    transition: 0.4s;
   }
   ${MyPillItem}:hover & > p {
-    opacity: 1; visibility: visible;
-    transition: .4s;
+    opacity: 1;
+    visibility: visible;
+    transition: 0.4s;
     cursor: default;
   }
 `;
