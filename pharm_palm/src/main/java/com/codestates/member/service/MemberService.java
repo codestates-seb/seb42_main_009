@@ -43,23 +43,19 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
-//        Member findMember = findVerifiedMemberEmail(member.getMemberEmail());
+        Member findMember = findVerifiedMemberEmail(member.getMemberEmail());
 
-//        Optional.ofNullable(member.getMemberName())
-//                .ifPresent(findMember::setMemberName);
-//
-//        Optional.ofNullable(member.getMemberGender())
-//                .ifPresent(findMember::setMemberGender);
-//
-//        Optional.ofNullable(member.getMemberAge())
-//                .ifPresent(findMember::setMemberAge);
-//
-//        Optional.ofNullable(member.getMemberState())
-//                .ifPresent(findMember::setMemberState);
-        Member findMember = findVerifiedMemberId(member.getMemberId());
+        Optional.ofNullable(member.getMemberName())
+                .ifPresent(findMember::setMemberName);
 
-        Optional.ofNullable(member.isAlarm())
-                .ifPresent(findMember::setAlarm);
+        Optional.ofNullable(member.getMemberGender())
+                .ifPresent(findMember::setMemberGender);
+
+        Optional.ofNullable(member.getMemberAge())
+                .ifPresent(findMember::setMemberAge);
+
+        Optional.ofNullable(member.getMemberState())
+                .ifPresent(findMember::setMemberState);
 
         return memberRepository.save(findMember);
     }

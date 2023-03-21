@@ -3,15 +3,11 @@ package com.codestates.auth.filter;
 import com.codestates.auth.dto.JwtConvertor;
 import com.codestates.auth.dto.LoginDto;
 import com.codestates.auth.jwt.JwtTokenizer;
-import com.codestates.auth.refreshToken.entity.RefreshToken;
-import com.codestates.auth.refreshToken.repository.RefreshTokenRepository;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.nimbusds.jose.shaded.json.JSONObject;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,18 +20,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
+
     private final MemberRepository memberRepository;
-//    private final RefreshTokenRepository refreshTokenRepository;
+
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer, MemberRepository memberRepository) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenizer = jwtTokenizer;
+        this.memberRepository = memberRepository;
+    }
 
     @SneakyThrows
     @Override
@@ -61,15 +60,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String accessToken = delegateAccessToken(findMember);
         String refreshToken = delegateRefreshToken(findMember);
+        Date accessTokenExpiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+        Date refreshTokenExpiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
 
-        Date accessToken_expiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-        Date refreshToken_expiresAt = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
-
-        sendJwtToken(response, accessToken, refreshToken, accessToken_expiresAt, refreshToken_expiresAt);
-
-//        RefreshToken saveRefreshToken = new RefreshToken();
-//        saveRefreshToken.setRefreshToken(refreshToken);
-//        refreshTokenRepository.save(saveRefreshToken);
+        sendJwtToken(response, accessToken, refreshToken, accessTokenExpiresAt, refreshTokenExpiresAt);
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }

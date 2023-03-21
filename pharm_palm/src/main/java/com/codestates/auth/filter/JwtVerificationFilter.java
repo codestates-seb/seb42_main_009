@@ -1,14 +1,9 @@
 package com.codestates.auth.filter;
 
 import com.codestates.auth.jwt.JwtTokenizer;
-import com.codestates.auth.refreshToken.repository.RefreshTokenRepository;
 import com.codestates.auth.utils.CustomAuthorityUtils;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,39 +15,22 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@AllArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-//    private final RefreshTokenRepository refreshTokenRepository;
 
-
-
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//
-//        try {
-//            Map<String, Object> claims = verifyJws(request);
-//            setAuthenticationToContext(claims);
-//        } catch (SignatureException se) {
-//            request.setAttribute("exception", se);
-//        } catch (ExpiredJwtException ee) {
-//            request.setAttribute("exception", ee);
-//        } catch (Exception e) {
-//            request.setAttribute("exception", e);
-//        }
-//
-//        filterChain.doFilter(request, response);
-//    }
+    public JwtVerificationFilter(JwtTokenizer jwtTokenizer,
+                                 CustomAuthorityUtils authorityUtils) {
+        this.jwtTokenizer = jwtTokenizer;
+        this.authorityUtils = authorityUtils;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // System.out.println("# JwtVerificationFilter");
+
         try {
             Map<String, Object> claims = verifyJws(request);
             setAuthenticationToContext(claims);
@@ -63,6 +41,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             request.setAttribute("exception", e);
         }
+
         filterChain.doFilter(request, response);
     }
 
@@ -86,5 +65,4 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-
 }

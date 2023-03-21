@@ -1,6 +1,5 @@
 package com.codestates.auth.utils;
 
-
 import com.codestates.auth.dto.ClaimsToMember;
 import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.exception.BusinessLogicException;
@@ -33,7 +32,7 @@ public class JwtToMemberInfoUtils {
     public ClaimsToMember parseClaimsToMemberInfo(String token, long memberId){
         token = token.replace("Bearer ", "");
         Map<String, Object> claims =
-                tokenizer.getClaims(token, tokenizer.encodeBase64SecretKey(tokenizer.getSecretKey()));
+                 tokenizer.getClaims(token, tokenizer.encodeBase64SecretKey(tokenizer.getSecretKey()));
 
         ClaimsToMember memberInfo = ClaimsToMember.builder()
                 .id((String) claims.get("id"))
@@ -53,38 +52,3 @@ public class JwtToMemberInfoUtils {
     }
 
 }
-
-//@Component
-//public class JwtToMemberInfoUtils {
-//
-//    private final JwtTokenizer jwtTokenizer;
-//
-//    public JwtToMemberInfoUtils(JwtTokenizer jwtTokenizer) {
-//        this.jwtTokenizer = jwtTokenizer;
-//    }
-//
-//    public ClaimsToMember parseClaimsToUserInfo(String token){
-//        token = token.replace("Bearer ", "");
-//        Map<String, Object> claims =
-//                jwtTokenizer.getClaims(token, jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()));
-//
-//        ClaimsToMember memberInfo = ClaimsToMember.builder()
-//                .id((String) claims.get("id"))
-//                .memberId( claims.get("memberId"))
-//                .memberName((String) claims.get("memberName")).build();
-//
-//        return memberInfo;
-//    }
-
-//    public Long extractMemberIdFromToken(String token) {
-//        token = token.replace("Bearer ", "");
-//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-//
-//        Claims claims = jwtTokenizer.getClaims(token, base64EncodedSecretKey).getBody();
-//
-//        Long memberId = claims.get("memberId", Long.class);
-//
-//        return memberId;
-//    }
-
-//}

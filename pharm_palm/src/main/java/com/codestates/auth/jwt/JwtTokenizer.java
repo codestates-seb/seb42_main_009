@@ -69,8 +69,7 @@ public class JwtTokenizer {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(jws)
-                .getBody()
-                ;
+                .getBody();
     }
 
     public void verifySignature(String jws, String base64EncodedSecretKey) {
