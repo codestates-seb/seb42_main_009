@@ -1,11 +1,13 @@
 package com.codestates.review.entity;
 
 import com.codestates.audit.Auditable;
+import com.codestates.disease.entity.Disease;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
@@ -36,4 +38,7 @@ public class Review {
 
     @Column
     private String lastModifiedAt;
+
+    @OneToMany(cascade = CascadeType.DETACH)
+    private List<Disease> diseases;
 }
