@@ -8,6 +8,7 @@ import com.codestates.auth.handler.MemberAuthenticationEntryPoint;
 import com.codestates.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.auth.jwt.JwtTokenizer;
+import com.codestates.auth.refreshToken.repository.RefreshTokenRepository;
 import com.codestates.auth.utils.CustomAuthorityUtils;
 
 import com.codestates.member.repository.MemberRepository;
@@ -43,6 +44,7 @@ public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -94,13 +96,14 @@ public class SecurityConfiguration {
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, memberRepository);
+            JwtAuthenticationFilter jwtAuthenticationFilter =
+                    new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, memberRepository, refreshTokenRepository);
             jwtAuthenticationFilter.setFilterProcessesUrl("/pp/login");
 
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, refreshTokenRepository);
 
             builder
                     .addFilter(jwtAuthenticationFilter)

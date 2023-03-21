@@ -19,7 +19,7 @@ public class JwtToMemberInfoUtils {
     public ClaimsToMember parseClaimsToUserInfo(String token){
         token = token.replace("Bearer ", "");
         Map<String, Object> claims =
-                tokenizer.getClaims(token, tokenizer.encodeBase64SecretKey(tokenizer.getSecretKey()));
+                tokenizer.getClaims(token, tokenizer.encodeBase64SecretKey(tokenizer.getSecretKey())).getBody();
 
         ClaimsToMember memberInfo = ClaimsToMember.builder()
                 .id((String) claims.get("id"))
@@ -32,7 +32,7 @@ public class JwtToMemberInfoUtils {
     public ClaimsToMember parseClaimsToMemberInfo(String token, long memberId){
         token = token.replace("Bearer ", "");
         Map<String, Object> claims =
-                 tokenizer.getClaims(token, tokenizer.encodeBase64SecretKey(tokenizer.getSecretKey()));
+                 tokenizer.getClaims(token, tokenizer.encodeBase64SecretKey(tokenizer.getSecretKey())).getBody();
 
         ClaimsToMember memberInfo = ClaimsToMember.builder()
                 .id((String) claims.get("id"))
