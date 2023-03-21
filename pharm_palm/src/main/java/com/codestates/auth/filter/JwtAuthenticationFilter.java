@@ -67,7 +67,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         sendJwtToken(response, accessToken, refreshToken, accessToken_expiresAt, refreshToken_expiresAt);
 
-        refreshTokenRepository.save(new RefreshToken(refreshToken));
+        RefreshToken saveRefreshToken = new RefreshToken();
+        saveRefreshToken.setRefreshToken(refreshToken);
+        refreshTokenRepository.save(saveRefreshToken);
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
