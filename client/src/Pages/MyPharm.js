@@ -1,13 +1,14 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 import Banner from '../components/Banner';
 import MyPharmModal from '../components/MyPharmModal';
+import { useMyPharmStore } from '../Stores/myPharmStore';
 import { useIsModalOpen } from '../Stores/pharmModalStore';
 import {
   PillAddBtn,
   MyPillSection,
   DefaultNone,
   MyPillList,
-  MyPharmAddDone
+  MyPharmAddDone,
 } from '../styles/s-mypharm';
 
 const MyPharm = () => {
@@ -15,7 +16,7 @@ const MyPharm = () => {
   const modalHandler = () => {
     setModalOpen(!modalOpen);
   };
-  const data = [
+  const [data, setData] = useState([
     {
       doseId: 1,
       memberId: 1,
@@ -34,8 +35,17 @@ const MyPharm = () => {
       doseNumber: 2,
       doseTimes: ['9:00', '18:00'],
     },
-  ];
+  ]);
+  const { myPharmItem } = useMyPharmStore(state => state);
+  console.log(myPharmItem);
 
+  useEffect(() => {
+    setData([...data]);
+  }, []);
+
+  // myPharmItem
+
+  console.log(data);
   return (
     <>
       <Banner>

@@ -41,6 +41,11 @@ const SignUp = () => {
     `);
   }
 
+  const strValid = str => {
+    if (str === '') return true;
+    return false;
+  };
+
   const register = () => {
     const date = new Date();
     const createdAt = date;
@@ -166,6 +171,14 @@ const SignUp = () => {
               console.log('register');
               register();
             }}
+            disabled={
+              strValid(userId) ||
+              strValid(password) ||
+              strValid(passwordChecked) ||
+              strValid(username) ||
+              strValid(birth) ||
+              strValid(gender)
+            }
           >
             회원가입
           </SignUpBtn>

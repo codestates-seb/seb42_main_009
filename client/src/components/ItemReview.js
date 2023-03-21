@@ -291,7 +291,10 @@ const ItemReview = () => {
                   })}
                 </div>
               </ReviewMedSelect>
-              <ReviewSubmitBtn onClick={reviewAddHandler}>
+              <ReviewSubmitBtn
+                onClick={reviewAddHandler}
+                disabled={reviewItem.reviewText === ''}
+              >
                 리뷰쓰기
               </ReviewSubmitBtn>
             </ReviewModalBox>
@@ -344,7 +347,10 @@ const ItemReview = () => {
                   })}
                 </div>
               </ReviewMedSelect>
-              <ReviewSubmitBtn onClick={reviewUpdateHandler}>
+              <ReviewSubmitBtn
+                onClick={reviewUpdateHandler}
+                disabled={reviewItem.reviewText === ''}
+              >
                 수정하기
               </ReviewSubmitBtn>
             </ReviewModalBox>
