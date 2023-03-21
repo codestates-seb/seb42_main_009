@@ -16,6 +16,7 @@ public class MemberPatchDto {
     private String memberGender;
     private String memberAge;
     private Member.MemberState memberState;
+    private boolean alarm;
 
     public void setMemberId(long memberId) {
         this.memberId = memberId;
