@@ -1,54 +1,30 @@
 package com.codestates.auth.utils;
 
-import com.codestates.auth.dto.ClaimsToMember;
-import com.codestates.auth.jwt.JwtTokenizer;
-import com.codestates.exception.BusinessLogicException;
-import com.codestates.exception.ExceptionCode;
-import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import com.codestates.auth.jwt.JwtTokenizer;
+
+import io.jsonwebtoken.Claims;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class JwtToMemberInfoUtils {
-    private final JwtTokenizer tokenizer;
 
-    public JwtToMemberInfoUtils(JwtTokenizer tokenizer) {
-        this.tokenizer = tokenizer;
+    private final JwtTokenizer jwtTokenizer;
+
+    public JwtToMemberInfoUtils(JwtTokenizer jwtTokenizer) {
+        this.jwtTokenizer = jwtTokenizer;
     }
 
-    public ClaimsToMember parseClaimsToUserInfo(String token){
+    public Long extractMemberIdFromToken(String token) {
         token = token.replace("Bearer ", "");
-        Map<String, Object> claims =
-                tokenizer.getClaims(token, tokenizer.encodeBase64SecretKey(tokenizer.getSecretKey())).getBody();
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
-        ClaimsToMember memberInfo = ClaimsToMember.builder()
-                .id((String) claims.get("id"))
-                .memberId( claims.get("memberId"))
-                .memberName((String) claims.get("memberName")).build();
+        Claims claims = jwtTokenizer.getClaims(token, base64EncodedSecretKey).getBody();
 
-        return memberInfo;
-    }
+        Long memberId = claims.get("memberId", Long.class);
 
-    public ClaimsToMember parseClaimsToMemberInfo(String token, long memberId){
-        token = token.replace("Bearer ", "");
-        Map<String, Object> claims =
-                 tokenizer.getClaims(token, tokenizer.encodeBase64SecretKey(tokenizer.getSecretKey())).getBody();
-
-        ClaimsToMember memberInfo = ClaimsToMember.builder()
-                .id((String) claims.get("id"))
-                .memberId( claims.get("memberId"))
-                .memberName((String) claims.get("memberName")).build();
-
-        verifiedAppropriateMember(memberInfo.getMemberId(), memberId);
-
-        return memberInfo;
-    }
-
-    private void verifiedAppropriateMember (Object tryId,long memberId){
-        if((Integer)tryId == memberId){
-            return;
-        }
-        throw new BusinessLogicException(ExceptionCode.WRONG_TOKEN_INPUT);
+        return memberId;
     }
 
 }

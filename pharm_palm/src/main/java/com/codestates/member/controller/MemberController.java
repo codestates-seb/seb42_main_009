@@ -1,9 +1,6 @@
 package com.codestates.member.controller;
 
-import com.codestates.auth.dto.ClaimsToMember;
-import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.auth.utils.JwtToMemberInfoUtils;
-import com.codestates.dto.MultiResponseDto;
 import com.codestates.dto.SingleResponseDto;
 import com.codestates.member.dto.MemberPatchDto;
 import com.codestates.member.dto.MemberPostDto;
@@ -12,9 +9,10 @@ import com.codestates.member.entity.Member;
 import com.codestates.member.mapper.MemberMapper;
 import com.codestates.member.service.MemberService;
 import com.codestates.utils.UriCreator;
+
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,17 +44,19 @@ public class MemberController {
 
     @GetMapping("/info")
     public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
-        String token;
 
+        String token;
         try{
             token = httpHeaders.get("Authorization").get(0);
         }catch (NullPointerException exception){
-            throw new MalformedJwtException("");
+            throw new MalformedJwtException("토큰의 형식이 올바르지 않습니다.");
         }
 
-        ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
+        Long memberId = jwtToMemberInfoUtils.extractMemberIdFromToken(token);
 
-        return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
+        Member member = memberService.findMember(memberId);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
     }
 
     @PostMapping
@@ -69,25 +69,30 @@ public class MemberController {
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
+//    @PatchMapping("/{member-id}")
+//    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
+//                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
+//
+//        memberPatchDto.setMemberId(memberId);
+//        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
+//
+//        return new ResponseEntity<>(
+//                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+//    }
+
+    @PatchMapping("/info")
+    public ResponseEntity patchMemberInfo(@RequestHeader HttpHeaders httpHeaders,
+                                          @Valid @RequestBody MemberPatchDto memberPatchDto) {
+        String token;
+
+        try{
+            token = httpHeaders.get("Authorization").get(0);
+        }catch (NullPointerException exception){
+            throw new MalformedJwtException("");
+        }
+        Long memberId = jwtToMemberInfoUtils.extractMemberIdFromToken(token);
 
         memberPatchDto.setMemberId(memberId);
-        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
-    }
-
-    @PatchMapping("/mypage")
-    public ResponseEntity patchMemberInfo(Authentication authentication,
-                                          @Valid @RequestBody MemberPatchDto memberPatchDto) {
-        if (authentication == null) {
-            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-        }
-
-        memberPatchDto.setMemberEmail(authentication.getName());
         Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
 
         return new ResponseEntity<>(
@@ -112,16 +117,16 @@ public class MemberController {
     
 
 
-    @GetMapping("/mypage")
-    public ResponseEntity getMemberInfo(Authentication authentication) {
-        if (authentication == null) {
-            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-        }
-        Member member = memberService.findMemberInfo(authentication.getName());
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
-    }
+//    @GetMapping("/mypage")
+//    public ResponseEntity getMemberInfo(Authentication authentication) {
+//        if (authentication == null) {
+//            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
+//        }
+//        Member member = memberService.findMemberInfo(authentication.getName());
+//
+//        return new ResponseEntity<>(
+//                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+//    }
 
 
 
