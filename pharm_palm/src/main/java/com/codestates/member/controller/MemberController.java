@@ -44,7 +44,7 @@ public class MemberController {
         this.jwtToMemberInfoUtils = jwtToMemberInfoUtils;
     }
 
-    @PostMapping("/info")
+    @GetMapping("/info")
     public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
         String token;
 
@@ -69,16 +69,16 @@ public class MemberController {
         return ResponseEntity.created(location).build();
     }
 
-//    @PatchMapping("/{member-id}")
-//    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-//                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
-//
-//        memberPatchDto.setMemberId(memberId);
-//        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
-//
-//        return new ResponseEntity<>(
-//                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
-//    }
+    @PatchMapping("/{member-id}")
+    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
+                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
+
+        memberPatchDto.setMemberId(memberId);
+        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+    }
 
     @PatchMapping("/mypage")
     public ResponseEntity patchMemberInfo(Authentication authentication,
