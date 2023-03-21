@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { BsFillImageFill } from 'react-icons/bs';
 import { HeaderBtn } from '../styles/s-header';
 import { SmBtn } from '../styles/globalStyle';
+import { useUserInfoStore } from '../Stores/userInfoStore';
 
 const ProfileWrap = styled.article`
   width: 250px;
@@ -99,6 +100,9 @@ const DefaultProfile = styled.div`
 `;
 
 const Profile = () => {
+  const { userInfo } = useUserInfoStore(state => state);
+  console.log('프로필 컴포넌트');
+  console.log(userInfo);
   const [editMode, setEditMode] = useState(false);
   const [inputName, setInputName] = useState('');
   const [image, setImage] = useState({

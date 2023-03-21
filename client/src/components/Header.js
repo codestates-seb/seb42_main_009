@@ -42,6 +42,8 @@ const Header = () => {
     setIsLogin(false);
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('KAKAO_accessToken');
+    localStorage.removeItem('NAVER_accessToken');
     localStorage.removeItem('accessToken_expiresAt');
     localStorage.removeItem('refreshToken_expiresAt');
   };

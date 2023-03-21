@@ -1,4 +1,5 @@
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaInfoCircle } from 'react-icons/fa';
 import { Tab } from '../styles/globalStyle';
 import Profile from '../components/Profile';
@@ -6,7 +7,7 @@ import Banner from '../components/Banner';
 import MyPills from '../components/MyPills';
 import MyPharmModal from '../components/MyPharmModal';
 import { useIsModalOpen } from '../Stores/pharmModalStore';
-import { 
+import {
   FieldTooltip,
   ToggleWrap,
   ToggleBox,
@@ -15,14 +16,28 @@ import {
   MypageTabContent,
   MypageAlarm,
   MyPillList,
-  PillAddBtn
+  PillAddBtn,
 } from '../styles/s-mypage';
-import { ReviewList,ReviewItem,ReviewContent,UserImage,UserInputs } from '../styles/s-item';
-
+import {
+  ReviewList,
+  ReviewItem,
+  ReviewContent,
+  UserImage,
+  UserInputs,
+} from '../styles/s-item';
+import { useIsLoginStore } from '../Stores/loginStore';
 
 const MyPage = () => {
-  const [ curTab, setCurTab ] = useState(0);
-  const [ toggleOn, setToggleOn ] = useState(false);
+  // 로그인이 안돼어 있을 경우, 홈페이지로 이동
+  const { isLogin } = useIsLoginStore(state => state);
+  console.log(isLogin);
+  if (isLogin === false) {
+    const navigate = useNavigate();
+    navigate('/home');
+  }
+
+  const [curTab, setCurTab] = useState(0);
+  const [toggleOn, setToggleOn] = useState(false);
   const { modalOpen, setModalOpen } = useIsModalOpen(state => state);
 
   const modalHandler = () => {
@@ -45,25 +60,25 @@ const MyPage = () => {
   const toggleHandler = () => {
     setToggleOn(!toggleOn);
   };
-  const [rvList, setRvList]=useState([
+  const [rvList, setRvList] = useState([
     {
-      reviewImg:'',
-      reviewText:`nforce onClick is accompanied by at least one of the following:
+      reviewImg: '',
+      reviewText: `nforce onClick is accompanied by at least one of the following:
       onKeyUp, onKeyDown, onKeyPress. Coding for the keyboard is
       important for users with physical disabilities who cannot use a
       mouse, AT compatibility, and screenreader users. This does not
       apply for interactive or hidden elements. Enforce onClick is
       accompanied by at least one of the following: onKeyUp,`,
-      reviewTag:'',
-      reviewStretch:false
+      reviewTag: '',
+      reviewStretch: false,
     },
     {
-      reviewImg:'',
-      reviewText:'22222222',
-      reviewTag:'',
-      reviewStretch:false
-    }
-  ])
+      reviewImg: '',
+      reviewText: '22222222',
+      reviewTag: '',
+      reviewStretch: false,
+    },
+  ]);
   const moreReview = id => {
     setRvList(reviewList =>
       reviewList.map((item, idx) =>
@@ -79,24 +94,23 @@ const MyPage = () => {
       </Banner>
       <div className="bodywrap">
         <MypageWrap>
-          <Profile/>
+          <Profile />
           <MypageContent>
             <Tab>
               {tabArr.map((item, idx) => (
                 <li
                   onClick={() => tabHandler(idx)}
-                  onKeyUp = {item.tabHandler}
-                  onKeyDown = {item.tabHandler}
+                  onKeyUp={item.tabHandler}
+                  onKeyDown={item.tabHandler}
                   key={idx}
                   className={idx === curTab ? 'active tabmenu' : 'tabmenu'}
-                  role='tab'
+                  role="tab"
                 >
                   {item}
                 </li>
               ))}
             </Tab>
-            { curTab===0 
-              ? 
+            {curTab === 0 ? (
               <MypageTabContent>
                 <MypageAlarm>
                   <ToggleWrap>
@@ -127,59 +141,61 @@ const MyPage = () => {
                 </MypageAlarm>
 
                 <PillAddBtn onClick={modalHandler}>약 추가하기</PillAddBtn>
-                {
-                  modalOpen 
-                  ? <MyPharmModal className='새로넣는모달' setModalOpen={setModalOpen} />
-                  : null
-                }
+
+                {modalOpen ? (
+                  <MyPharmModal setModalOpen={setModalOpen} />
+                ) : null}
+
                 <MyPillList>
-                  <MyPills/>
-                  <MyPills/>
-                  <MyPills/>
-                  <MyPills/>
-                  <MyPills/>
-                  <MyPills/>
+                  <MyPills />
+                  <MyPills />
+                  <MyPills />
+                  <MyPills />
+                  <MyPills />
+                  <MyPills />
                   {/* {myPillCount.map((item,idx)=>(
                     <MyPills key={idx} objectKey={idx} />
                   ))} */}
                 </MyPillList>
               </MypageTabContent>
-              :
+            ) : (
               <MypageTabContent>
                 <ReviewList>
-                  {
-                    rvList.map((item,idx)=>(
-                        <ReviewItem className={item.reviewStretch ? 'review-open review' : 'review'}>
-                          <div className="btn-more" onClick={() => moreReview(idx)} role='presentation' >
-                            {item.reviewStretch ? '닫기' : '더보기'}
+                  {rvList.map((item, idx) => (
+                    <ReviewItem
+                      className={
+                        item.reviewStretch ? 'review-open review' : 'review'
+                      }
+                    >
+                      <div
+                        className="btn-more"
+                        onClick={() => moreReview(idx)}
+                        role="presentation"
+                      >
+                        {item.reviewStretch ? '닫기' : '더보기'}
+                      </div>
+                      <ReviewContent>
+                        <UserImage>
+                          <img src="https://picsum.photos/300/200" alt="user" />
+                        </UserImage>
+                        <UserInputs>
+                          <span className="username">약먹기시러</span>
+                          <span className="writedate">2023-09-13</span>
+
+                          <div className="textarea">
+                            {item.reviewImg ? (
+                              <img src={item.reviewImg.preview_URL} alt="dd" />
+                            ) : null}
+
+                            {item.reviewText}
                           </div>
-                          <ReviewContent>
-                            <UserImage>
-                              <img src="https://picsum.photos/300/200" alt="user" />
-                            </UserImage>
-                            <UserInputs>
-                              <span className="username">약먹기시러</span>
-                              <span className="writedate">2023-09-13</span>
-      
-                              <div className='textarea'>
-                                {
-                                  item.reviewImg ? <img src={item.reviewImg.preview_URL} alt='dd' /> : null
-                                }
-                                
-                                {item.reviewText}
-                              </div>
-                            </UserInputs>
-                          </ReviewContent>
-                        </ReviewItem>
-                      )
-                      )
-                    }
-                    </ReviewList>
-
-
+                        </UserInputs>
+                      </ReviewContent>
+                    </ReviewItem>
+                  ))}
+                </ReviewList>
               </MypageTabContent>
-            }
-
+            )}
           </MypageContent>
         </MypageWrap>
       </div>
