@@ -4,17 +4,25 @@ import axios from 'axios';
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 import { BsFillBalloonHeartFill } from 'react-icons/bs';
 import { Tab } from '../styles/globalStyle';
-import { ItemWrap,ItemBox,ItemTitle,LikeWrap,ItemOverview,ItemDetail } from '../styles/s-item';
+import {
+  ItemWrap,
+  ItemBox,
+  ItemTitle,
+  LikeWrap,
+  ItemOverview,
+  ItemDetail,
+} from '../styles/s-item';
 import { useMedicineItemStore } from '../Stores/medicineItemStore';
 import Search from '../components/Search';
 import Banner from '../components/Banner';
 import ItemInfo from '../components/ItemInfo';
 import ItemReview from '../components/ItemReview';
-
+import { useUserInfoStore } from '../Stores/userInfoStore';
 
 const Item = () => {
   const [curTab, setCurTab] = useState(0);
   const [like, setLike] = useState(false);
+  const { userInfo } = useUserInfoStore(state => state);
   const { medicineItem, setMedicineItem, setLikeIncrease, setLikeDecrease } =
     useMedicineItemStore(state => state);
 
@@ -32,6 +40,14 @@ const Item = () => {
     } else {
       setLikeIncrease();
     }
+    const postData = {
+      memberId: userInfo.memberId,
+      medicineId,
+    };
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/pp/heart`, postData)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
   };
   const handleImageError = e => {
     e.target.src = '/pharmpalm.png';
@@ -41,15 +57,12 @@ const Item = () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/pp/medicines/${medicineId}`)
       .then(res => {
-        console.log(res.data);
         setMedicineItem(res.data);
       })
       .catch(err => {
         console.log(err);
       });
   }, []);
-
-  console.log(medicineItem);
 
   return (
     <>

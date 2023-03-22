@@ -106,7 +106,6 @@ const MyPharmModal = ({ setModalOpen }) => {
       doseNumber,
       doseTimes: timeTableArray.join(','),
     };
-    console.log(myDose);
     setMyPharmItem({
       medicineId,
       medicineName: searchTxt,
@@ -115,15 +114,15 @@ const MyPharmModal = ({ setModalOpen }) => {
       doseTimes: timeTableArray,
     });
     axios
-      .post(`${URI}/pp/doses`, myDose, {
+      .post(`${process.env.REACT_APP_API_URL}/pp/doses`, myDose, {
         withCredentials: true,
       })
       .then(res => console.log(res))
       .catch(err => console.log(err));
-
+    console.log(myDose);
+    console.log(myPharmItem);
     modalCloseBtn();
   };
-  console.log(myPharmItem);
 
   return (
     <MyPharmWrap>
@@ -232,7 +231,12 @@ const MyPharmModal = ({ setModalOpen }) => {
             </FieldBox>
           </FieldSet>
           <MyPharmBtnWrap>
-            <MyPharmSubmit onClick={doseSubmit}>추가하기</MyPharmSubmit>
+            <MyPharmSubmit
+              onClick={doseSubmit}
+              disabled={searchTxt === '' || doseMount === '' || doseNumber <= 0}
+            >
+              추가하기
+            </MyPharmSubmit>
             <MyPharmSubmit
               background="var(--red-1)"
               color="var(--red-2)"
