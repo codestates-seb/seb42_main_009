@@ -28,8 +28,8 @@ public class JwtToMemberInfoUtils {
                 .id((String) claims.get("id"))
                 .memberId(claims.get("memberId"))
                 .memberName((String) claims.get("memberName"))
-//                .memberAge((String) claims.get("memberAge"))
-//                .memberGender((String) claims.get("memberGender"))
+                .memberAge((String) claims.get("memberAge"))
+                .memberGender((String) claims.get("memberGender"))
                 .build();
 
         return memberInfo;
