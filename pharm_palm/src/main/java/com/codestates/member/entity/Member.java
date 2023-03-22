@@ -1,7 +1,6 @@
 package com.codestates.member.entity;
 
 import com.codestates.audit.Auditable;
-import com.codestates.dose.entity.Dose;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -44,19 +42,6 @@ public class Member extends Auditable {
 
     @Enumerated(EnumType.STRING)
     private MemberState memberState = MemberState.ACTIVE;
-
-    @Column
-    private boolean alarm;
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Dose> doses = new ArrayList<>();
-
-    public void addDose(Dose dose) {
-        this.doses.add(dose);
-        if (dose.getMember() != this) {
-            dose.addMember(this);
-        }
-    }
-
 
     public Member update (String memberEmail, String memberName, String picture, String memberGender, String memberAge) {
         this.memberEmail = memberEmail;

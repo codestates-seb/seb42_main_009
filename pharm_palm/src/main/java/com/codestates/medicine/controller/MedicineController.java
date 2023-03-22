@@ -45,10 +45,9 @@ public class MedicineController {
             @PathVariable("medicine-id") @Positive long medicineId) {
         Medicine medicine = medicineService.findVerifiedMedicine(medicineId);
 
-//        return new ResponseEntity(
-//                new SingleResponseDto<>(mapper.medicineToMedicineResponseDto(medicine))
-//                , HttpStatus.OK);
-        return new ResponseEntity(mapper.medicineToMedicineResponseDto(medicine), HttpStatus.OK);
+        return new ResponseEntity(
+                new SingleResponseDto<>(mapper.medicineToMedicineResponseDto(medicine))
+                , HttpStatus.OK);
     }
 
     @GetMapping("/name")
