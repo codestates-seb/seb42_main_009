@@ -30,7 +30,6 @@ public class JwtToMemberInfoUtils {
                 .memberName((String) claims.get("memberName"))
                 .memberAge((String) claims.get("memberAge"))
                 .memberGender((String) claims.get("memberGender"))
-                .picture((String) claims.get("picture"))
                 .build();
 
         return memberInfo;

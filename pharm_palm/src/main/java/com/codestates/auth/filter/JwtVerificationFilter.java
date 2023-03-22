@@ -42,7 +42,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             request.setAttribute("exception", se);
         } catch (ExpiredJwtException ee) {
             request.setAttribute("exception", ee);
-            return;
         } catch (Exception e) {
             request.setAttribute("exception", e);
         }
@@ -60,7 +59,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        Map<String, Object> claims = jwtTokenizer.getJws(jws, base64EncodedSecretKey).getBody();
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey);
 
         return claims;
     }
@@ -72,26 +71,5 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    //액세스 토큰 재발급을 위한 코드
-//    private String delegateNewAccessToken(HttpServletRequest request) {
-//        String oldAccessToken = request.getHeader("Authorization").replace("Bearer ", "");
-//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-//        Claims oldAccessTokenClaims = jwtTokenizer.getJws(oldAccessToken, base64EncodedSecretKey).getBody();
-//
-//        Map<String, Object> newAccessTokenClaims =new HashMap<>();
-//        newAccessTokenClaims.put("id", oldAccessTokenClaims.get("id"));
-//        newAccessTokenClaims.put("memberName", oldAccessTokenClaims.get("memberName"));
-//        newAccessTokenClaims.put("memberId", oldAccessTokenClaims.get("memberId"));
-//        newAccessTokenClaims.put("roles", oldAccessTokenClaims.get("roles"));
-//
-//        String subject = oldAccessTokenClaims.getSubject();
-//
-//        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-//
-//        String newAccessToken = jwtTokenizer.generateToken(newAccessTokenClaims, subject, expiration, base64EncodedSecretKey);
-//
-//        return newAccessToken;
-//
-//    }
 
 }

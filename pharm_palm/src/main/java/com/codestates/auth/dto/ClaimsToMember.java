@@ -12,7 +12,6 @@ public class ClaimsToMember {
     private String memberName;
     private String id;
     private Object memberId;
-    private String picture;
     private String memberGender;
     private String memberAge;
 }
