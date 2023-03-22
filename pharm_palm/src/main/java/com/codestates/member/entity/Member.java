@@ -39,6 +39,9 @@ public class Member extends Auditable {
 
     @Column
     private String memberAge;
+    
+    @Column
+    private boolean alarm;
 
     @Enumerated(EnumType.STRING)
     private MemberState memberState = MemberState.ACTIVE;

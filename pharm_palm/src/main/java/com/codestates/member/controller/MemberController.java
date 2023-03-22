@@ -95,6 +95,7 @@ public class MemberController {
 //        return new ResponseEntity<>(
 //                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
 //    }
+    
     @GetMapping("/info")
     public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
         String token;
@@ -135,5 +136,12 @@ public class MemberController {
         memberService.withdrawMember(authentication.getName());
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+    
+       @GetMapping("/doses/{member-id}")
+    public ResponseEntity getDoses(@PathVariable("member-id") @Positive long memberId) {
+        MemberResponseDto memberResponseDto = mapper.memberToMemberResponseDto( memberService.findMember(memberId));
+        return new ResponseEntity(
+                new SingleResponseDto<>(memberResponseDto), HttpStatus.OK);
     }
 }
