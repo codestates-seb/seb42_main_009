@@ -6,6 +6,7 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,8 @@ import java.util.Optional;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+
+    @Autowired
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
 
@@ -40,7 +43,7 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
-        Member findMember = findVerifiedMemberId(member.getMemberId());
+        Member findMember = findVerifiedMemberEmail(member.getMemberEmail());
 
         Optional.ofNullable(member.getMemberName())
                 .ifPresent(findMember::setMemberName);
@@ -48,8 +51,8 @@ public class MemberService {
         Optional.ofNullable(member.getMemberGender())
                 .ifPresent(findMember::setMemberGender);
 
-        Optional.ofNullable(member.getMemberBirthday())
-                .ifPresent(findMember::setMemberBirthday);
+        Optional.ofNullable(member.getMemberAge())
+                .ifPresent(findMember::setMemberAge);
 
         Optional.ofNullable(member.getMemberState())
                 .ifPresent(findMember::setMemberState);
@@ -72,6 +75,12 @@ public class MemberService {
 
     public void deleteMember(long memberId) {
         Member findMember = findVerifiedMemberId(memberId);
+
+        memberRepository.delete(findMember);
+    }
+
+    public void withdrawMember(String memberEmail) {
+        Member findMember = findVerifiedMemberEmail(memberEmail);
         findMember.setMemberState(Member.MemberState.WITHDRAW);
         memberRepository.save(findMember);
     }

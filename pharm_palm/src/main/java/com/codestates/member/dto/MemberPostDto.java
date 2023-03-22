@@ -17,6 +17,6 @@ public class MemberPostDto {
     @NotBlank(message = "비밀번호를 작성해 주세요.")
     private String memberPwd;
     private String memberGender;
-    private String memberBirthday;
+    private String memberAge;
 
 }

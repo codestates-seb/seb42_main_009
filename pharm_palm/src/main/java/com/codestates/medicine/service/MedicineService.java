@@ -35,11 +35,13 @@ public class MedicineService {
         return findMedicine;
     }
 
-    public List<Medicine> findMedicineByMedicineNameLike(String medicineName) {
-        return medicineRepository.findByMedicineNameLike("%" + medicineName + "%");
+    public Page<Medicine> findByMedicineNameLike(String medicineName, int page, int size) {
+        return medicineRepository.findByMedicineNameLike("%" + medicineName + "%",
+                PageRequest.of(page, size, Sort.by("medicineName").descending()));
     }
 
-    public List<Medicine> findMedicineByMedicineIngredientLike(String medicineIngredient) {
-        return medicineRepository.findByMedicineIngredientLike("%" + medicineIngredient + "%");
+    public Page<Medicine> findByMedicineIngredientLike(String medicineIngredient, int page, int size) {
+        return medicineRepository.findByMedicineIngredientLike("%" + medicineIngredient + "%",
+                PageRequest.of(page, size, Sort.by("medicineIngredient").descending()));
     }
 }

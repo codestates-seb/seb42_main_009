@@ -1,6 +1,7 @@
 package com.codestates.member.entity;
 
 import com.codestates.audit.Auditable;
+import com.codestates.dose.entity.Dose;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -29,7 +31,7 @@ public class Member extends Auditable {
     @Column
     private String picture;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String memberPwd;
 
     //    @Enumerated(EnumType.STRING)
@@ -38,28 +40,51 @@ public class Member extends Auditable {
     private String memberGender;
 
     @Column
-    private String memberBirthday;
+    private String memberAge;
 
     @Enumerated(EnumType.STRING)
     private MemberState memberState = MemberState.ACTIVE;
+
+    @Column
+    private boolean alarm;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Dose> doses = new ArrayList<>();
+
+    public void addDose(Dose dose) {
+        this.doses.add(dose);
+        if (dose.getMember() != this) {
+            dose.addMember(this);
+        }
+    }
+
+
+    public Member update (String memberEmail, String memberName, String picture, String memberGender, String memberAge) {
+        this.memberEmail = memberEmail;
+        this.memberName = memberName;
+        this.picture = picture;
+        this.memberGender = memberGender;
+        this.memberAge = memberAge;
+
+        return this;
+    }
 
     //diseaseId 와 medicineId 나중에 추가
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    public enum MemberGender {
-        FEMALE("여성"),
-        MALE("남성"),
-        PRIVATE("비밀")
-        ;
-        @Getter
-        private String gender;
-
-        MemberGender(String gender) {
-            this.gender = gender;
-        }
-    }
+//    public enum MemberGender {
+//        FEMALE("여성"),
+//        MALE("남성"),
+//        PRIVATE("비밀")
+//        ;
+//        @Getter
+//        private String gender;
+//
+//        MemberGender(String gender) {
+//            this.gender = gender;
+//        }
+//    }
 
     public enum MemberState {
         ACTIVE("활동중"),
