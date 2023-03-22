@@ -26,7 +26,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/pp/members")
@@ -46,13 +45,13 @@ public class MemberController {
 
     @GetMapping("/info")
     public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
-        String token;
+        String token  = httpHeaders.get("Authorization").get(0);
 
-        try{
-            token = Objects.requireNonNull(httpHeaders.get("Authorization")).get(0);
-        }catch (NullPointerException exception){
-            throw new MalformedJwtException("");
-        }
+//        try{
+//            token = httpHeaders.get("Authorization").get(0);
+//        }catch (NullPointerException exception){
+//            throw new MalformedJwtException("");
+//        }
         ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
         return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
     }
