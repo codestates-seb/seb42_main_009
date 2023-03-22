@@ -2,8 +2,6 @@ package com.codestates.auth.filter;
 
 import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.auth.refreshToken.repository.RefreshTokenRepository;
-import com.codestates.auth.refreshToken.service.RefreshTokenService;
-import com.codestates.auth.refreshToken.service.UseRefreshToken;
 import com.codestates.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

@@ -1,6 +1,6 @@
 package com.codestates.disease.service;
 
-import com.codestates.disease.DiseasesData;
+//import com.codestates.disease.DiseasesData;
 import com.codestates.disease.entity.Disease;
 import com.codestates.disease.mapper.DiseaseMapper;
 import com.codestates.disease.repository.DiseaseRepository;
