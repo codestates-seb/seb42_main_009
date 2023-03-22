@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { BiSearchAlt } from 'react-icons/bi';
-import { useNavigate } from 'react-router-dom';
+import { useIsLoginStore } from '../Stores/loginStore';
 import {
   HeaderWrap,
   Flexbox,
@@ -18,19 +19,34 @@ import {
 
 const Header = () => {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
+  const { isLogin, setIsLogin } = useIsLoginStore(state => state);
   const [searchOn, setSearchOn] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const searchOpen = () => {
     setSearchOn(!searchOn);
   };
   const tempLogin = () => {
-    setIsLogin(!isLogin);
+    // setIsLogin(!isLogin);
+    navigate('/');
   };
   const panelOpen = () => {
     setMobileOpen(!mobileOpen);
   };
-  const menu = ['의약품 조회', '내 약 관리', '복약루틴', 'NEWS'];
+  const menuList = [
+    { title: '의약품 조회', linkSrc: '/list' },
+    { title: '내 약 관리', linkSrc: '/mypharm' },
+    { title: '차트데이터', linkSrc: '/chart' },
+    { title: 'NEWS', linkSrc: '/' },
+  ];
+  const logoutHandler = () => {
+    setIsLogin(false);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('KAKAO_accessToken');
+    localStorage.removeItem('NAVER_accessToken');
+    localStorage.removeItem('accessToken_expiresAt');
+    localStorage.removeItem('refreshToken_expiresAt');
+  };
 
   return (
     <>
@@ -40,8 +56,10 @@ const Header = () => {
             <img src="/pharmpalm.png" alt="pharm palm logo" />
           </Logo>
           <Menu>
-            {menu.map((item, idx) => (
-              <li key={idx}>{item}</li>
+            {menuList.map((item, idx) => (
+              <li key={idx}>
+                <Link to={item.linkSrc}>{item.title}</Link>
+              </li>
             ))}
           </Menu>
         </Flexbox>
@@ -54,8 +72,11 @@ const Header = () => {
           </Search>
           {isLogin ? (
             <ButtonWrap>
-              <HeaderBtn width="80px">My Page</HeaderBtn>
+              <HeaderBtn width="80px" onClick={() => navigate('/mypage')}>
+                My Page
+              </HeaderBtn>
               <HeaderBtn
+                onClick={() => logoutHandler()}
                 border="var(--mainbl)"
                 color="var(--mainbl)"
                 background="#fff"
@@ -68,7 +89,7 @@ const Header = () => {
             <ButtonWrap>
               <HeaderBtn onClick={() => navigate('/login')}>Login</HeaderBtn>
               <HeaderBtn
-                onClick={() => navigate('/SignUp')}
+                onClick={() => navigate('/signup')}
                 border="var(--mainbl)"
                 color="var(--mainbl)"
                 background="#fff"
@@ -91,26 +112,53 @@ const Header = () => {
         <Panel className={mobileOpen ? 'open' : null}>
           {isLogin ? (
             <PanelBtn>
-              <HeaderBtn background="#fff" color="var(--mainbl)" width="80px">
+              <HeaderBtn
+                background="#fff"
+                color="var(--mainbl)"
+                width="80px"
+                onClick={() => navigate('/mypage')}
+              >
                 My Page
               </HeaderBtn>
-              <HeaderBtn background="#fff" color="var(--mainbl)">
+              <HeaderBtn
+                background="#fff"
+                color="var(--mainbl)"
+                onClick={() => logoutHandler()}
+              >
                 Logout
               </HeaderBtn>
             </PanelBtn>
           ) : (
             <PanelBtn>
-              <HeaderBtn background="#fff" color="var(--mainbl)">
+              <HeaderBtn
+                background="#fff"
+                color="var(--mainbl)"
+                onClick={() => {
+                  panelOpen();
+                  navigate('/login');
+                }}
+              >
                 Login
               </HeaderBtn>
-              <HeaderBtn background="#fff" color="var(--mainbl)">
+              <HeaderBtn
+                background="#fff"
+                color="var(--mainbl)"
+                onClick={() => {
+                  panelOpen();
+                  navigate('/signup');
+                }}
+              >
                 Join
               </HeaderBtn>
             </PanelBtn>
           )}
           <PanelMenu>
-            {menu.map((item, idx) => (
-              <li key={idx}>{item}</li>
+            {menuList.map((item, idx) => (
+              <Link to={item.linkSrc}>
+                <button key={idx} onClick={panelOpen}>
+                  {item.title}
+                </button>
+              </Link>
             ))}
           </PanelMenu>
         </Panel>

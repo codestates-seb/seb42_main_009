@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// import moment from 'moment';
 import { useIsLoginStore, useLoginInfoStore } from '../Stores/loginStore';
+import kakaoLoginImage from '../images/kakao_login_medium_narrow.png';
+import naverLoginImage from '../images/naver_login.png';
+import Input from '../components/Ui/Input';
+import { HeaderBtn } from '../styles/s-header';
 
-const REST_API_KEY = '46d7b3692a51eff3138a1580dccdd6c0';
-const REDIRECT_URI = 'http://localhost:8080/oauth2/code/kakao';
+const KAKAO_REST_API_KEY = '46d7b3692a51eff3138a1580dccdd6c0';
+const KAKAO_REDIRECT_URI = 'http://localhost:3000/auth/kakao/callback';
+
+const NAVER_CLIENT_ID = 'xycgRfAt8xXQwhRJjvno';
+const NAVER_REDIRECT_URI = 'http://localhost:3000/auth/naver/callback';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,13 +20,8 @@ const Login = () => {
   const { setIsLogin } = useIsLoginStore(state => state);
   const [setErrorMessage] = useState('');
 
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-  const kakaoLoginHandler = () => {
-    window.location.assign(KAKAO_AUTH_URL);
-    console.log(window.location.href);
-    navigate('/');
-  };
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
+  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=STRING&redirect_uri=${NAVER_REDIRECT_URI}`;
 
   // Input 정보 처리
   const handleInputValue = key => e => {
@@ -34,22 +37,36 @@ const Login = () => {
     }
 
     axios
-      .post(`${process.env.REACT_APP_API_URL}/auth/login`, loginInfo, {
-        withCredentials: true,
-      })
+      .post(
+        `http://ec2-3-38-166-142.ap-northeast-2.compute.amazonaws.com:8080/pp/login`,
+        loginInfo,
+        {
+          withCredentials: true,
+        },
+      )
       .then(res => {
         setIsLogin(true);
         // data 확인
         console.log(res);
         // local storage에 token 저장
-        localStorage.setItem('token', res.data.jwt);
+        localStorage.setItem('accessToken', res.data.accessToken);
+        localStorage.setItem('refreshToken', res.data.refreshToken);
+        localStorage.setItem(
+          'accessToken_expiresAt',
+          res.data.accessToken_expiresAt,
+        );
+        localStorage.setItem(
+          'refreshToken_expiresAt',
+          res.data.refreshToken_expiresAt,
+        );
+
         // 로그인 성공시 홈페이지 이동
-        axios.defaults.headers.common.Authorization = `Bearer ${res.data.jwt}`;
+        axios.defaults.headers.common.Authorization = `Bearer ${res.data.accessToken}`;
         navigate('/');
-        setErrorMessage('');
         window.location.reload();
       })
       .catch(err => {
+        console.log(err);
         if (err.response.status === 401) {
           setErrorMessage('로그인에 실패했습니다.');
           navigate('/404');
@@ -59,11 +76,11 @@ const Login = () => {
 
   return (
     <div className="content justify-center flex flex-col stack-gray place-content-center h-screen items-center">
-      <h1>pharm palm에 로그인하세요</h1>
+      <h1 className="font-semibold text-2xl mb-4">pharm palm에 로그인하세요</h1>
 
       <form className="loginForm my-1.5">
         <div className="flex flex-col w-full mb-4`">
-          <input
+          <Input
             id="id"
             type="text"
             placeholder="아이디"
@@ -71,42 +88,49 @@ const Login = () => {
           />
         </div>
         <div className="flex flex-col w-full mb-4`">
-          <input
+          <Input
             id="password"
             type="password"
             placeholder="비밀번호"
             onChange={handleInputValue('password')}
           />
         </div>
-        <div className="flex items-center justify-between">
-          <button
-            className="login-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        <div className="flex items-center justify-between mb-2">
+          <HeaderBtn
+            className="my-3"
+            width="100%"
+            height="34px"
+            marginLeft="0"
             type="button"
             onClick={() => {
               loginRequestHandler();
             }}
           >
             로그인
-          </button>
+          </HeaderBtn>
         </div>
-        <button type="submit" onClick={() => kakaoLoginHandler()}>
-          <span>카카오 로그인</span>
-        </button>
+
+        <div className="flex flex-row justify-between my-4">
+          <Link
+            className="inline-block items-end font-semibold text-sm hover:text-blue-800 ml-2"
+            to="/signup"
+          >
+            아이디·비밀번호 찾기
+          </Link>
+          <Link
+            className="inline-block items-end font-semibold text-sm hover:text-blue-800 mr-4"
+            to="/signup"
+          >
+            회원가입
+          </Link>
+        </div>
       </form>
-      <div>
-        <Link
-          className="inline-block items-end font-light text-sm text-blue-500 hover:text-blue-800 ml-2"
-          to="/signup"
-        >
-          아이디·비밀번호 찾기
-        </Link>
-        <Link
-          className="inline-block items-end font-light text-sm text-blue-500 hover:text-blue-800 ml-2"
-          to="/signup"
-        >
-          회원가입
-        </Link>
-      </div>
+      <Link className="kakao-link" to={KAKAO_AUTH_URL}>
+        <img src={kakaoLoginImage} alt="kakao-login" />
+      </Link>
+      <Link className="naver-link w-[183px] h-[45px] my-4" to={NAVER_AUTH_URL}>
+        <img src={naverLoginImage} alt="naver-login" />
+      </Link>
     </div>
   );
 };
