@@ -68,25 +68,13 @@ public class MemberController {
         return ResponseEntity.created(location).build();
     }
 
-//    @PatchMapping("/{member-id}")
-//    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-//                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
-//
-//        memberPatchDto.setMemberId(memberId);
-//        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
-//
-//        return new ResponseEntity<>(
-//                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
-//    }
+    @PatchMapping("/{member-id}")
+    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
+                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
 
-    @PatchMapping("/info")
-    public ResponseEntity patchMemberInfo(Authentication authentication,
-                                          @Valid @RequestBody MemberPatchDto memberPatchDto) {
-        if (authentication == null) {
-            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-        }
-        memberPatchDto.setMemberEmail(authentication.getName());
+        memberPatchDto.setMemberId(memberId);
         Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
+
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
     }
@@ -113,27 +101,13 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/info")
-    public ResponseEntity withdrawMember(Authentication authentication) {
-        if (authentication == null) {
-            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-        }
-        memberService.withdrawMember(authentication.getName());
+    @DeleteMapping("/withdraw/{member-id}")
+    public ResponseEntity withdrawMember(@PathVariable("member-id") @Positive long memberId) {
+
+        memberService.withdrawMember(memberId);
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
-
-    //    @GetMapping("/mypage")
-//    public ResponseEntity getMemberInfo(Authentication authentication) {
-//        if (authentication == null) {
-//            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-//        }
-//        Member member = memberService.findMemberInfo(authentication.getName());
-//
-//        return new ResponseEntity<>(
-//                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
-//    }
-
 
 
 //    @GetMapping

@@ -83,8 +83,8 @@ public class MemberService {
         memberRepository.delete(findMember);
     }
 
-    public void withdrawMember(String memberEmail) {
-        Member findMember = findVerifiedMemberEmail(memberEmail);
+    public void withdrawMember(Long memberId) {
+        Member findMember = findVerifiedMemberId(memberId);
         findMember.setMemberState(Member.MemberState.WITHDRAW);
         memberRepository.save(findMember);
     }
