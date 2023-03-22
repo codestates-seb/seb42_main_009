@@ -1,9 +1,7 @@
 package com.codestates.dose.controller;
 
-import com.codestates.dose.dto.DosePatchDto;
 import com.codestates.dose.dto.DosePostDto;
 import com.codestates.dose.dto.DoseResponseDto;
-import com.codestates.dose.entity.Dose;
 import com.codestates.dose.service.DoseService;
 import com.codestates.dto.SingleResponseDto;
 import com.codestates.utils.UriCreator;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,6 +20,7 @@ import java.util.List;
 @Validated
 @Slf4j
 public class DoseController {
+    private final static String DOSE_DEFAULT_URL = "/pp/doses";
     private final DoseService doseService;
 
     public DoseController(DoseService doseService) {
@@ -31,28 +29,21 @@ public class DoseController {
 
     @PostMapping
     public ResponseEntity postDose(@Valid @RequestBody DosePostDto dosePostDto) {
-        doseService.createDose(dosePostDto);
+        DoseResponseDto doseResponseDto = doseService.createDose(dosePostDto);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(doseResponseDto), HttpStatus.CREATED);
     }
-
     @GetMapping("/info/{member-id}")
     public ResponseEntity getDose(@PathVariable("member-id") @Positive long memberId) {
-        List<DoseResponseDto> doseResponseDto = doseService.findDoses(memberId);
-        return new ResponseEntity<>(doseResponseDto, HttpStatus.OK);
+        List<DoseResponseDto> doseResponses = doseService.findDoses(memberId);
+        return new ResponseEntity(
+                new SingleResponseDto<>(doseResponses), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{dose-id}")
+    @DeleteMapping("{dose-id}")
     public ResponseEntity deleteDose(@PathVariable("dose-id") @Positive long doseId) {
         doseService.deleteDose(doseId);
-        return new ResponseEntity(HttpStatus.ACCEPTED);
-    }
-
-    @PatchMapping("/{dose-id}")
-    public ResponseEntity patchDose(@PathVariable("dose-id") @Positive long doseId,
-                                    @Valid @RequestBody DosePatchDto dosePatchDto) {
-        doseService.updateDose(doseId, dosePatchDto);
-
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 }

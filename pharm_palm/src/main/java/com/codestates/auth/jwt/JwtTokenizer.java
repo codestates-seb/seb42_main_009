@@ -65,6 +65,7 @@ public class JwtTokenizer {
                                 String subject,
                                 Date expiration,
                                 String base64EncodedSecretKey){
+
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
         return Jwts.builder()
                 .setClaims(claims)
@@ -88,7 +89,18 @@ public class JwtTokenizer {
     }
 
     public Jws<Claims> getJws(String jws, String base64EncodedSecretKey) {
+
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jws)
+                .getBody();
+    }
+
+    public Jws<Claims> getJws(String jws, String base64EncodedSecretKey) {
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -96,14 +108,14 @@ public class JwtTokenizer {
                 ;
     }
 
-    public void verifySignature(String jws, String base64EncodedSecretKey) {
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
-
-        Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jws);
-    }
+//    public void verifySignature(String jws, String base64EncodedSecretKey) {
+//        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+//
+//        Jwts.parserBuilder()
+//                .setSigningKey(key)
+//                .build()
+//                .parseClaimsJws(jws);
+//    }
 
     public Date getTokenExpiration(int expirationMinutes) {
         Calendar calendar = Calendar.getInstance();

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -15,4 +16,7 @@ public class ClaimsToMember {
     private String picture;
     private String memberGender;
     private String memberAge;
+
 }
+
+

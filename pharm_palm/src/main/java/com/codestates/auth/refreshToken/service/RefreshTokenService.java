@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,6 +30,8 @@ public class RefreshTokenService {
     private final JwtTokenizer jwtTokenizer;
 
     private final MemberService memberService;
+
+
 
     public String reissueAccessToken (HttpHeaders httpHeaders){
         String refreshToken = httpHeaders.get("Refresh").get(0);

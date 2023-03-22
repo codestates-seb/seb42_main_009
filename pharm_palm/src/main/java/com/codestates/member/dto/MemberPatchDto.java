@@ -12,7 +12,7 @@ public class MemberPatchDto {
     private long memberId;
     private String memberEmail;
     private String memberName;
-    private String memberPwd;
+//    private String memberPwd;
     private String memberGender;
     private String memberAge;
     private Member.MemberState memberState;

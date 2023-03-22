@@ -1,13 +1,10 @@
 package com.codestates.review.entity;
 
-import com.codestates.audit.Auditable;
-import com.codestates.disease.entity.Disease;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @NoArgsConstructor
 @Entity
@@ -15,7 +12,7 @@ import java.util.List;
 @Setter
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
     @Column(length = 200, nullable = false)
@@ -29,16 +26,4 @@ public class Review {
 
     @Column
     private Long memberId;
-
-    @Column
-    private Long medicineId;
-
-    @Column
-    private String createdAt;
-
-    @Column
-    private String lastModifiedAt;
-
-    @OneToMany(cascade = CascadeType.DETACH)
-    private List<Disease> diseases;
 }

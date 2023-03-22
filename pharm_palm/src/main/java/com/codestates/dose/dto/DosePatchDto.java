@@ -14,4 +14,5 @@ public class DosePatchDto {
     @Positive
     private int doseNumber;
     private String doseTimes;
+
 }

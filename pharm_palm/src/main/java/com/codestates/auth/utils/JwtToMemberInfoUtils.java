@@ -20,6 +20,7 @@ public class JwtToMemberInfoUtils {
         this.tokenizer = tokenizer;
     }
 
+
     public ClaimsToMember parseClaimsToUserInfo(String token) {
         token = token.replace("Bearer ", "");
         Map<String, Object> claims =
@@ -34,6 +35,7 @@ public class JwtToMemberInfoUtils {
                 .build();
 
         return memberInfo;
+
     }
 
     private void verifiedAppropriateMember(Object tryId, long memberId) {

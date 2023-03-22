@@ -1,5 +1,7 @@
 package com.codestates.auth.refreshToken.controller;
 
+
+
 import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.auth.refreshToken.service.RefreshTokenService;
 import com.codestates.auth.utils.JwtToMemberInfoUtils;
@@ -34,4 +36,6 @@ public class RefreshTokenController {
         return new ResponseEntity<>(new SingleResponseDto<>(newAccessToken), HttpStatus.OK);
 
     }
+
 }
+
