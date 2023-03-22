@@ -106,10 +106,24 @@ public class MemberController {
         return new ResponseEntity(
                 new SingleResponseDto<>(memberResponseDto), HttpStatus.OK);
     }
-    
 
+    @DeleteMapping("/{member-id}")
+    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
+        memberService.deleteMember(memberId);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 
-//    @GetMapping("/mypage")
+    @DeleteMapping("/info")
+    public ResponseEntity withdrawMember(Authentication authentication) {
+        if (authentication == null) {
+            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
+        }
+        memberService.withdrawMember(authentication.getName());
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    //    @GetMapping("/mypage")
 //    public ResponseEntity getMemberInfo(Authentication authentication) {
 //        if (authentication == null) {
 //            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
@@ -133,20 +147,4 @@ public class MemberController {
 //                        mapper.membersToMemberResponseDto(members), pageMembers), HttpStatus.OK);
 //                        mapper.membersToMemberResponseDtos(members), pageMembers), HttpStatus.OK);
 //    }
-
-    @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
-        memberService.deleteMember(memberId);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-
-    @DeleteMapping("/info")
-    public ResponseEntity withdrawMember(Authentication authentication) {
-        if (authentication == null) {
-            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-        }
-        memberService.withdrawMember(authentication.getName());
-
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
 }
