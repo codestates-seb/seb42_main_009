@@ -1,5 +1,6 @@
 package com.codestates.member.controller;
 
+import com.codestates.auth.dto.ClaimsToMember;
 import com.codestates.auth.utils.JwtToMemberInfoUtils;
 import com.codestates.dto.SingleResponseDto;
 import com.codestates.member.dto.MemberPatchDto;
@@ -44,19 +45,15 @@ public class MemberController {
 
     @GetMapping("/info")
     public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
-
         String token;
+
         try{
             token = httpHeaders.get("Authorization").get(0);
         }catch (NullPointerException exception){
-            throw new MalformedJwtException("토큰의 형식이 올바르지 않습니다.");
+            throw new MalformedJwtException("");
         }
-
-        Long memberId = jwtToMemberInfoUtils.extractMemberIdFromToken(token);
-
-        Member member = memberService.findMember(memberId);
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+        ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
+        return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
     }
 
     @PostMapping
@@ -81,20 +78,13 @@ public class MemberController {
 //    }
 
     @PatchMapping("/info")
-    public ResponseEntity patchMemberInfo(@RequestHeader HttpHeaders httpHeaders,
+    public ResponseEntity patchMemberInfo(Authentication authentication,
                                           @Valid @RequestBody MemberPatchDto memberPatchDto) {
-        String token;
-
-        try{
-            token = httpHeaders.get("Authorization").get(0);
-        }catch (NullPointerException exception){
-            throw new MalformedJwtException("");
+        if (authentication == null) {
+            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
         }
-        Long memberId = jwtToMemberInfoUtils.extractMemberIdFromToken(token);
-
-        memberPatchDto.setMemberId(memberId);
+        memberPatchDto.setMemberEmail(authentication.getName());
         Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
-
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
     }

@@ -33,75 +33,22 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
 
 
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//
-//        try {
-//            Map<String, Object> claims = verifyJws(request);
-//            setAuthenticationToContext(claims);
-//        } catch (SignatureException se) {
-//            request.setAttribute("exception", se);
-//        } catch (ExpiredJwtException ee) {
-//            request.setAttribute("exception", ee);
-//        } catch (Exception e) {
-//            request.setAttribute("exception", e);
-//        }
-//
-//        filterChain.doFilter(request, response);
-//    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-            try {
-                Map<String, Object> claims = verifyJws(request);
-                setAuthenticationToContext(claims);
-            } catch (ExpiredJwtException ee) {
-                // 액세스 토큰 만료시 리프레쉬 토큰으로 재발급
-                String refreshToken = request.getHeader("refreshToken");
-                boolean isRefreshToken = refreshTokenRepository.existsByRefreshToken(refreshToken);
-                if (refreshToken != null && isRefreshToken) {
-                    try {
-                        //토큰의 Signature를 검증하기 위한 Secret Key 얻기
-                        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-                        // Claims를 파싱 (파싱 할 수 있다는건 내부적으로 Signature 검증에 성공했다는 의미)
-                        Claims refreshTokenClaims = jwtTokenizer.getClaims(refreshToken, base64EncodedSecretKey).getBody();
-
-                        // 리프리쉬 토큰 만료 체크
-                        Date now = new Date();
-                        Date expirationDate = refreshTokenClaims.getExpiration();
-                        if (expirationDate.before(now)) {
-                            throw new Exception("Refresh token has expired");
-                        }
-
-                        // 리프레쉬 토큰에서 멤버 아이디 가져오기
-                        String userId = refreshTokenClaims.getSubject();
-
-                        // 액세스 토큰의 id와 리프레쉬 토큰의 id가 일치하는지 확인
-                        String accessTokenUserId = verifyJws(request).get("id").toString();
-                        if (!accessTokenUserId.equals(userId)) {
-                            throw new Exception("User IDs in tokens don't match");
-                        }
-
-                        // 새 액세스 토큰 생성
-                        delegateNewAccessToken(request);
-
-                    } catch (Exception ex) {
-                        // 리프레시 토큰 만료 혹은 id가 불일치할때
-                        SecurityContextHolder.clearContext();
-                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                        return;
-                    }
-                } else {
-                    // 전해진 리프레쉬 토큰이 없을때
-                    SecurityContextHolder.clearContext();
-                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                    return;
-                }
-            }
-
-            filterChain.doFilter(request, response);
+        try {
+            Map<String, Object> claims = verifyJws(request);
+            setAuthenticationToContext(claims);
+        } catch (SignatureException se) {
+            request.setAttribute("exception", se);
+        } catch (ExpiredJwtException ee) {
+            request.setAttribute("exception", ee);
+            return;
+        } catch (Exception e) {
+            request.setAttribute("exception", e);
+        }
+        filterChain.doFilter(request, response);
     }
+
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
@@ -113,7 +60,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
+        Map<String, Object> claims = jwtTokenizer.getJws(jws, base64EncodedSecretKey).getBody();
 
         return claims;
     }
@@ -126,25 +73,25 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     }
 
     //액세스 토큰 재발급을 위한 코드
-    private String delegateNewAccessToken(HttpServletRequest request) {
-        String oldAccessToken = request.getHeader("Authorization").replace("Bearer ", "");
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        Claims oldAccessTokenClaims = jwtTokenizer.getClaims(oldAccessToken, base64EncodedSecretKey).getBody();
-
-        Map<String, Object> newAccessTokenClaims =new HashMap<>();
-        newAccessTokenClaims.put("id", oldAccessTokenClaims.get("id"));
-        newAccessTokenClaims.put("memberName", oldAccessTokenClaims.get("memberName"));
-        newAccessTokenClaims.put("memberId", oldAccessTokenClaims.get("memberId"));
-        newAccessTokenClaims.put("roles", oldAccessTokenClaims.get("roles"));
-
-        String subject = oldAccessTokenClaims.getSubject();
-
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-
-        String newAccessToken = jwtTokenizer.generateAccessToken(newAccessTokenClaims, subject, expiration, base64EncodedSecretKey);
-
-        return newAccessToken;
-
-    }
+//    private String delegateNewAccessToken(HttpServletRequest request) {
+//        String oldAccessToken = request.getHeader("Authorization").replace("Bearer ", "");
+//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+//        Claims oldAccessTokenClaims = jwtTokenizer.getJws(oldAccessToken, base64EncodedSecretKey).getBody();
+//
+//        Map<String, Object> newAccessTokenClaims =new HashMap<>();
+//        newAccessTokenClaims.put("id", oldAccessTokenClaims.get("id"));
+//        newAccessTokenClaims.put("memberName", oldAccessTokenClaims.get("memberName"));
+//        newAccessTokenClaims.put("memberId", oldAccessTokenClaims.get("memberId"));
+//        newAccessTokenClaims.put("roles", oldAccessTokenClaims.get("roles"));
+//
+//        String subject = oldAccessTokenClaims.getSubject();
+//
+//        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+//
+//        String newAccessToken = jwtTokenizer.generateToken(newAccessTokenClaims, subject, expiration, base64EncodedSecretKey);
+//
+//        return newAccessToken;
+//
+//    }
 
 }

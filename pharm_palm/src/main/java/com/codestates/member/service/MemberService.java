@@ -99,7 +99,7 @@ public class MemberService {
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
-    private Member findVerifiedMemberEmail(String memberEmail) {
+    public Member findVerifiedMemberEmail(String memberEmail) {
         Optional<Member> optionalMember = memberRepository.findByMemberEmail(memberEmail);
         return optionalMember.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
