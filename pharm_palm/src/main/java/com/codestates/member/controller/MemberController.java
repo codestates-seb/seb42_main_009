@@ -43,12 +43,26 @@ public class MemberController {
         this.jwtToMemberInfoUtils = jwtToMemberInfoUtils;
     }
 
-    @PostMapping("/info")
+//    @PostMapping("/info")
+//    public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
+//        String token;
+//
+//        try{
+//            token = httpHeaders.get("Authorization").get(0);
+//        }catch (NullPointerException exception){
+//
+//            throw new MalformedJwtException("");
+//        }
+//        ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
+//        return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
+//    }
+
+    @GetMapping("/info")
     public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
         String token;
 
         try{
-            token = httpHeaders.get("Authorization").get(0);
+            token = httpHeaders.getFirst("Authorization");
         }catch (NullPointerException exception){
 
             throw new MalformedJwtException("");
