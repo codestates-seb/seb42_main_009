@@ -49,7 +49,7 @@ public class MemberController {
 
         try{
 
-            token = httpHeaders.get("Authorization").get(1);
+            token = httpHeaders.get("Authorization").get(0);
         }catch (NullPointerException exception){
 
             throw new MalformedJwtException("");
