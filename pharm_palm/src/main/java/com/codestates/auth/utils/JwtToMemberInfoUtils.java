@@ -24,25 +24,29 @@ public class JwtToMemberInfoUtils {
         ClaimsToMember memberInfo = ClaimsToMember.builder()
                 .id((String) claims.get("id"))
                 .memberId( claims.get("memberId"))
-                .memberName((String) claims.get("memberName")).build();
+                .memberName((String) claims.get("memberName"))
+                .memberAge((String) claims.get("memberAge"))
+                .memberGender((String) claims.get("memberGender"))
+                .picture((String) claims.get("picture"))
+                .build();
 
         return memberInfo;
     }
 
-    public ClaimsToMember parseClaimsToMemberInfo(String token, long memberId){
-        token = token.replace("Bearer ", "");
-        Map<String, Object> claims =
-                 tokenizer.getClaims(token, tokenizer.encodeBase64SecretKey(tokenizer.getSecretKey()));
-
-        ClaimsToMember memberInfo = ClaimsToMember.builder()
-                .id((String) claims.get("id"))
-                .memberId( claims.get("memberId"))
-                .memberName((String) claims.get("memberName")).build();
-
-        verifiedAppropriateMember(memberInfo.getMemberId(), memberId);
-
-        return memberInfo;
-    }
+//    public ClaimsToMember parseClaimsToMemberInfo(String token, long memberId){
+//        token = token.replace("Bearer ", "");
+//        Map<String, Object> claims =
+//                 tokenizer.getClaims(token, tokenizer.encodeBase64SecretKey(tokenizer.getSecretKey()));
+//
+//        ClaimsToMember memberInfo = ClaimsToMember.builder()
+//                .id((String) claims.get("id"))
+//                .memberId( claims.get("memberId"))
+//                .memberName((String) claims.get("memberName")).build();
+//
+//        verifiedAppropriateMember(memberInfo.getMemberId(), memberId);
+//
+//        return memberInfo;
+//    }
 
     private void verifiedAppropriateMember (Object tryId,long memberId){
         if((Integer)tryId == memberId){

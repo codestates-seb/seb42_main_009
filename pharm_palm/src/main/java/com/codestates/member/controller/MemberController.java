@@ -95,7 +95,7 @@ public class MemberController {
 //        return new ResponseEntity<>(
 //                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
 //    }
-    @PostMapping("/info")
+    @GetMapping("/info")
     public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
         String token;
 
