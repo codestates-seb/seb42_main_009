@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/pp/members")
@@ -48,7 +49,7 @@ public class MemberController {
         String token;
 
         try{
-            token = httpHeaders.get("Authorization").get(0);
+            token = Objects.requireNonNull(httpHeaders.get("Authorization")).get(0);
         }catch (NullPointerException exception){
             throw new MalformedJwtException("");
         }
