@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
     private final MemberRepository memberRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
+//    private final RefreshTokenRepository refreshTokenRepository;
 
     @SneakyThrows
     @Override
@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         sendJwtToken(response, accessToken, refreshToken, accessToken_expiresAt, refreshToken_expiresAt);
 
-        refreshTokenRepository.save(new RefreshToken(refreshToken));
+//        refreshTokenRepository.save(new RefreshToken(refreshToken));
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
