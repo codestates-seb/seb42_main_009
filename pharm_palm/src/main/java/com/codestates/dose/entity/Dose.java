@@ -21,22 +21,17 @@ public class Dose {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long doseId;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "medicine_id", nullable = false )
     private Medicine medicine;
-
     @Column(nullable = false)
     private int doseNumber;
     @Column(nullable = false)
     private String doseMount; // ex) 2정, 3포
-
     private String doseTimes;
-
 
     public void addMember(Member member) {
         this.member = member;

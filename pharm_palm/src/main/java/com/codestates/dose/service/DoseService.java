@@ -23,7 +23,6 @@ public class DoseService {
     private final DoseRepository doseRepository;
     private final MemberService memberService;
     private final MedicineService medicineService;
-
     private final DoseMapper mapper;
 
     public DoseService(DoseRepository doseRepository, MemberService memberService, MedicineService medicineService, DoseMapper mapper) {
@@ -44,7 +43,6 @@ public class DoseService {
 
         dose.setMember(member);
         dose.setMedicine(medicine);
-
 
         return doseRepository.save(dose);
     }
