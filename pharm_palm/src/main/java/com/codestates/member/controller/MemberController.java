@@ -43,24 +43,24 @@ public class MemberController {
         this.jwtToMemberInfoUtils = jwtToMemberInfoUtils;
     }
 
-//    @GetMapping("/info")
-//    public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
-//        String token  = httpHeaders.get("Authorization").get(0);
-//
-////        try{
-////            token = httpHeaders.get("Authorization").get(0);
-////        }catch (NullPointerException exception){
-////            throw new MalformedJwtException("");
-////        }
-//        ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
-//        return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
-//    }
     @GetMapping("/info")
-    public ResponseEntity getMemberInfo(@RequestHeader("Authorization") String authorizationHeader) {
-        String token = authorizationHeader.replace("Bearer ", "");
+    public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
+        String token;
+
+        try{
+            token = httpHeaders.get("Authorization").get(0);
+        }catch (NullPointerException exception){
+            throw new MalformedJwtException("");
+        }
         ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
         return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
     }
+//    @GetMapping("/info")
+//    public ResponseEntity getMemberInfo(@RequestHeader("Authorization") String authorizationHeader) {
+//        String token = authorizationHeader.replace("Bearer ", "");
+//        ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
+//        return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
+//    }
 
 
     @PostMapping
