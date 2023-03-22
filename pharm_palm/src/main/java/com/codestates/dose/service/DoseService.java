@@ -15,6 +15,8 @@ import java.util.Optional;
 @Service
 public class DoseService {
     private final DoseRepository doseRepository;
+    private final MemberService memberService;
+    private final MedicineService medicineService;
 
     private final DoseMapper mapper;
     public DoseService(DoseRepository doseRepository, DoseMapper mapper) {
@@ -26,9 +28,12 @@ public class DoseService {
         Dose dose = mapper.dosePostDtoToDose(dosePostDto);
         verifyExistsDose(dose.getMemberId(), dose.getMedicineName());
 
-        dose = doseRepository.save(dose);
-        DoseResponseDto doseResponseDto = mapper.doseToResponseDto(dose);
-        return doseResponseDto;
+        Member member = memberService.findMember(dosePostDto.getMemberId());
+
+        dose.setMember(member);
+        dose.setMedicine(medicine);
+
+        return doseRepository.save(dose);
     }
 
     private void verifyExistsDose(Long memberId, String medicineName) {

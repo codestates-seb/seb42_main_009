@@ -15,22 +15,38 @@ import java.sql.Time;
 @Setter
 @Entity
 public class Dose {
-    @Id
+  @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long doseId;
-
-    @Column(nullable = false)
-    private Long memberId;
-
-    @Column(nullable = false)
-    private String medicineName;
-
-    @Column(nullable = false)
-    private int doseMount;
-
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "medicine_id", nullable = false )
+    private Medicine medicine;
     @Column(nullable = false)
     private int doseNumber;
+    @Column(nullable = false)
+    private String doseMount; // ex) 2정, 3포
+    private String doseTimes;
 
-    @Column
-    private String doseTime;
+    public void addMember(Member member) {
+        this.member = member;
+        if (!this.member.getDoses().contains(this)) {
+            this.member.getDoses().add(this);
+        }
+    }
+
+    public void addMedicine(Medicine medicine) {
+        this.medicine = medicine;
+        if (!this.medicine.getDoses().contains(this)) {
+            this.medicine.addDose(this);
+        }
+    }
+
+    public Dose(Long doseId, Medicine medicine, Member member) {
+        this.doseId = doseId;
+        this.medicine = medicine;
+        this.member = member;
+    }
 }
