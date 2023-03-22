@@ -2,8 +2,6 @@ package com.codestates.auth.filter;
 
 import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.auth.refreshToken.repository.RefreshTokenRepository;
-import com.codestates.auth.refreshToken.service.RefreshTokenService;
-import com.codestates.auth.refreshToken.service.UseRefreshToken;
 import com.codestates.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -126,7 +124,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
 
-        String newAccessToken = jwtTokenizer.generateAccessToken(newAccessTokenClaims, subject, expiration, base64EncodedSecretKey);
+        String newAccessToken = jwtTokenizer.generateToken(newAccessTokenClaims, subject, expiration, base64EncodedSecretKey);
 
         return newAccessToken;
 
