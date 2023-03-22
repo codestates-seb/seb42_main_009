@@ -4,6 +4,7 @@ import com.codestates.dto.MultiResponseDto;
 import com.codestates.dto.SingleResponseDto;
 import com.codestates.medicine.entity.Medicine;
 import com.codestates.medicine.mapper.MedicineMapper;
+import com.codestates.medicine.repository.QueryRepository;
 import com.codestates.medicine.service.MedicineService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,11 +23,15 @@ import java.util.List;
 public class MedicineController {
     private final MedicineService medicineService;
     private final MedicineMapper mapper;
+    private final QueryRepository queryRepository;
 
-    public MedicineController(MedicineService medicineService, MedicineMapper mapper) {
+    public MedicineController(MedicineService medicineService, MedicineMapper mapper, QueryRepository queryRepository) {
         this.medicineService = medicineService;
         this.mapper = mapper;
+        this.queryRepository = queryRepository;
     }
+
+
 
     @GetMapping
     public ResponseEntity getMedicines(@Positive @RequestParam int page,
@@ -50,6 +55,12 @@ public class MedicineController {
                 , HttpStatus.OK);
     }
 
+    @GetMapping("/likeDesc")
+    public ResponseEntity getMedicinesByLike() {
+        List<Medicine> medicines = queryRepository.findByMedicineLikeDESC();
+        return new ResponseEntity(medicines,HttpStatus.OK);
+    }
+
     @GetMapping("/name")
     public ResponseEntity getMedicineByMedicineNameLike(@RequestParam(required = false) String medicineName,
                                                         @Positive @RequestParam int page,
@@ -59,10 +70,10 @@ public class MedicineController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        Page<Medicine> pageMedicines = medicineService.findByMedicineNameLike(medicineName, page -1, size);
+        Page<Medicine> pageMedicines = medicineService.findByMedicineNameLike(medicineName, page - 1, size);
         List<Medicine> medicines = pageMedicines.getContent();
 
-        if(medicines.isEmpty()) {
+        if (medicines.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
 
