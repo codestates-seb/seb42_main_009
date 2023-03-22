@@ -1,7 +1,5 @@
 package com.codestates.dose.entity;
 
-import com.codestates.medicine.entity.Medicine;
-import com.codestates.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Time;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +15,7 @@ import java.util.List;
 @Setter
 @Entity
 public class Dose {
-    @Id
+  @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long doseId;
     @ManyToOne(cascade = CascadeType.ALL)

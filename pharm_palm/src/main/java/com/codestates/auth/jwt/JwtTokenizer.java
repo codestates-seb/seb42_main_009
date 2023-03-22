@@ -36,7 +36,32 @@ public class JwtTokenizer {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateAccessToken(Map<String, Object> claims,
+//    public String generateAccessToken(Map<String, Object> claims,
+//                                      String subject,
+//                                      Date expiration,
+//                                      String base64EncodedSecretKey) {
+//        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+//
+//        return Jwts.builder()
+//                .setClaims(claims)
+//                .setSubject(subject)
+//                .setIssuedAt(Calendar.getInstance().getTime())
+//                .setExpiration(expiration)
+//                .signWith(key)
+//                .compact();
+//    }
+//
+//    public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
+//        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+//
+//        return Jwts.builder()
+//                .setSubject(subject)
+//                .setIssuedAt(Calendar.getInstance().getTime())
+//                .setExpiration(expiration)
+//                .signWith(key)
+//                .compact();
+//    }
+    public String generateToken(Map<String, Object> claims,
                                       String subject,
                                       Date expiration,
                                       String base64EncodedSecretKey) {
@@ -44,17 +69,6 @@ public class JwtTokenizer {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(Calendar.getInstance().getTime())
-                .setExpiration(expiration)
-                .signWith(key)
-                .compact();
-    }
-
-    public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
-
-        return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
@@ -72,14 +86,24 @@ public class JwtTokenizer {
                 .getBody();
     }
 
-    public void verifySignature(String jws, String base64EncodedSecretKey) {
+    public Jws<Claims> getJws(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
-        Jwts.parserBuilder()
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(jws);
+                .parseClaimsJws(jws)
+                ;
     }
+
+//    public void verifySignature(String jws, String base64EncodedSecretKey) {
+//        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+//
+//        Jwts.parserBuilder()
+//                .setSigningKey(key)
+//                .build()
+//                .parseClaimsJws(jws);
+//    }
 
     public Date getTokenExpiration(int expirationMinutes) {
         Calendar calendar = Calendar.getInstance();
