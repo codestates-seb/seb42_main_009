@@ -45,15 +45,21 @@ public class MemberController {
 
     @GetMapping("/info")
     public ResponseEntity getMemberInfo(@RequestHeader HttpHeaders httpHeaders) {
-        String token;
+        String token1 = httpHeaders.get("Authorization").get(0);
+        String token2 = httpHeaders.get("Authorization").get(1);
+        System.out.println(token1 + token2);
 
-        try{
-            token = httpHeaders.get("Authorization").get(0);
-        }catch (NullPointerException exception){
-            throw new MalformedJwtException("");
-        }
-        ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
-        return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
+
+//        try{
+//            token = httpHeaders.get("Authorization").get(0);
+//        }catch (NullPointerException exception){
+//            throw new MalformedJwtException("");
+//        }
+//        ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
+//        return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
     }
 //    @GetMapping("/info")
 //    public ResponseEntity getMemberInfo(@RequestHeader("Authorization") String authorizationHeader) {
