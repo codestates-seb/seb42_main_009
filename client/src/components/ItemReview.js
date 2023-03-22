@@ -1,11 +1,13 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import ReactPaginate from 'react-paginate';
 import { useMedicineItemStore } from '../Stores/medicineItemStore';
 import { useUserInfoStore } from '../Stores/userInfoStore';
 import { SmBtn } from '../styles/globalStyle';
 import { IoMdClose } from 'react-icons/io';
 import { FaPlus } from 'react-icons/fa';
+import { Pagination } from '../styles/s-list';
 import {
   ReviewWrap,
   ReviewBtn,
@@ -26,6 +28,7 @@ import {
 const ItemReview = () => {
   const { medicineItem } = useMedicineItemStore(state => state);
   const { userInfo } = useUserInfoStore(sate => sate);
+  const [isUpdate, setIsUpdate] = useState(false);
   const [reviewAddOpen, setReviewAddOpen] = useState(false);
   const [reviewUpdateOpen, setReviewUpdateOpen] = useState(false);
   const [updateIndex, setUpdateIndex] = useState(0);
@@ -37,14 +40,14 @@ const ItemReview = () => {
   });
   const [reviewItem, setReviewItem] = useState({
     reviewImg: {},
-    reviewText: '',
+    reviewContent: '',
     reviewTag: '',
     reviewId: 0,
   });
   const [reviewList, setReviewList] = useState([
     {
       reviewImg: '',
-      reviewText: `Enforce onClick is accompanied by at least one of the following:
+      reviewContent: `Enforce onClick is accompanied by at least one of the following:
                 onKeyUp, onKeyDown, onKeyPress. Coding for the keyboard is
                 important for users with physical disabilities who cannot use a
                 mouse, AT compatibility, and screenreader users. This does not
@@ -77,6 +80,18 @@ const ItemReview = () => {
       reviewStretch: false,
     },
   ]);
+
+  // Pagination
+  // 1. currentPage 초기값은 0으로 설정
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalLength, setTotalLength] = useState(0);
+
+  const PER_PAGE = 5;
+  const pageCount = Math.ceil(totalLength / PER_PAGE);
+
+  const handlerPageClick = event => {
+    setCurrentPage(event.selected + 1);
+  };
 
   // Input 정보 처리
   const handleInputValue = key => e => {
@@ -118,7 +133,7 @@ const ItemReview = () => {
   const initializeItem = () => {
     setReviewItem({
       reviewImg: {},
-      reviewText: '',
+      reviewContent: '',
       reviewTag: '',
       reviewStretch: false,
     });
@@ -132,7 +147,7 @@ const ItemReview = () => {
 
   const reviewAddHandler = () => {
     const postData = {
-      reviewContent: reviewItem.reviewText,
+      reviewContent: reviewItem.reviewContent,
       reviewImg: reviewItem.reviewImg.preview_URL,
       reviewOtherMedicine: '',
       memberId: 123,
@@ -146,24 +161,51 @@ const ItemReview = () => {
           withCredentials: true,
         },
       )
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res);
+        setIsUpdate(true);
+        setReviewAddOpen(!reviewAddOpen);
+        initializeItem();
+      })
       .catch(err => console.log(err));
-
-    setReviewList([...reviewList, reviewItem]);
-    setReviewAddOpen(!reviewAddOpen);
-    initializeItem();
   };
 
   const reviewDeleteHandler = id => {
-    setReviewList(reviewList => reviewList.filter((item, idx) => idx !== id));
+    // setReviewList(reviewList =>
+    //   reviewList.filter(item => item.reviewId !== id),
+    // );
+    axios
+      .delete(`${process.env.REACT_APP_API_URL}/pp/reviews/${id}`)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
   };
 
   const reviewUpdateHandler = () => {
-    setReviewList(reviewList =>
-      reviewList.map((item, idx) => (idx === updateIndex ? reviewItem : item)),
-    );
-    setReviewUpdateOpen(!reviewUpdateOpen);
-    initializeItem();
+    // setReviewList(reviewList =>
+    //   reviewList.map((item, idx) => (idx === updateIndex ? reviewItem : item)),
+    // );
+
+    const patchData = {
+      reviewContent: reviewItem.reviewContent,
+      reviewImg: reviewItem.reviewImg.preview_URL,
+      reviewOtherMedicine: '',
+    };
+    console.log(patchData);
+    axios
+      .patch(
+        `${process.env.REACT_APP_API_URL}/pp/reviews/${updateIndex}`,
+        patchData,
+        {
+          withCredentials: true,
+        },
+      )
+      .then(res => {
+        console.log(res);
+        setIsUpdate(true);
+        setReviewUpdateOpen(!reviewUpdateOpen);
+        initializeItem();
+      })
+      .catch(err => console.log(err));
   };
 
   const saveImage = e => {
@@ -188,6 +230,21 @@ const ItemReview = () => {
     };
   };
 
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/pp/reviews/medicines/${medicineItem.medicineId}?page=${currentPage}&size=${PER_PAGE}`,
+      )
+      .then(res => {
+        setReviewList(res.data.data);
+        setTotalLength(res.data.pageInfo.totalElements);
+        setIsUpdate(false);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [currentPage, isUpdate]);
+
   return (
     <ReviewWrap>
       <ReviewBtn onClick={reviewAddModalOpen}>
@@ -204,7 +261,8 @@ const ItemReview = () => {
                 <SmBtn
                   onClick={e => {
                     reviewUpdateModalOpen(e);
-                    setUpdateIndex(idx);
+                    setUpdateIndex(item.reviewId);
+                    console.log(item.reviewId);
                   }}
                 >
                   수정
@@ -216,7 +274,7 @@ const ItemReview = () => {
                   hoverBg="var(--red-2)"
                   hoverColor="var(--red-1)"
                   marginLeft="4px"
-                  onClick={() => reviewDeleteHandler(idx)}
+                  onClick={() => reviewDeleteHandler(item.reviewId)}
                 >
                   삭제
                 </SmBtn>
@@ -237,7 +295,7 @@ const ItemReview = () => {
                       <img src={item.reviewImg.preview_URL} />
                     ) : null}
 
-                    {item.reviewText}
+                    {item.reviewContent}
                   </div>
                 </UserInputs>
               </ReviewContent>
@@ -271,7 +329,7 @@ const ItemReview = () => {
               <ReviewText
                 maxLength={500}
                 placeholder="복용 후기를 적어주세요."
-                onChange={handleInputValue('reviewText')}
+                onChange={handleInputValue('reviewContent')}
               ></ReviewText>
               <ReviewMedSelect>
                 <input
@@ -293,7 +351,7 @@ const ItemReview = () => {
               </ReviewMedSelect>
               <ReviewSubmitBtn
                 onClick={reviewAddHandler}
-                disabled={reviewItem.reviewText === ''}
+                disabled={reviewItem.reviewContent === ''}
               >
                 리뷰쓰기
               </ReviewSubmitBtn>
@@ -307,7 +365,7 @@ const ItemReview = () => {
             <ReviewModalBox>
               <button
                 onClick={e => {
-                  reviewAddModalOpen(e);
+                  reviewUpdateModalOpen(e);
                   initializeItem();
                 }}
                 className="close"
@@ -327,7 +385,7 @@ const ItemReview = () => {
               <ReviewText
                 maxLength={500}
                 placeholder="복용 후기를 적어주세요."
-                onChange={handleInputValue('reviewText')}
+                onChange={handleInputValue('reviewContent')}
               ></ReviewText>
               <ReviewMedSelect>
                 <input
@@ -349,7 +407,7 @@ const ItemReview = () => {
               </ReviewMedSelect>
               <ReviewSubmitBtn
                 onClick={reviewUpdateHandler}
-                disabled={reviewItem.reviewText === ''}
+                disabled={reviewItem.reviewContent === ''}
               >
                 수정하기
               </ReviewSubmitBtn>
@@ -357,6 +415,23 @@ const ItemReview = () => {
           </ReviewModal>
         </ReviewModalBack>
       ) : null}
+      {/* Pagination */}
+      <Pagination>
+        <ReactPaginate
+          previousLabel="<"
+          nextLabel=">"
+          breakLabel="..."
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlerPageClick}
+          // 밑 props는 style을 위한 className 지정 해주는 역할
+          containerClassName=""
+          // containerClassName="pagination"
+          subContainerClassName=""
+          activeClassName="active"
+        />
+      </Pagination>
     </ReviewWrap>
   );
 };

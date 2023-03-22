@@ -4,7 +4,6 @@ import { useMedicineItemStore } from '../Stores/medicineItemStore';
 
 const Iteminfo = () => {
   const { medicineItem } = useMedicineItemStore(state => state);
-  console.log(medicineItem);
 
   return (
     <ItemInfoTable>
@@ -24,16 +23,6 @@ const Iteminfo = () => {
         <span>보관법</span>
         <div>{medicineItem.medicineDeposit}</div>
       </li>
-      {/* <li>
-        <span>성분,함량</span>
-        <div>
-          습기와 빛을 피해 실온에서 보관하십시오.습기와 빛을 피해 실온에서
-          보관하십시오.습기와 빛을 피해 실온에서 보관하십시오.습기와 빛을 피해
-          실온에서 보관하십시오.습기와 빛을 피해 실온에서 보관하십시오.습기와
-          빛을 피해 실온에서 보관하십시오.습기와 빛을 피해 실온에서
-          보관하십시오.
-        </div>
-      </li> */}
     </ItemInfoTable>
   );
 };

@@ -3,7 +3,14 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { useNavigate } from 'react-router-dom';
 import { FaRegThumbsUp } from 'react-icons/fa';
-import { ContentList,ContentBox,ContentTit,ContentText,LikeCount,Pagination } from '../styles/s-list';
+import {
+  ContentList,
+  ContentBox,
+  ContentTit,
+  ContentText,
+  LikeCount,
+  Pagination,
+} from '../styles/s-list';
 import {
   useSearchApiStore,
   useSearchSelectedStore,
@@ -11,7 +18,6 @@ import {
 } from '../Stores/listSearchStore';
 import Banner from '../components/Banner';
 import Search from '../components/Search';
-
 
 const List = () => {
   const URI = process.env.REACT_APP_API_URL;
@@ -36,14 +42,6 @@ const List = () => {
   };
 
   useEffect(() => {
-    // const getMedList = async () => {
-    //   const items = await axios({
-    //     method: 'get',
-    //     url: `${URI}/pp/medicines?page=3&size=8`,
-    //   });
-    //   setItemList(items.data.data);
-    // };
-    // getMedList();
     if (searchText === '') {
       axios
         .get(`${URI}/pp/medicines?page=${currentPage}&size=${PER_PAGE}`)
