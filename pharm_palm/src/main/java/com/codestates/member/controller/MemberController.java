@@ -85,6 +85,18 @@ public class MemberController {
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
     }
 
+    @PatchMapping("/alarm/{member-id}")
+    public ResponseEntity patchAlarm(@PathVariable("member-id") @Positive long memberId,
+                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
+
+        memberPatchDto.setMemberId(memberId);
+        Member member = memberService.updateAlarm(mapper.memberPatchDtoToMember(memberPatchDto));
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+    }
+
+
     @PatchMapping(value="/image/{member-id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity saveImage(@RequestParam(value="memberImage") MultipartFile image,
                                     @PathVariable("member-id") @Positive long memberId) throws IOException {
