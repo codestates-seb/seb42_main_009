@@ -35,16 +35,16 @@ public class DoseService {
 
 
     public Dose createDose(DosePostDto dosePostDto) {
-        Medicine medicine = medicineService.findVerifiedMedicine(dosePostDto.getMedicineId());
-        verifyExistsDose(dosePostDto.getMemberId(), medicine.getMedicineName());
+        Medicine findMedicine = medicineService.findVerifiedMedicine(dosePostDto.getMedicineId());
+        verifyExistsDose(dosePostDto.getMemberId(), findMedicine.getMedicineName());
 
         Dose dose = mapper.dosePostDtoToDose(dosePostDto);
 
         Member member = memberService.findMember(dosePostDto.getMemberId());
-
+        Medicine medicine = medicineService.findVerifiedMedicine(dosePostDto.getMedicineId());
+        dose.setMedicineName(medicine.getMedicineName());
         dose.setMember(member);
         dose.setMedicine(medicine);
-
 
         return doseRepository.save(dose);
     }
