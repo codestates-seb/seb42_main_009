@@ -5,6 +5,8 @@ import com.codestates.auth.dto.LoginDto;
 import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.auth.refreshToken.entity.RefreshToken;
 import com.codestates.auth.refreshToken.repository.RefreshTokenRepository;
+import com.codestates.exception.BusinessLogicException;
+import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,6 +45,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         ObjectMapper objectMapper = new ObjectMapper();
         LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
+
+        Member findMember = memberRepository.findByMemberEmail(loginDto.getId()).get();
+
+        if(findMember.getMemberState() == Member.MemberState.WITHDRAW){
+            response.getWriter().write("탈퇴한 회원 입니다");
+            throw new BusinessLogicException(ExceptionCode.WITHDRAW_MEMBER);
+        }
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getId(), loginDto.getPassword());
