@@ -14,8 +14,9 @@ public interface DoseRepository extends JpaRepository<Dose, Long> {
 
     List<Dose> findAllByMember_MemberId(Long memberId);
 
-    @Query(value = "SELECT * FROM DOSE WHERE member_id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM dose WHERE member_id = :id", nativeQuery = true)
     List<Dose> findDoseByMemberId(@Param("id") Long memberId);
+
 
 //    @Query(value = "SELECT new com.codestates.dose.dto.DoseResponseDto(d.doseId, d.doseMount, d.doseNumber, d.doseTime ,m.medicineName) FROM Dose d JOIN d.medicine m WHERE m.medicineId = :medicineId")
 //    List<DoseResponseDto> findDoseResponseDtoById(Long medicineId);
