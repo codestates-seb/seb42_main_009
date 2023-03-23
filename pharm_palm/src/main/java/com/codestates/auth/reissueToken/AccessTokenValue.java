@@ -7,11 +7,11 @@ import java.util.Date;
 @Setter
 public class AccessTokenValue {
     private String accessToken;
-    private Date expiration;
+    private Date accessToken_expiresAt;
 
     public AccessTokenValue(String accessToken, Date expiration) {
         this.accessToken = accessToken;
-        this.expiration = expiration;
+        this.accessToken_expiresAt = expiration;
     }
 
     public String getAccessToken() {
@@ -19,6 +19,6 @@ public class AccessTokenValue {
     }
 
     public Date getExpiration() {
-        return expiration;
+        return accessToken_expiresAt;
     }
 }
