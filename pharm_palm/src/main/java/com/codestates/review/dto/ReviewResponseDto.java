@@ -1,5 +1,6 @@
 package com.codestates.review.dto;
 
+import com.codestates.disease.entity.Disease;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,4 +22,5 @@ public class ReviewResponseDto {
     private Boolean oauthMember;
     private String createdAt;
     private String lastModifiedAt;
+    private List<Disease> diseases;
 }
