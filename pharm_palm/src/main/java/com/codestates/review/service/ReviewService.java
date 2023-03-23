@@ -4,16 +4,23 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.medicine.entity.Medicine;
 import com.codestates.medicine.repository.MedicineRepository;
+import com.codestates.member.entity.Member;
+import com.codestates.member.repository.MemberRepository;
 import com.codestates.review.entity.Review;
 import com.codestates.review.repository.ReviewRepository;
+import com.codestates.s3.uploader.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,17 +28,32 @@ import java.util.Optional;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MedicineRepository medicineRepository;
+    private final MemberRepository memberRepository;
+    private final S3Uploader s3Uploader;
 
-    public Review createReview(Review review, Long medicineId) {
+    public Review createReview(List<MultipartFile> image, Review review, Long medicineId) throws IOException {
         Medicine medicine = medicineRepository.findByMedicineId(medicineId);
+        Member member = memberRepository.findByMemberId(review.getMemberId());
 
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
         String formattedDateLastModifiedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
         review.setCreatedAt(formattedDateTime);
         review.setLastModifiedAt(formattedDateLastModifiedTime);
         review.setMedicineId(medicineId);
+        review.setMemberName(member.getMemberName());
+        review.setMemberImg(member.getPicture());
+
+        member.addReview(review);
+        memberRepository.save(member);
 
         medicine.addReview(review);
+
+        //S3 이미지 업로드
+        if (!image.isEmpty()) {
+            List<String> storedFileName = s3Uploader.uploadList(image, "reviewImages");
+            review.setReviewImg(storedFileName);
+        }
+
         return reviewRepository.save(review);
     }
 
@@ -40,15 +62,6 @@ public class ReviewService {
 
         Optional.ofNullable(review.getReviewContent())
                 .ifPresent(findReview::setReviewContent);
-
-        Optional.ofNullable(review.getReviewImg())
-                .ifPresent(findReview::setReviewImg);
-
-        Optional.ofNullable(review.getReviewOtherMedicine())
-                .ifPresent(findReview::setReviewOtherMedicine);
-
-        Optional.ofNullable(review.getMemberId())
-                .ifPresent(findReview::setMemberId);
 
         String formattedDateLastModifiedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
         findReview.setLastModifiedAt(formattedDateLastModifiedTime);
@@ -77,7 +90,7 @@ public class ReviewService {
 
     public void deleteReview(long reviewId) {
         Review findReview = findVerifiedReviewId(reviewId);
-        reviewRepository.save(findReview);
+        reviewRepository.delete(findReview);
     }
 
     private Review findVerifiedReviewId(long reviewId) {
