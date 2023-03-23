@@ -61,7 +61,9 @@ const Login = () => {
         );
 
         // 로그인 성공시 홈페이지 이동
-        axios.defaults.headers.common.Authorization = `Bearer ${res.data.accessToken}`;
+        axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
+          'accessToken',
+        )}`;
         navigate('/');
         window.location.reload();
       })

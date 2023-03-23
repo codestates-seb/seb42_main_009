@@ -16,12 +16,14 @@ import {
   PanelBtn,
   PanelMenu,
 } from '../styles/s-header';
+import { useUserInfoStore } from '../Stores/userInfoStore';
 
 const Header = () => {
   const navigate = useNavigate();
   const { isLogin, setIsLogin } = useIsLoginStore(state => state);
   const [searchOn, setSearchOn] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { userInfo } = useUserInfoStore(state => state);
   const searchOpen = () => {
     setSearchOn(!searchOn);
   };
@@ -34,7 +36,7 @@ const Header = () => {
   };
   const menuList = [
     { title: '의약품 조회', linkSrc: '/list' },
-    { title: '내 약 관리', linkSrc: '/mypharm' },
+    { title: '내 약 관리', linkSrc: `/mypharm/${userInfo.memberId}` },
     { title: '차트데이터', linkSrc: '/chart' },
     { title: 'NEWS', linkSrc: '/' },
   ];
@@ -72,7 +74,10 @@ const Header = () => {
           </Search>
           {isLogin ? (
             <ButtonWrap>
-              <HeaderBtn width="80px" onClick={() => navigate('/mypage')}>
+              <HeaderBtn
+                width="80px"
+                onClick={() => navigate(`/mypage/${userInfo.memberId}`)}
+              >
                 My Page
               </HeaderBtn>
               <HeaderBtn
@@ -116,7 +121,7 @@ const Header = () => {
                 background="#fff"
                 color="var(--mainbl)"
                 width="80px"
-                onClick={() => navigate('/mypage')}
+                onClick={() => navigate(`/mypage/${userInfo.memberId}`)}
               >
                 My Page
               </HeaderBtn>

@@ -5,4 +5,9 @@ const useIsModalOpen = create(set => ({
   setModalOpen: state => set(() => ({ modalOpen: state })),
 }));
 
-export { useIsModalOpen };
+const useUpdateModalOpen = create(set => ({
+  updateModalOpen: false,
+  setUpdateModalOpen: state => set(() => ({ updateModalOpen: state })),
+}));
+
+export { useIsModalOpen, useUpdateModalOpen };

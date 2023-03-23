@@ -196,13 +196,14 @@ const Profile = () => {
           <ProfileContent>
             <ProfileItem>
               <li>
-                <SmBtn>이름</SmBtn> <p>{inputName}</p>{' '}
+                <SmBtn>이름</SmBtn> <p>{userInfo.memberName}</p>{' '}
               </li>
               <li>
-                <SmBtn>성별</SmBtn> <p>남성</p>{' '}
+                <SmBtn>성별</SmBtn>{' '}
+                <p>{userInfo.memberGender === 'male' ? '남성' : '여성'}</p>{' '}
               </li>
               <li>
-                <SmBtn>나이</SmBtn> <p>20대</p>{' '}
+                <SmBtn>나이</SmBtn> <p>{userInfo.memberAge}</p>{' '}
               </li>
             </ProfileItem>
 

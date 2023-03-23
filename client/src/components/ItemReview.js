@@ -146,18 +146,17 @@ const ItemReview = () => {
   };
 
   const reviewAddHandler = () => {
-    const postData = {
-      reviewContent: reviewItem.reviewContent,
-      reviewImg: reviewItem.reviewImg.preview_URL,
-      reviewOtherMedicine: '',
-      memberId: 123,
-    };
-    console.log(postData);
+    const formData = new FormData();
+    formData.append('reviewImage', reviewItem.reviewImg.image_file);
+    formData.append('reviewContent', reviewItem.reviewContent);
+    formData.append('memberId', userInfo.memberId);
+    console.log(formData);
     axios
       .post(
         `${process.env.REACT_APP_API_URL}/pp/reviews/${medicineItem.medicineId}`,
-        postData,
+        formData,
         {
+          'Content-Type': 'multipart/form-data',
           withCredentials: true,
         },
       )
@@ -176,7 +175,10 @@ const ItemReview = () => {
     // );
     axios
       .delete(`${process.env.REACT_APP_API_URL}/pp/reviews/${id}`)
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res);
+        setIsUpdate(true);
+      })
       .catch(err => console.log(err));
   };
 
@@ -236,6 +238,7 @@ const ItemReview = () => {
         `${process.env.REACT_APP_API_URL}/pp/reviews/medicines/${medicineItem.medicineId}?page=${currentPage}&size=${PER_PAGE}`,
       )
       .then(res => {
+        console.log(res);
         setReviewList(res.data.data);
         setTotalLength(res.data.pageInfo.totalElements);
         setIsUpdate(false);
@@ -257,28 +260,30 @@ const ItemReview = () => {
             <ReviewItem
               className={item.reviewStretch ? 'review-open review' : 'review'}
             >
-              <div className="btn-wrap">
-                <SmBtn
-                  onClick={e => {
-                    reviewUpdateModalOpen(e);
-                    setUpdateIndex(item.reviewId);
-                    console.log(item.reviewId);
-                  }}
-                >
-                  수정
-                </SmBtn>
-                <SmBtn
-                  background="var(--red-1)"
-                  color="var(--red-2)"
-                  border="1px solid var(--red-2)"
-                  hoverBg="var(--red-2)"
-                  hoverColor="var(--red-1)"
-                  marginLeft="4px"
-                  onClick={() => reviewDeleteHandler(item.reviewId)}
-                >
-                  삭제
-                </SmBtn>
-              </div>
+              {item.memberId === userInfo.memberId ? (
+                <div className="btn-wrap">
+                  <SmBtn
+                    onClick={e => {
+                      reviewUpdateModalOpen(e);
+                      setUpdateIndex(item.reviewId);
+                      console.log(item.reviewId);
+                    }}
+                  >
+                    수정
+                  </SmBtn>
+                  <SmBtn
+                    background="var(--red-1)"
+                    color="var(--red-2)"
+                    border="1px solid var(--red-2)"
+                    hoverBg="var(--red-2)"
+                    hoverColor="var(--red-1)"
+                    marginLeft="4px"
+                    onClick={() => reviewDeleteHandler(item.reviewId)}
+                  >
+                    삭제
+                  </SmBtn>
+                </div>
+              ) : null}
               <div className="btn-more" onClick={() => moreReview(idx)}>
                 {item.reviewStretch ? '닫기' : '더보기'}
               </div>
@@ -287,13 +292,10 @@ const ItemReview = () => {
                   <img src="https://picsum.photos/300/200" alt="user" />
                 </UserImage>
                 <UserInputs>
-                  <span className="username">약먹기시러</span>
-                  <span className="writedate">2023-09-13</span>
-
+                  <span className="username">{item.memberName}</span>
+                  <span className="writedate">{item.lastModifiedAt}</span>
                   <div>
-                    {item.reviewImg ? (
-                      <img src={item.reviewImg.preview_URL} />
-                    ) : null}
+                    {item.reviewImg ? <img src={item.reviewImg} /> : null}
 
                     {item.reviewContent}
                   </div>

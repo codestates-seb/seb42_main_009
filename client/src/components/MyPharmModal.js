@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 import { FaPlus, FaInfoCircle, FaChevronDown } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import {
@@ -20,13 +21,31 @@ import {
 } from '../styles/s-mypharmmodal';
 import TimeInput from './TimeInput';
 import { useSearchTextStore } from '../Stores/listSearchStore';
-import { useMyPharmStore } from '../Stores/myPharmStore';
+import {
+  useMyPharmDoseId,
+  useMyPharmStore,
+  useMyPharmUpdateStore,
+} from '../Stores/myPharmStore';
+import { useUpdateModalOpen } from '../Stores/pharmModalStore';
 
 const MyPharmModal = ({ setModalOpen }) => {
   const URI = process.env.REACT_APP_API_URL;
+  // memberId 추출
+  const location = useLocation();
+  const memberId = Number(location.pathname.split('/')[2]);
+
+  // myPharm 추가, 변경시 update 변수로 확인
+  const { setMyPharmUpdate } = useMyPharmUpdateStore(state => state);
 
   // myPharm Store
-  const { myPharmItem, setMyPharmItem } = useMyPharmStore(state => state);
+  const { setMyPharmItem } = useMyPharmStore(state => state);
+
+  // update modal Store
+  const { updateModalOpen, setUpdateModalOpen } = useUpdateModalOpen(
+    state => state,
+  );
+  // 수정할 my Pharm doseId
+  const { myPharmDoseId } = useMyPharmDoseId(state => state);
 
   // 타임테이블
   const [timeIpCount, setTimeIpCount] = useState([0]);
@@ -61,6 +80,7 @@ const MyPharmModal = ({ setModalOpen }) => {
   };
   const modalCloseBtn = () => {
     setModalOpen(false);
+    setUpdateModalOpen(false);
   };
 
   const searchHandler = e => {
@@ -100,11 +120,11 @@ const MyPharmModal = ({ setModalOpen }) => {
   // 추가하기
   const doseSubmit = () => {
     const myDose = {
-      memberId: 1,
+      memberId,
       medicineId,
       doseMount: `${doseMount}${doseOption}`,
       doseNumber,
-      doseTimes: timeTableArray.join(','),
+      doseTimes: timeTableArray.join(', '),
     };
     setMyPharmItem({
       medicineId,
@@ -117,12 +137,59 @@ const MyPharmModal = ({ setModalOpen }) => {
       .post(`${process.env.REACT_APP_API_URL}/pp/doses`, myDose, {
         withCredentials: true,
       })
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res);
+        setMyPharmUpdate(true);
+        modalCloseBtn();
+      })
       .catch(err => console.log(err));
-    console.log(myDose);
-    console.log(myPharmItem);
-    modalCloseBtn();
   };
+
+  // 수정하기
+  const doseUpdate = () => {
+    const updateDose = {
+      doseMount: `${doseMount}${doseOption}`,
+      doseNumber,
+      doseTimes: timeTableArray.join(', '),
+    };
+    axios
+      .patch(
+        `${process.env.REACT_APP_API_URL}/pp/doses/${myPharmDoseId}`,
+        updateDose,
+        {
+          withCredentials: true,
+        },
+      )
+      .then(res => {
+        console.log(res);
+        setMyPharmUpdate(true);
+        modalCloseBtn();
+      })
+      .catch(err => console.log(err));
+  };
+
+  // 삭제하기
+  const doseDelete = () => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_API_URL}/pp/doses/${myPharmDoseId}`,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
+      .then(res => {
+        console.log(res);
+        console.log('삭제 성공!');
+        setMyPharmUpdate(true);
+        modalCloseBtn();
+      })
+      .catch(err => console.log(err));
+  };
+
+  useEffect(() => {
+    console.log(updateModalOpen);
+  }, []);
 
   return (
     <MyPharmWrap>
@@ -135,42 +202,48 @@ const MyPharmModal = ({ setModalOpen }) => {
           <IoMdClose />
         </button>
         <MyPharmModalBox>
+          {!updateModalOpen ? (
+            <FieldSet>
+              <FieldTitle>
+                현재 복용하고 있는 의약품의 이름을 입력해 주세요.
+              </FieldTitle>
+              <FieldBox>
+                <label htmlFor="medicine_name">약품명</label>
+                <FieldInput
+                  type="text"
+                  id="medicine_name"
+                  width="160px"
+                  value={searchTxt}
+                  onChange={searchHandler}
+                  onKeyDown={searchSubmit}
+                  required
+                />
+                <SearchList className={listOpen ? 'list-open' : null}>
+                  {searchResult.map(item => (
+                    <li
+                      role="presentation"
+                      onClick={e => listSelect(e, item.medicineId)}
+                      onKeyDown={e => listSelect(e, item.medicineId)}
+                      key={item.medicineId}
+                      medId={item.medicineId}
+                    >
+                      {item.medicineName}
+                    </li>
+                  ))}
+                </SearchList>
+                <FieldTooltip>
+                  <FaInfoCircle />
+                  <p>복용 중인 약 이름을 입력하세요.</p>
+                </FieldTooltip>
+              </FieldBox>
+            </FieldSet>
+          ) : null}
           <FieldSet>
             <FieldTitle>
-              현재 복용하고 있는 의약품의 이름을 입력해 주세요.
+              {!updateModalOpen
+                ? '현재 복용량과 복용 기간을 입력해 주세요.'
+                : '현재 복용량과 복용 기간을 수정해 주세요.'}
             </FieldTitle>
-            <FieldBox>
-              <label htmlFor="medicine_name">약품명</label>
-              <FieldInput
-                type="text"
-                id="medicine_name"
-                width="160px"
-                value={searchTxt}
-                onChange={searchHandler}
-                onKeyDown={searchSubmit}
-                required
-              />
-              <SearchList className={listOpen ? 'list-open' : null}>
-                {searchResult.map(item => (
-                  <li
-                    role="presentation"
-                    onClick={e => listSelect(e, item.medicineId)}
-                    onKeyDown={e => listSelect(e, item.medicineId)}
-                    key={item.medicineId}
-                    medId={item.medicineId}
-                  >
-                    {item.medicineName}
-                  </li>
-                ))}
-              </SearchList>
-              <FieldTooltip>
-                <FaInfoCircle />
-                <p>복용 중인 약 이름을 입력하세요.</p>
-              </FieldTooltip>
-            </FieldBox>
-          </FieldSet>
-          <FieldSet>
-            <FieldTitle>현재 복용량과 복용 기간을 입력해 주세요.</FieldTitle>
             <FieldBox>
               <label htmlFor="medicine_number">복용횟수</label>
               <FieldInput
@@ -231,19 +304,33 @@ const MyPharmModal = ({ setModalOpen }) => {
             </FieldBox>
           </FieldSet>
           <MyPharmBtnWrap>
-            <MyPharmSubmit
-              onClick={doseSubmit}
-              disabled={searchTxt === '' || doseMount === '' || doseNumber <= 0}
-            >
-              추가하기
-            </MyPharmSubmit>
-            <MyPharmSubmit
-              background="var(--red-1)"
-              color="var(--red-2)"
-              hoverBg="var(--red-2)"
-            >
-              삭제하기
-            </MyPharmSubmit>
+            {!updateModalOpen ? (
+              <MyPharmSubmit
+                onClick={doseSubmit}
+                disabled={
+                  searchTxt === '' || doseMount === '' || doseNumber <= 0
+                }
+              >
+                추가하기
+              </MyPharmSubmit>
+            ) : (
+              <div>
+                <MyPharmSubmit
+                  onClick={doseUpdate}
+                  disabled={doseMount === '' || doseNumber <= 0}
+                >
+                  수정하기
+                </MyPharmSubmit>
+                <MyPharmSubmit
+                  onClick={doseDelete}
+                  background="var(--red-1)"
+                  color="var(--red-2)"
+                  hoverBg="var(--red-2)"
+                >
+                  삭제하기
+                </MyPharmSubmit>
+              </div>
+            )}
           </MyPharmBtnWrap>
         </MyPharmModalBox>
       </MyPharmModalWrap>

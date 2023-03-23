@@ -2,12 +2,12 @@ import { create } from 'zustand';
 
 const useUserInfoStore = create(set => ({
   userInfo: {
-    name: '',
-    email: '',
-    gender: '',
+    memberName: '',
+    id: '',
+    memberGender: '',
     profileImg: '',
     memberId: 0,
-    age: 0,
+    memberAge: 0,
   },
   setUserInfo: state => set(() => ({ userInfo: state })),
 }));
