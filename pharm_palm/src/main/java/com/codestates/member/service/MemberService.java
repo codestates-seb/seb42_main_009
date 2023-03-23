@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -113,6 +114,32 @@ public class MemberService {
         }
 
         return  memberRepository.save(member);
+    }
+
+    public void passwordCheck(Member member) {
+        Member findMember = findVerifiedMemberId(member.getMemberId());
+        if(findMember.getOauthMember().equals(true)) {
+            throw new IllegalStateException("소셜 로그인 사용자는 사용자 정보를 수정 할 수 없습니다.");
+        }
+        Member checkMember = memberRepository.findByMemberId(member.getMemberId());
+        String inputPassword = member.getMemberPwd();
+        boolean isMatched = passwordEncoder.matches(inputPassword, checkMember.getMemberPwd());
+        if (!isMatched){
+            throw new BusinessLogicException(ExceptionCode.PASSWORD_NOT_MATCH);
+        }
+    }
+
+    public void savePassword(Member member) {
+        Member findMember = findVerifiedMemberId(member.getMemberId());
+        if(findMember.getOauthMember().equals(true)) {
+            throw new IllegalStateException("소셜 로그인 사용자는 사용자 정보를 수정 할 수 없습니다.");
+        }
+        Member checkMember = memberRepository.findByMemberId(member.getMemberId());
+
+        String encryptedPassword = passwordEncoder.encode(member.getMemberPwd());
+        Optional.ofNullable(member.getMemberPwd()).ifPresent(memberPwd -> checkMember.setMemberPwd(encryptedPassword));
+
+        memberRepository.save(checkMember);
     }
 
     public void withdrawMember(Long memberId) {

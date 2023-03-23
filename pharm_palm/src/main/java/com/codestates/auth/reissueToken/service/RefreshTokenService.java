@@ -1,21 +1,16 @@
-package com.codestates.auth.refreshToken.service;
+package com.codestates.auth.reissueToken.service;
 
 
-import com.codestates.auth.filter.JwtAuthenticationFilter;
 import com.codestates.auth.jwt.JwtTokenizer;
-import com.codestates.auth.refreshToken.entity.RefreshToken;
-import com.codestates.auth.refreshToken.repository.RefreshTokenRepository;
+import com.codestates.auth.reissueToken.AccessTokenValue;
+import com.codestates.auth.reissueToken.repository.RefreshTokenRepository;
 import com.codestates.member.entity.Member;
 import com.codestates.member.service.MemberService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,11 +48,16 @@ public class RefreshTokenService {
 
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
-        String accessToken = jwtTokenizer.generateToken(claims, subject, expiration, base64EncodedSecretKey);
+        String Token = jwtTokenizer.generateToken(claims, subject, expiration, base64EncodedSecretKey);
 
-        return accessToken;
-
+        return Token;
     }
+
+    public Date tokenExpireAt() {
+        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+        return expiration;
+    }
+
 
     private Map<String, Object> verifyJws(HttpHeaders httpHeaders) {
         String jws = httpHeaders.get("Authorization").get(0).replace("Bearer ", "");

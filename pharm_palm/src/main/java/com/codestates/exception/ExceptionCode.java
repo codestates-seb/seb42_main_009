@@ -11,8 +11,9 @@ public enum ExceptionCode {
     DOSE_ALREADY_EXISTS(409,"Dose already exists"),
     DOSE_NOT_FOUND(404,"Dose not found"),
     WRONG_TOKEN_INPUT(403, "Wrong token inputted"),
+    WITHDRAW_MEMBER(404,"탈퇴한 회원 입니다."),
 
-    WITHDRAW_MEMBER(404,"탈퇴한 회원 입니다.")
+    PASSWORD_NOT_MATCH(403, "비밀번호가 일치하지 않습니다.")
     ;
 
     @Getter
