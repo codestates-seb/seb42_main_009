@@ -53,24 +53,31 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
-//        Member findMember = findVerifiedMemberEmail(member.getMemberEmail());
-
-//        Optional.ofNullable(member.getMemberName())
-//                .ifPresent(findMember::setMemberName);
-//
-//        Optional.ofNullable(member.getMemberGender())
-//                .ifPresent(findMember::setMemberGender);
-//
-//        Optional.ofNullable(member.getMemberAge())
-//                .ifPresent(findMember::setMemberAge);
-//
-//        Optional.ofNullable(member.getMemberState())
-//                .ifPresent(findMember::setMemberState);
         Member findMember = findVerifiedMemberId(member.getMemberId());
 
+        if(findMember.getOauthMember().equals(true)) {
+            throw new IllegalStateException("소셜 로그인 사용자는 사용자 정보를 수정 할 수 없습니다.");
+        }
+
+        Optional.ofNullable(member.getMemberName())
+                .ifPresent(findMember::setMemberName);
+
+        Optional.ofNullable(member.getMemberGender())
+                .ifPresent(findMember::setMemberGender);
+
+        Optional.ofNullable(member.getMemberAge())
+                .ifPresent(findMember::setMemberAge);
+
+//        Optional.ofNullable(member.getMemberState())
+//                .ifPresent(findMember::setMemberState);
+
+        return memberRepository.save(findMember);
+    }
+
+    public Member updateAlarm(Member member) {
+        Member findMember = findVerifiedMemberId(member.getMemberId());
         Optional.ofNullable(member.isAlarm())
                 .ifPresent(findMember::setAlarm);
-
         return memberRepository.save(findMember);
     }
 
