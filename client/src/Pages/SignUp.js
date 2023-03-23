@@ -46,6 +46,14 @@ const SignUp = () => {
     return false;
   };
 
+  // Email 유효성 검사 함수
+  const isValidEmail = str => {
+    const regex =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+    return regex.test(str);
+  };
+
   const register = () => {
     const date = new Date();
     const createdAt = date;
@@ -59,6 +67,18 @@ const SignUp = () => {
       created_at: createdAt,
     });
 
+    if (!username || !userId || !password) {
+      setErrorMessage('아이디와 비밀번호를 입력하세요');
+      return;
+    }
+    if (!isValidEmail(userId)) {
+      setErrorMessage('Email 형식에 맞게 입력해주세요');
+      return;
+    }
+    if (password !== passwordChecked) {
+      setErrorMessage('비밀번호가 다릅니다');
+      return;
+    }
     axios
       .post(
         `http://ec2-3-38-166-142.ap-northeast-2.compute.amazonaws.com:8080/pp/members`,
@@ -68,7 +88,6 @@ const SignUp = () => {
           memberPwd: password,
           memberAge: birth,
           memberGender: gender,
-          // created_at: createdAt,
         },
       )
       .then(res => {
@@ -155,13 +174,18 @@ const SignUp = () => {
               <input
                 type="radio"
                 id="female_link"
-                value="male"
+                value="female"
                 name="gender"
                 onClick={e => setGender(e.target.value)}
               />
               <label htmlFor="female_link">여자</label>
             </RadioBox>
           </InputItem>
+          {errorMessage ? (
+            <p className=" mb-4 font-medium text-xs text-red-600">
+              {errorMessage}
+            </p>
+          ) : null}
           <LinktoLogin>
             이미 가입하셨나요? <Link to="/login">로그인</Link>{' '}
           </LinktoLogin>

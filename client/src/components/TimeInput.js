@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { FaChevronDown, FaTimes } from 'react-icons/fa';
 import { FieldSelectDown, TimeSelect } from '../styles/s-mypharmmodal';
 
-const TimeInput = ({ timeTable, setTimeTable, objectKey }) => {
+const TimeInput = ({ timeTable, setTimeTable, objectKey, timeTableValue }) => {
   const [startDate, setStartDate] = useState('');
   const [inputDisplay, setInputDisplay] = useState(true);
 
@@ -43,6 +43,7 @@ const TimeInput = ({ timeTable, setTimeTable, objectKey }) => {
             timeIntervals={60}
             timeCaption="Time"
             dateFormat="h:mm aa"
+            value={timeTableValue}
             required
           />
           <FieldSelectDown>

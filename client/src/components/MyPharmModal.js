@@ -188,7 +188,42 @@ const MyPharmModal = ({ setModalOpen }) => {
   };
 
   useEffect(() => {
-    console.log(updateModalOpen);
+    // 수정된 Data 미리 확인
+    if (updateModalOpen) {
+      axios
+        .get(
+          `${process.env.REACT_APP_API_URL}/pp/doses/info/${memberId}`,
+          {},
+          {
+            withCredentials: true,
+          },
+        )
+        .then(res => {
+          console.log(res);
+          const filteredItem = res.data.filter(
+            item => item.doseId === myPharmDoseId,
+          );
+
+          // 수정시 정보 유지
+          setDoseNumber(filteredItem[0].doseNumber);
+
+          // 문자열에서 숫자만 추출
+          const regex = /[^0-9]/g;
+          setDoseMount(filteredItem[0].doseMount.replace(regex, ''));
+
+          const doseTimesArr = filteredItem[0].doseTimes.split(', ');
+          console.log(doseTimesArr);
+          const doseTimeIpCount = [];
+          const doseTimeTable = {};
+          doseTimesArr.forEach((item, idx) => {
+            doseTimeIpCount.push(idx);
+            doseTimeTable[idx] = item;
+          });
+          setTimeIpCount(doseTimeIpCount);
+          setTimeTable(doseTimeTable);
+        })
+        .catch(err => console.log(err));
+    }
   }, []);
 
   return (
@@ -251,6 +286,7 @@ const MyPharmModal = ({ setModalOpen }) => {
                 id="medicine_number"
                 value={doseNumber}
                 onChange={doseNumberHandler}
+                min={0}
               />
               <span>회</span>
               <FieldTooltip>
@@ -265,6 +301,7 @@ const MyPharmModal = ({ setModalOpen }) => {
                 id="medicine_mount"
                 value={doseMount}
                 onChange={doseMountHandler}
+                min={0}
               />
               <FieldSelect>
                 <select onChange={doseOptionHandler}>
@@ -298,6 +335,7 @@ const MyPharmModal = ({ setModalOpen }) => {
                     objectKey={idx}
                     timeTable={timeTable}
                     setTimeTable={setTimeTable}
+                    timeTableValue={timeTable[idx]}
                   />
                 ))}
               </Flexbox>
