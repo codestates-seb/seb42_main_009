@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import ReactPaginate from 'react-paginate';
 import { FaInfoCircle } from 'react-icons/fa';
 import { Tab } from '../styles/globalStyle';
 import Profile from '../components/Profile';
 import Banner from '../components/Banner';
 import MyPills from '../components/MyPills';
 import MyPharmModal from '../components/MyPharmModal';
+import { Pagination } from '../styles/s-list';
 import { useIsModalOpen } from '../Stores/pharmModalStore';
 import {
   FieldTooltip,
@@ -25,20 +29,21 @@ import {
   UserImage,
   UserInputs,
 } from '../styles/s-item';
-import { useIsLoginStore } from '../Stores/loginStore';
+import { useMyPharmUpdateStore } from '../Stores/myPharmStore';
 
 const MyPage = () => {
-  // 로그인이 안돼어 있을 경우, 홈페이지로 이동
-  const { isLogin } = useIsLoginStore(state => state);
-  console.log(isLogin);
-  if (isLogin === false) {
-    const navigate = useNavigate();
-    navigate('/home');
-  }
-
   const [curTab, setCurTab] = useState(0);
   const [toggleOn, setToggleOn] = useState(false);
   const { modalOpen, setModalOpen } = useIsModalOpen(state => state);
+
+  // myPharm 변경 확인
+  const { myPharmUpdate, setMyPharmUpdate } = useMyPharmUpdateStore(
+    state => state,
+  );
+
+  // memberId 추출
+  const location = useLocation();
+  const memberId = location.pathname.split('/')[2];
 
   const modalHandler = () => {
     setModalOpen(!modalOpen);
@@ -53,6 +58,20 @@ const MyPage = () => {
   //   setMyPillCount(myPillCountArr)
   // }
 
+  // Pagination
+  // 1. currentPage 초기값은 0으로 설정
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalLength, setTotalLength] = useState(0);
+
+  const PER_PAGE = 5;
+  const pageCount = Math.ceil(totalLength / PER_PAGE);
+
+  const handlerPageClick = event => {
+    setCurrentPage(event.selected + 1);
+  };
+
+  const [myPharmList, setMyPharmList] = useState([]);
+  const [myReviewList, setMyReviewList] = useState([]);
   const tabArr = ['나의 의약품', '나의 리뷰'];
   const tabHandler = idx => {
     setCurTab(idx);
@@ -86,6 +105,35 @@ const MyPage = () => {
       ),
     );
   };
+
+  useEffect(() => {
+    // 나의 의약품 정보 받아오기
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/pp/doses/info/${memberId}`)
+      .then(res => {
+        console.log(res);
+        setMyPharmList(res.data);
+        setMyPharmUpdate(false);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    // 나의 리뷰 데이터 받아오기
+    axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/pp/reviews/medicines/${memberId}?page=${currentPage}&size=${PER_PAGE}`,
+      )
+      .then(res => {
+        console.log(res);
+        setMyReviewList(res.data.data);
+        console.log(myReviewList);
+        setTotalLength(res.data.pageInfo.totalElements);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [myPharmUpdate]);
 
   return (
     <>
@@ -147,15 +195,13 @@ const MyPage = () => {
                 ) : null}
 
                 <MyPillList>
-                  <MyPills />
-                  <MyPills />
-                  <MyPills />
-                  <MyPills />
-                  <MyPills />
-                  <MyPills />
-                  {/* {myPillCount.map((item,idx)=>(
-                    <MyPills key={idx} objectKey={idx} />
-                  ))} */}
+                  {myPharmList.map((item, idx) => (
+                    <MyPills
+                      key={idx}
+                      medicineName={item.medicineName}
+                      doseId={item.doseId}
+                    />
+                  ))}
                 </MyPillList>
               </MypageTabContent>
             ) : (
@@ -163,6 +209,7 @@ const MyPage = () => {
                 <ReviewList>
                   {rvList.map((item, idx) => (
                     <ReviewItem
+                      key={idx}
                       className={
                         item.reviewStretch ? 'review-open review' : 'review'
                       }
@@ -194,6 +241,23 @@ const MyPage = () => {
                     </ReviewItem>
                   ))}
                 </ReviewList>
+                {/* Pagination */}
+                <Pagination>
+                  <ReactPaginate
+                    previousLabel="<"
+                    nextLabel=">"
+                    breakLabel="..."
+                    pageCount={pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={handlerPageClick}
+                    // 밑 props는 style을 위한 className 지정 해주는 역할
+                    containerClassName=""
+                    // containerClassName="pagination"
+                    subContainerClassName=""
+                    activeClassName="active"
+                  />
+                </Pagination>
               </MypageTabContent>
             )}
           </MypageContent>

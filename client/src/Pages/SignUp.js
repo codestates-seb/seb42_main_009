@@ -66,7 +66,7 @@ const SignUp = () => {
           memberEmail: userId,
           memberName: username,
           memberPwd: password,
-          memberBirthday: birth,
+          memberAge: birth,
           memberGender: gender,
           // created_at: createdAt,
         },

@@ -13,4 +13,14 @@ const useMyPharmStore = create(set => ({
   setMyPharmItem: state => set(() => ({ myPharmItem: state })),
 }));
 
-export { useMyPharmStore };
+const useMyPharmUpdateStore = create(set => ({
+  myPharmUpdate: false,
+  setMyPharmUpdate: state => set(() => ({ myPharmUpdate: state })),
+}));
+
+const useMyPharmDoseId = create(set => ({
+  myPharmDoseId: 0,
+  setMyPharmDoseId: state => set(() => ({ myPharmDoseId: state })),
+}));
+
+export { useMyPharmStore, useMyPharmUpdateStore, useMyPharmDoseId };

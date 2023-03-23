@@ -37,10 +37,32 @@ function App() {
 
     console.log(expireAt);
 
-    if (moment(expireAt).diff(moment()) < 0) console.log('토큰 만료!!');
+    // refresh token
+    if (moment(expireAt).diff(moment()) < 0) {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/pp/tokens`,
+          {},
+          {
+            headers: {
+              Refresh: `${localStorage.getItem('refreshToken')}`,
+              withCredentials: true,
+            },
+          },
+        )
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          if (err.response) {
+            console.log(err.response);
+          }
+        });
+    }
 
+    // access Token 검증
     axios
-      .get(
+      .post(
         `${process.env.REACT_APP_API_URL}/pp/members/info`,
         {},
         {
@@ -149,15 +171,15 @@ function App() {
       <div className="App">
         <Header />
         <Routes>
-          <Route path="home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="list" element={<List />} />
-          <Route path="mypage" element={<MyPage />} />
           <Route path="item/:itemId" element={<Item />} />
           <Route path="editinfo" element={<EditInfo />} />
           <Route path="test" element={<Test />} />
-          <Route path="mypharm" element={<MyPharm />} />
+          <Route path="mypage/:memberId" element={<MyPage />} />
+          <Route path="mypharm/:memberId" element={<MyPharm />} />
           <Route path="chart" element={<Chart />} />
         </Routes>
       </div>

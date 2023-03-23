@@ -1,7 +1,9 @@
+import axios from 'axios';
 import { React, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import ApexCharts from 'react-apexcharts';
 import Banner from '../components/Banner';
 import MyPharmModal from '../components/MyPharmModal';
-import { useMyPharmStore } from '../Stores/myPharmStore';
 import { useIsModalOpen } from '../Stores/pharmModalStore';
 import {
   PillAddBtn,
@@ -10,16 +12,25 @@ import {
   MyPillList,
   MyPharmAddDone,
 } from '../styles/s-mypharm';
+import { useMyPharmUpdateStore } from '../Stores/myPharmStore';
 
 const MyPharm = () => {
+  // memberId 추출
+  const location = useLocation();
+  const memberId = location.pathname.split('/')[2];
+
   const { modalOpen, setModalOpen } = useIsModalOpen(state => state);
   const modalHandler = () => {
     setModalOpen(!modalOpen);
   };
-  const [data, setData] = useState([
+  const [myPharmList, setMyPharmList] = useState([]);
+  const { myPharmUpdate, setMyPharmUpdate } = useMyPharmUpdateStore(
+    state => state,
+  );
+  const [data] = useState([
     {
       doseId: 1,
-      memberId: 1,
+      memberId,
       medicineId: 1,
       medicineName: '활명수',
       doseMount: '1개',
@@ -28,7 +39,7 @@ const MyPharm = () => {
     },
     {
       doseId: 2,
-      memberId: 1,
+      memberId,
       medicineId: 11,
       medicineName: '세나서트2밀리그람질정',
       doseMount: '2캡슐',
@@ -36,16 +47,20 @@ const MyPharm = () => {
       doseTimes: ['9:00', '18:00'],
     },
   ]);
-  const { myPharmItem } = useMyPharmStore(state => state);
-  console.log(myPharmItem);
 
   useEffect(() => {
-    setData([...data]);
-  }, []);
+    setTimeout(() => {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/pp/doses/info/${memberId}`)
+        .then(res => {
+          console.log(res.data);
+          setMyPharmList(res.data);
+          setMyPharmUpdate(false);
+        })
+        .catch(err => console.log(err));
+    }, 500);
+  }, [myPharmUpdate]);
 
-  // myPharmItem
-
-  console.log(data);
   return (
     <>
       <Banner>
@@ -60,14 +75,14 @@ const MyPharm = () => {
             <DefaultNone>복용하고 있는 약을 입력해주세요.</DefaultNone>
           ) : (
             <MyPillList>
-              {data.map((item, idx) => (
+              {myPharmList.map((item, idx) => (
                 <li key={idx}>
-                  <p>{item.doseId}</p>
+                  <p>{idx + 1}</p>
                   <h3>{item.medicineName}</h3>
                   <div className="dose-info">
                     <span>{item.doseMount}</span>
                     <div className="dose-times">
-                      {item.doseTimes.map((v, i) => (
+                      {item.doseTimes.split(', ').map((v, i) => (
                         <span key={i}>{v}</span>
                       ))}
                     </div>
@@ -78,6 +93,47 @@ const MyPharm = () => {
           )}
         </MyPillSection>
         <MyPharmAddDone>내 약 추가 완료</MyPharmAddDone>
+        <ApexCharts
+          className="area-chart 복용시간"
+          type="rangeBar"
+          series={[
+            {
+              name: '시간표',
+              data: [
+                {
+                  x: '활명수',
+                  y: [9, 10.5],
+                },
+                {
+                  x: '세나서트',
+                  y: [13, 14.5],
+                },
+                {
+                  x: '활명수',
+                  y: [18, 19.5],
+                },
+                {
+                  x: '세나서트',
+                  y: [3, 4.5],
+                },
+              ],
+            },
+          ]}
+          options={{
+            chart: {
+              height: 250,
+              type: 'rangeBar',
+            },
+            plotOptions: {
+              bar: {
+                horizontal: true,
+              },
+            },
+            xaxis: {
+              type: 'category',
+            },
+          }}
+        />
       </div>
     </>
   );
