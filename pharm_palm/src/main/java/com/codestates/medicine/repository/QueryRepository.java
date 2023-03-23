@@ -33,37 +33,7 @@ public class QueryRepository {
                 .fetch();
 
     }
-//    public List<Object[]> findDoseByGenderDESC() {
-//        QDose dose = QDose.dose;
-//        QMember member = QMember.member;
-//        QMedicine medicine = QMedicine.medicine;
-//
-//        BooleanExpression genderMale = member.memberGender.eq("male");
-//        List<Tuple> result = jpaQueryFactory
-//                .select(dose.medicine.medicineId, dose.count())
-//                .from(dose)
-//                .where(dose.member.memberId.in(
-//                        JPAExpressions
-//                                .select(member.memberId)
-//                                .from(member)
-//                                .where(genderMale)
-//                ))
-//                .groupBy(dose.medicine.medicineId)
-//                .orderBy(dose.count().desc())
-//                .limit(10)
-//                .fetch();
-//
-//        return jpaQueryFactory
-//                .select(medicine.medicineName, dose.count())
-//                .from(medicine)
-//                .leftJoin(dose).on(medicine.medicineId.eq(dose.medicine.medicineId))
-//                .where(medicine.medicineId.in(
-//                        result.stream()
-//                                .map(tuple -> tuple.get(dose.medicine.medicineId))
-//                                .collect(Collectors.toList())))
-//                .orderBy(dose.count().desc())
-//                .fetch();
-//    }
+
 
 
 

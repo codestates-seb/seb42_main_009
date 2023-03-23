@@ -77,7 +77,6 @@ sourceSets {
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
-
 // querydsl이 compileClassPath를 상속하도록 설정
 configurations {
 	compileOnly {
