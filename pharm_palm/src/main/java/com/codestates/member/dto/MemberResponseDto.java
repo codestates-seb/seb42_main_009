@@ -20,9 +20,8 @@ public class MemberResponseDto {
     //    private String memberPwd; reponse에 pwd가 필요한가?
     private String memberGender;
     private String memberAge;
+    private String picture;
     private Member.MemberState memberState;
     private boolean alarm;
     private List<DoseResponseDto> doses;
-
-
 }
