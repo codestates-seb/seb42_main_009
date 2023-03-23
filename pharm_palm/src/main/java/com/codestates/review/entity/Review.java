@@ -1,11 +1,13 @@
 package com.codestates.review.entity;
 
 import com.codestates.audit.Auditable;
+import com.codestates.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
@@ -20,13 +22,17 @@ public class Review {
     private String reviewContent;
 
     @Column
-    private String reviewImg;
-
-    @Column
-    private String reviewOtherMedicine;
+    @ElementCollection(targetClass=String.class)
+    private List<String> reviewImg;
 
     @Column
     private Long memberId;
+
+    @Column
+    private String memberName;
+
+    @Column
+    private String memberImg;
 
     @Column
     private Long medicineId;
