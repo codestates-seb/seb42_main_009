@@ -26,8 +26,19 @@ server:
     encoding:
       force-response: true
 jwt:
-  access-token-expiration-minutes: 60
-  refresh-token-expiration-minutes: 90
+  access-token-expiration-minutes: 90
+  refresh-token-expiration-minutes: 1000
 mail:
   address:
     admin: example@admin.com
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
+    s3:
+      bucket: pharm-palm-deploy
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

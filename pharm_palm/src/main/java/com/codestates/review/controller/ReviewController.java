@@ -4,6 +4,7 @@ import com.codestates.dto.MultiResponseDto;
 import com.codestates.dto.SingleResponseDto;
 import com.codestates.medicine.entity.Medicine;
 import com.codestates.medicine.repository.MedicineRepository;
+import com.codestates.member.entity.Member;
 import com.codestates.review.dto.ReviewPatchDto;
 import com.codestates.review.dto.ReviewPostDto;
 import com.codestates.review.entity.Review;
@@ -13,15 +14,20 @@ import com.codestates.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,11 +40,15 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final ReviewMapper mapper;
 
-    @PostMapping("/{medicine-id}")
-    public ResponseEntity postMedicineReview(@PathVariable("medicine-id") @Positive long medicineId,
-                                             @Valid @RequestBody ReviewPostDto reviewPostDto) {
+    @PostMapping(value = "/{medicine-id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity postMedicineReview(HttpServletRequest request,
+                                             @RequestParam(value="reviewImage") List<MultipartFile> image,
+                                             @PathVariable("medicine-id") @Positive long medicineId,
+                                             @Valid ReviewPostDto reviewPostDto) throws IOException {
+        System.out.println(image);
+        System.out.println(reviewPostDto.getMemberId());
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.reviewToReviewResponseDto(
-                reviewService.createReview(mapper.reviewPostDtoToReview(reviewPostDto), medicineId))), HttpStatus.CREATED);
+                reviewService.createReview(image ,mapper.reviewPostDtoToReview(reviewPostDto), medicineId))), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{review-id}")

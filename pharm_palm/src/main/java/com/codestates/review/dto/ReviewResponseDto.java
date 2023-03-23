@@ -14,10 +14,12 @@ import java.util.List;
 public class ReviewResponseDto {
     private Long reviewId;
     private String reviewContent;
-    private String reviewImg;
-    private String reviewOtherMedicine;
+    private List<String> reviewImg;
+    private String memberImg;
     private Long memberId;
+    private String memberName;
     private Long medicineId;
+    private Boolean oauthMember;
     private String createdAt;
     private String lastModifiedAt;
     private List<Disease> diseases;
