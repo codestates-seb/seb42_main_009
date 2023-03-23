@@ -49,6 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Member findMember = memberRepository.findByMemberEmail(loginDto.getId()).get();
 
         if(findMember.getMemberState() == Member.MemberState.WITHDRAW){
+            response.getWriter().write("탈퇴한 회원 입니다");
             throw new BusinessLogicException(ExceptionCode.WITHDRAW_MEMBER);
         }
 
