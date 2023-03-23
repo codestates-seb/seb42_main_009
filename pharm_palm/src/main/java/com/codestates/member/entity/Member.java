@@ -2,10 +2,8 @@ package com.codestates.member.entity;
 
 import com.codestates.audit.Auditable;
 import com.codestates.dose.entity.Dose;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.codestates.review.entity.Review;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -50,6 +48,13 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Dose> doses = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Review> reviews;
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
+    }
+
     public void addDose(Dose dose) {
         this.doses.add(dose);
         if (dose.getMember() != this) {
@@ -57,23 +62,12 @@ public class Member extends Auditable {
         }
     }
 
-
-    public Member update (String memberEmail, String memberName, String picture, String memberGender, String memberAge) {
-        this.memberEmail = memberEmail;
-        this.memberName = memberName;
-        this.picture = picture;
-        this.memberGender = memberGender;
-        this.memberAge = memberAge;
-
-        return this;
-    }
-
     //diseaseId 와 medicineId 나중에 추가
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-//    public enum MemberGender {
+    //    public enum MemberGender {
 //        FEMALE("여성"),
 //        MALE("남성"),
 //        PRIVATE("비밀")
@@ -85,6 +79,8 @@ public class Member extends Auditable {
 //            this.gender = gender;
 //        }
 //    }
+    @Column
+    private Boolean oauthMember;
 
     public enum MemberState {
         ACTIVE("활동중"),

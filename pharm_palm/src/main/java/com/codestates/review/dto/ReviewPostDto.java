@@ -15,6 +15,5 @@ public class ReviewPostDto {
     private String reviewContent;
     @NotNull(message = "회원의 아이디를 입력해 주세요.")
     private Long memberId;
-
     private List<Disease> diseases;
 }
