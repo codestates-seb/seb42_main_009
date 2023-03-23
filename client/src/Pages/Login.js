@@ -10,9 +10,13 @@ import { HeaderBtn } from '../styles/s-header';
 
 const KAKAO_REST_API_KEY = '46d7b3692a51eff3138a1580dccdd6c0';
 const KAKAO_REDIRECT_URI = 'http://localhost:3000/auth/kakao/callback';
+// const KAKAO_S3_REDIRECT_URI =
+//   'http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/auth/kakao/callback';
 
 const NAVER_CLIENT_ID = 'xycgRfAt8xXQwhRJjvno';
 const NAVER_REDIRECT_URI = 'http://localhost:3000/auth/naver/callback';
+// const NAVER_S3_REDIRECT_URI =
+//   'http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/auth/naver/callback';
 
 const Login = () => {
   const navigate = useNavigate();
