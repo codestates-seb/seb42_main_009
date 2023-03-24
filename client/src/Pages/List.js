@@ -26,7 +26,6 @@ const List = () => {
   const navigate = useNavigate();
   const { searchSelected } = useSearchSelectedStore(state => state);
   const { searchApi } = useSearchApiStore(state => state);
-  const [itemList, setItemList] = useState([]);
   // 1. currentPage 초기값은 0으로 설정
   const [currentPage, setCurrentPage] = useState(1);
   const [totalLength, setTotalLength] = useState(0);
