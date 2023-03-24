@@ -5,6 +5,11 @@ const useIsLoginStore = create(set => ({
   setIsLogin: state => set(() => ({ isLogin: state })),
 }));
 
+const useIsSocialLoginStore = create(set => ({
+  isSocialLogin: false,
+  setIsSocialLogin: state => set(() => ({ isSocialLogin: state })),
+}));
+
 const useLoginInfoStore = create(set => ({
   loginInfo: {
     id: '',
@@ -13,4 +18,4 @@ const useLoginInfoStore = create(set => ({
   setLoginInfo: state => set(() => ({ loginInfo: state })),
 }));
 
-export { useIsLoginStore, useLoginInfoStore };
+export { useIsLoginStore, useLoginInfoStore, useIsSocialLoginStore };

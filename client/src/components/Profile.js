@@ -137,6 +137,11 @@ const Profile = () => {
     }
   };
 
+  const genderCheck = gender => {
+    if (gender === 'male' || gender === '남성') return '남성';
+    return '여성';
+  };
+
   return (
     <div>
       {editMode ? (
@@ -199,17 +204,17 @@ const Profile = () => {
                 <SmBtn>이름</SmBtn> <p>{userInfo.memberName}</p>{' '}
               </li>
               <li>
-                <SmBtn>성별</SmBtn>{' '}
-                <p>{userInfo.memberGender === 'male' ? '남성' : '여성'}</p>{' '}
+                <SmBtn>성별</SmBtn> <p>{genderCheck(userInfo.memberGender)}</p>{' '}
               </li>
               <li>
                 <SmBtn>나이</SmBtn> <p>{userInfo.memberAge}</p>{' '}
               </li>
             </ProfileItem>
-
-            <HeaderBtn onClick={editModeHandler} width="70px">
-              정보수정
-            </HeaderBtn>
+            {!userInfo.socialLogin ? (
+              <HeaderBtn onClick={editModeHandler} width="70px">
+                정보수정
+              </HeaderBtn>
+            ) : null}
           </ProfileContent>
         </ProfileWrap>
       )}

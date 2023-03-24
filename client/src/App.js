@@ -1,11 +1,5 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  // useLocation,
-  // useNavigate,
-} from 'react-router-dom';
-import { useEffect } from 'react';
+import { React, useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
 import './styles/variable.css';
@@ -23,6 +17,8 @@ import EditInfo from './Pages/EditInfo';
 import Test from './Pages/Test';
 import MyPharm from './Pages/MyPharm';
 import Chart from './Pages/Chart';
+import Auth from './Pages/Auth';
+import PrivateRoute from './components/PrivateRoute';
 
 // 모든 요청에 withCredentials가 true로 설정됩니다.
 axios.defaults.withCredentials = true;
@@ -30,6 +26,7 @@ axios.defaults.withCredentials = true;
 function App() {
   const { setIsLogin } = useIsLoginStore(state => state);
   const { setUserInfo } = useUserInfoStore(state => state);
+  const navigate = useNavigate();
 
   const authHandler = () => {
     console.log(localStorage.getItem('accessToken'));
@@ -52,6 +49,12 @@ function App() {
         )
         .then(res => {
           console.log(res);
+          // 로컬 스토리지에 새롭게 Access Token 저장
+          localStorage.setItem('accessToken', res.data.accessToken);
+          localStorage.setItem(
+            'accessToken_expiresAt',
+            res.data.accessToken_expiresAt,
+          );
         })
         .catch(err => {
           if (err.response) {
@@ -61,27 +64,29 @@ function App() {
     }
 
     // access Token 검증
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/pp/members/info`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            withCredentials: true,
+    setTimeout(() => {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/pp/members/info`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+              withCredentials: true,
+            },
           },
-        },
-      )
-      .then(res => {
-        console.log(res);
-        setUserInfo(res.data.data);
-        setIsLogin(true);
-      })
-      .catch(err => {
-        if (err.response) {
-          console.log(err.response);
-        }
-      });
+        )
+        .then(res => {
+          console.log(res);
+          setUserInfo(res.data.data);
+          setIsLogin(true);
+        })
+        .catch(err => {
+          if (err.response) {
+            console.log(err.response);
+          }
+        });
+    }, 500);
   };
 
   const kakaoAuthHandler = code => {
@@ -107,7 +112,9 @@ function App() {
             )
             .then(response => {
               console.log(response);
+              setUserInfo({ ...response.data.data, socialLogin: true });
               setIsLogin(true);
+              navigate(`/`);
             })
             .catch(err => {
               if (err.response) {
@@ -118,9 +125,13 @@ function App() {
       }, 500);
   };
 
-  const naverAuthHandler = code => {
+  const naverAuthHandler = (code, state) => {
+    console.log(code);
+    console.log(state);
     axios
-      .get(`${process.env.REACT_APP_API_URL}/auth/naver/callback?code=${code}`)
+      .get(
+        `${process.env.REACT_APP_API_URL}/auth/naver/callback?code=${code}&state=${state}`,
+      )
       .then(res => {
         localStorage.setItem('NAVER_accessToken', res.data.access_token);
         console.log(localStorage.getItem('NAVER_accessToken'));
@@ -140,8 +151,11 @@ function App() {
               },
             )
             .then(response => {
+              console.log(response);
+              setUserInfo({ ...response.data.data, socialLogin: true });
               setIsLogin(true);
-              setUserInfo(response.data.response);
+              // setIsSocialLogin(true);
+              navigate('/');
             })
             .catch(err => {
               if (err.response) {
@@ -155,35 +169,46 @@ function App() {
   useEffect(() => {
     const url = new URL(window.location.href);
     const authorizationCode = url.searchParams.get('code');
+
     console.log(url.pathname);
     if (url.pathname.indexOf('kakao') !== -1) {
       kakaoAuthHandler(authorizationCode);
     } else if (url.pathname.indexOf('naver') !== -1) {
-      naverAuthHandler(authorizationCode);
+      const authorizationState = url.searchParams.get('state');
+      naverAuthHandler(authorizationCode, authorizationState);
     } else {
       authHandler();
     }
   }, []);
 
   return (
-    <BrowserRouter>
+    <div>
       <GlobalStyle />
       <div className="App">
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="list" element={<List />} />
           <Route path="item/:itemId" element={<Item />} />
           <Route path="editinfo" element={<EditInfo />} />
           <Route path="test" element={<Test />} />
-          <Route path="mypage/:memberId" element={<MyPage />} />
-          <Route path="mypharm/:memberId" element={<MyPharm />} />
+          <Route
+            exact
+            path="mypage/:memberId"
+            element={<PrivateRoute component={<MyPage />} />}
+          />
+          <Route
+            exact
+            path="mypharm/:memberId"
+            element={<PrivateRoute component={<MyPharm />} />}
+          />
           <Route path="chart" element={<Chart />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </div>
   );
 }
 

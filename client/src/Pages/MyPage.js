@@ -79,27 +79,27 @@ const MyPage = () => {
   const toggleHandler = () => {
     setToggleOn(!toggleOn);
   };
-  const [rvList, setRvList] = useState([
-    {
-      reviewImg: '',
-      reviewText: `nforce onClick is accompanied by at least one of the following:
-      onKeyUp, onKeyDown, onKeyPress. Coding for the keyboard is
-      important for users with physical disabilities who cannot use a
-      mouse, AT compatibility, and screenreader users. This does not
-      apply for interactive or hidden elements. Enforce onClick is
-      accompanied by at least one of the following: onKeyUp,`,
-      reviewTag: '',
-      reviewStretch: false,
-    },
-    {
-      reviewImg: '',
-      reviewText: '22222222',
-      reviewTag: '',
-      reviewStretch: false,
-    },
-  ]);
+  // const [rvList, setRvList] = useState([
+  //   {
+  //     reviewImg: '',
+  //     reviewText: `nforce onClick is accompanied by at least one of the following:
+  //     onKeyUp, onKeyDown, onKeyPress. Coding for the keyboard is
+  //     important for users with physical disabilities who cannot use a
+  //     mouse, AT compatibility, and screenreader users. This does not
+  //     apply for interactive or hidden elements. Enforce onClick is
+  //     accompanied by at least one of the following: onKeyUp,`,
+  //     reviewTag: '',
+  //     reviewStretch: false,
+  //   },
+  //   {
+  //     reviewImg: '',
+  //     reviewText: '22222222',
+  //     reviewTag: '',
+  //     reviewStretch: false,
+  //   },
+  // ]);
   const moreReview = id => {
-    setRvList(reviewList =>
+    setMyReviewList(reviewList =>
       reviewList.map((item, idx) =>
         idx === id ? { ...item, reviewStretch: !item.reviewStretch } : item,
       ),
@@ -122,18 +122,17 @@ const MyPage = () => {
     // 나의 리뷰 데이터 받아오기
     axios
       .get(
-        `${process.env.REACT_APP_API_URL}/pp/reviews/medicines/${memberId}?page=${currentPage}&size=${PER_PAGE}`,
+        `${process.env.REACT_APP_API_URL}/pp/reviews/members/${memberId}?page=${currentPage}&size=${PER_PAGE}`,
       )
       .then(res => {
         console.log(res);
         setMyReviewList(res.data.data);
-        console.log(myReviewList);
         setTotalLength(res.data.pageInfo.totalElements);
       })
       .catch(err => {
         console.log(err);
       });
-  }, [myPharmUpdate]);
+  }, [myPharmUpdate, currentPage]);
 
   return (
     <>
@@ -207,7 +206,7 @@ const MyPage = () => {
             ) : (
               <MypageTabContent>
                 <ReviewList>
-                  {rvList.map((item, idx) => (
+                  {myReviewList.map((item, idx) => (
                     <ReviewItem
                       key={idx}
                       className={
@@ -226,15 +225,17 @@ const MyPage = () => {
                           <img src="https://picsum.photos/300/200" alt="user" />
                         </UserImage>
                         <UserInputs>
-                          <span className="username">약먹기시러</span>
-                          <span className="writedate">2023-09-13</span>
+                          <span className="username">{item.memberName}</span>
+                          <span className="writedate">
+                            {item.lastModifiedAt}
+                          </span>
 
                           <div className="textarea">
                             {item.reviewImg ? (
-                              <img src={item.reviewImg.preview_URL} alt="dd" />
+                              <img src={item.reviewImg[0]} alt="dd" />
                             ) : null}
 
-                            {item.reviewText}
+                            {item.reviewContent}
                           </div>
                         </UserInputs>
                       </ReviewContent>

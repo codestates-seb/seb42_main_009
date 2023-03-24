@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-// import { BiSearchAlt } from 'react-icons/bi';
-import { useIsLoginStore } from '../Stores/loginStore';
+import { BiSearchAlt } from 'react-icons/bi';
+import { useIsLoginStore, useIsSocialLoginStore } from '../Stores/loginStore';
 import {
   HeaderWrap,
   Flexbox,
@@ -21,12 +21,13 @@ import { useUserInfoStore } from '../Stores/userInfoStore';
 const Header = () => {
   const navigate = useNavigate();
   const { isLogin, setIsLogin } = useIsLoginStore(state => state);
-  // const [searchOn, setSearchOn] = useState(false);
+  const { setIsSocialLogin } = useIsSocialLoginStore(state => state);
+  const [searchOn, setSearchOn] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { userInfo } = useUserInfoStore(state => state);
-  // const searchOpen = () => {
-  //   setSearchOn(!searchOn);
-  // };
+  const { userInfo, setUserInfo } = useUserInfoStore(state => state);
+  const searchOpen = () => {
+    setSearchOn(!searchOn);
+  };
   const tempLogin = () => {
     // setIsLogin(!isLogin);
     navigate('/');
@@ -41,12 +42,15 @@ const Header = () => {
   ];
   const logoutHandler = () => {
     setIsLogin(false);
+    setIsSocialLogin(false);
+    setUserInfo({});
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('KAKAO_accessToken');
     localStorage.removeItem('NAVER_accessToken');
     localStorage.removeItem('accessToken_expiresAt');
     localStorage.removeItem('refreshToken_expiresAt');
+    navigate('/');
   };
 
   return (
