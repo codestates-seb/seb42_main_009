@@ -22,7 +22,7 @@ import Search from '../components/Search';
 const List = () => {
   const URI = process.env.REACT_APP_API_URL;
   const [itemList, setItemList] = useState([]);
-  const { searchText } = useSearchTextStore(state => state);
+  const { searchText, setSearchTxt } = useSearchTextStore(state => state);
   const { searchSelected } = useSearchSelectedStore(state => state);
   const { searchApi } = useSearchApiStore(state => state);
   const navigate = useNavigate();
@@ -71,6 +71,8 @@ const List = () => {
             setItemList(res.data.data);
             setTotalLength(res.data.pageInfo.totalElements);
           }
+          // 검색 후 검색 기록 삭제
+          setSearchTxt('');
         })
         .catch(err => {
           console.log(err);

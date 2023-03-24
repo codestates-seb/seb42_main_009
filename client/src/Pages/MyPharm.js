@@ -27,39 +27,38 @@ const MyPharm = () => {
   const { myPharmUpdate, setMyPharmUpdate } = useMyPharmUpdateStore(
     state => state,
   );
-  const [data] = useState([
-    {
-      doseId: 1,
-      memberId,
-      medicineId: 1,
-      medicineName: '활명수',
-      doseMount: '1개',
-      doseNumber: 3,
-      doseTimes: ['9:00', '13:00', '18:00'],
-    },
-    {
-      doseId: 2,
-      memberId,
-      medicineId: 11,
-      medicineName: '세나서트2밀리그람질정',
-      doseMount: '2캡슐',
-      doseNumber: 2,
-      doseTimes: ['9:00', '18:00'],
-    },
-  ]);
+
+  // 차트에 들어갈 data 정제
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     setTimeout(() => {
       axios
         .get(`${process.env.REACT_APP_API_URL}/pp/doses/info/${memberId}`)
         .then(res => {
-          console.log(res.data);
           setMyPharmList(res.data);
+          const resList = res.data;
+          console.log(resList);
+          const chartList = [];
+          resList.forEach(item => {
+            const tiemTableList = item.doseTimes.split(', ');
+            tiemTableList.forEach(timeTable => {
+              const timeTableNumber = Number(timeTable.slice(0, 2));
+              console.log(chartData);
+              chartList.push({
+                x: item.medicineName,
+                y: [timeTableNumber, timeTableNumber + 1],
+              });
+            });
+          });
+          setChartData(chartList);
           setMyPharmUpdate(false);
         })
         .catch(err => console.log(err));
     }, 500);
   }, [myPharmUpdate]);
+
+  console.log(chartData);
 
   return (
     <>
@@ -71,7 +70,7 @@ const MyPharm = () => {
         {modalOpen ? <MyPharmModal setModalOpen={setModalOpen} /> : null}
 
         <MyPillSection>
-          {data.length === 0 ? (
+          {myPharmList.length === 0 ? (
             <DefaultNone>복용하고 있는 약을 입력해주세요.</DefaultNone>
           ) : (
             <MyPillList>
@@ -99,24 +98,7 @@ const MyPharm = () => {
           series={[
             {
               name: '시간표',
-              data: [
-                {
-                  x: '활명수',
-                  y: [9, 10.5],
-                },
-                {
-                  x: '세나서트',
-                  y: [13, 14.5],
-                },
-                {
-                  x: '활명수',
-                  y: [18, 19.5],
-                },
-                {
-                  x: '세나서트',
-                  y: [3, 4.5],
-                },
-              ],
+              data: chartData,
             },
           ]}
           options={{
