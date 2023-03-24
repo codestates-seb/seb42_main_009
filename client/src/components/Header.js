@@ -122,7 +122,7 @@ const Header = () => {
                 width="80px"
                 onClick={() => {
                   panelOpen();
-                  navigate(`/mypage/${userInfo.memberId}`)
+                  navigate(`/mypage/${userInfo.memberId}`);
                 }}
               >
                 My Page

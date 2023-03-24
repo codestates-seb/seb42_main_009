@@ -6,7 +6,7 @@ export const ContentList = styled.div`
   align-items: flex-start;
   flex-wrap: wrap;
   margin-top: 80px;
-  @media (max-width: 768px){
+  @media (max-width: 768px) {
     margin-top: 50px;
   }
 `;

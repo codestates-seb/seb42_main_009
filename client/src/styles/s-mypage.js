@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
 export const Flexbox = styled.div`
-  display: flex; justify-content: space-between; align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 `;
 export const FieldTooltip = styled.div`
   position: relative;

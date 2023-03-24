@@ -143,7 +143,7 @@ const SwiperTxtBtn = styled.button`
   }
 `;
 
-const Slide = ({clickToScroll}) => {
+const Slide = ({ clickToScroll }) => {
   SwiperCore.use([Navigation]);
   SwiperCore.use([Autoplay]);
   const [swiper, setSwiper] = useState(null);
@@ -179,7 +179,9 @@ const Slide = ({clickToScroll}) => {
                   <p>제품명과 성분으로 복용 중인 약을 검색해보세요.</p>
                   <p>복용방법과 주의사항, 보관법까지 알려드려요.</p>
                 </SwiperTxtBox>
-                <SwiperTxtBtn aria-label='section1' onClick={clickToScroll}>더 알아보기</SwiperTxtBtn>
+                <SwiperTxtBtn aria-label="section1" onClick={clickToScroll}>
+                  더 알아보기
+                </SwiperTxtBtn>
               </SwiperTxt>
             </SwiperContentBox>
           </SwiperContent>
@@ -199,7 +201,9 @@ const Slide = ({clickToScroll}) => {
                   <p>내가 복용중인 의약품을 등록하면</p>
                   <p>복용 시간을 잊지 않도록 알림을 드려요.</p>
                 </SwiperTxtBox>
-                <SwiperTxtBtn aria-label='section2' onClick={clickToScroll}>더 알아보기</SwiperTxtBtn>
+                <SwiperTxtBtn aria-label="section2" onClick={clickToScroll}>
+                  더 알아보기
+                </SwiperTxtBtn>
               </SwiperTxt>
             </SwiperContentBox>
           </SwiperContent>
@@ -219,7 +223,9 @@ const Slide = ({clickToScroll}) => {
                   <p>pharmpalm 사용자가 많이 복용하는 의약품을</p>
                   <p>차트 데이터로 한눈에 확인할 수 있어요.</p>
                 </SwiperTxtBox>
-                <SwiperTxtBtn aria-label='section3' onClick={clickToScroll}>더 알아보기</SwiperTxtBtn>
+                <SwiperTxtBtn aria-label="section3" onClick={clickToScroll}>
+                  더 알아보기
+                </SwiperTxtBtn>
               </SwiperTxt>
             </SwiperContentBox>
           </SwiperContent>
