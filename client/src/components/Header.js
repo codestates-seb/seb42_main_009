@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { BiSearchAlt } from 'react-icons/bi';
 import { useIsLoginStore, useIsSocialLoginStore } from '../Stores/loginStore';
 import {
   HeaderWrap,
@@ -22,12 +21,8 @@ const Header = () => {
   const navigate = useNavigate();
   const { isLogin, setIsLogin } = useIsLoginStore(state => state);
   const { setIsSocialLogin } = useIsSocialLoginStore(state => state);
-  const [searchOn, setSearchOn] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { userInfo, setUserInfo } = useUserInfoStore(state => state);
-  const searchOpen = () => {
-    setSearchOn(!searchOn);
-  };
   const tempLogin = () => {
     // setIsLogin(!isLogin);
     navigate('/');

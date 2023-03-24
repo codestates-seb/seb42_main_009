@@ -8,18 +8,6 @@ import naverLoginImage from '../images/naver_login.png';
 import Input from '../components/Ui/Input';
 import { HeaderBtn } from '../styles/s-header';
 
-// const KAKAO_REST_API_KEY = '46d7b3692a51eff3138a1580dccdd6c0';
-// const KAKAO_REDIRECT_URI = 'http://localhost:3000/auth/kakao/callback';
-// // const KAKAO_S3_REDIRECT_URI =
-// //   'http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/auth/kakao/callback';
-
-// const NAVER_CLIENT_ID = 'xycgRfAt8xXQwhRJjvno';
-// const NAVER_REDIRECT_URI = 'http://localhost:3000/auth/naver/callback';
-// // const NAVER_S3_REDIRECT_URI =
-// //   'http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/auth/naver/callback';
-// const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
-// const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=STRING&redirect_uri=${NAVER_REDIRECT_URI}`;
-
 const Login = () => {
   const navigate = useNavigate();
   const { loginInfo, setLoginInfo } = useLoginInfoStore(state => state);
