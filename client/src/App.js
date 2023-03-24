@@ -80,6 +80,8 @@ function App() {
           console.log(res);
           setUserInfo(res.data.data);
           setIsLogin(true);
+          sessionStorage.setItem('isLogin', true);
+          sessionStorage.setItem('userInfo', JSON.stringify(res.data.data));
         })
         .catch(err => {
           if (err.response) {
@@ -94,7 +96,6 @@ function App() {
       .get(`${process.env.REACT_APP_API_URL}/auth/kakao/callback?code=${code}`)
       .then(res => {
         localStorage.setItem('KAKAO_accessToken', res.data.access_token);
-
         setTimeout(() => {
           axios
             .get(
@@ -113,6 +114,14 @@ function App() {
             .then(response => {
               console.log(response);
               setUserInfo({ ...response.data.data, socialLogin: true });
+              sessionStorage.setItem('isLogin', true);
+              sessionStorage.setItem(
+                'userInfo',
+                JSON.stringify({
+                  ...response.data.data,
+                  socialLogin: true,
+                }),
+              );
               setIsLogin(true);
               navigate(`/`);
             })
@@ -154,6 +163,14 @@ function App() {
               console.log(response);
               setUserInfo({ ...response.data.data, socialLogin: true });
               setIsLogin(true);
+              sessionStorage.setItem('isLogin', true);
+              sessionStorage.setItem(
+                'userInfo',
+                JSON.stringify({
+                  ...response.data.data,
+                  socialLogin: true,
+                }),
+              );
               // setIsSocialLogin(true);
               navigate('/');
             })
@@ -171,6 +188,12 @@ function App() {
     const authorizationCode = url.searchParams.get('code');
 
     console.log(url.pathname);
+
+    if (sessionStorage.getItem('isLogin')) {
+      setIsLogin(true);
+      setUserInfo(JSON.parse(sessionStorage.getItem('userInfo')));
+    }
+
     if (url.pathname.indexOf('kakao') !== -1) {
       kakaoAuthHandler(authorizationCode);
     } else if (url.pathname.indexOf('naver') !== -1) {
