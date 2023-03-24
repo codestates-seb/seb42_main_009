@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+export const Flexbox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
 export const FieldTooltip = styled.div`
   position: relative;
   margin-left: 15px;
@@ -9,9 +14,8 @@ export const FieldTooltip = styled.div`
   p {
     position: absolute;
     width: max-content;
-    left: calc(100% + 10px);
-    top: 50%;
-    transform: translateY(-50%);
+    right: calc(100% + 10px);
+    bottom: 30px;
     opacity: 0;
     visibility: hidden;
     background: var(--nightbl);
@@ -27,7 +31,6 @@ export const FieldTooltip = styled.div`
     p {
       left: initial;
       right: 0;
-      top: calc(100% + 10px);
       transform: none;
     }
   }

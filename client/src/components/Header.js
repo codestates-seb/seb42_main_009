@@ -7,7 +7,7 @@ import {
   Flexbox,
   Logo,
   Menu,
-  Search,
+  // Search,
   ButtonWrap,
   HeaderBtn,
   MobileBtn,
@@ -39,7 +39,6 @@ const Header = () => {
     { title: '의약품 조회', linkSrc: '/list' },
     { title: '내 약 관리', linkSrc: `/mypharm/${userInfo.memberId}` },
     { title: '차트데이터', linkSrc: '/chart' },
-    { title: 'NEWS', linkSrc: '/' },
   ];
   const logoutHandler = () => {
     setIsLogin(false);
@@ -70,12 +69,12 @@ const Header = () => {
           </Menu>
         </Flexbox>
         <Flexbox flexjc="flex-end">
-          <Search className={searchOn ? 'active' : null}>
+          {/* <Search className={searchOn ? 'active' : null}>
             <input type="text" />
             <button onClick={searchOpen}>
               <BiSearchAlt />
             </button>
-          </Search>
+          </Search> */}
           {isLogin ? (
             <ButtonWrap>
               <HeaderBtn
@@ -125,7 +124,10 @@ const Header = () => {
                 background="#fff"
                 color="var(--mainbl)"
                 width="80px"
-                onClick={() => navigate(`/mypage/${userInfo.memberId}`)}
+                onClick={() => {
+                  panelOpen();
+                  navigate(`/mypage/${userInfo.memberId}`);
+                }}
               >
                 My Page
               </HeaderBtn>

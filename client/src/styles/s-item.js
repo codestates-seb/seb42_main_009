@@ -28,6 +28,7 @@ export const ItemInfoTable = styled.ul`
       line-height: 20px;
       padding: 15px 10px;
       border-bottom: 1px solid var(--lightbl);
+      word-break: keep-all;
       @media (max-width: 768px) {
         padding: 10px;
       }
@@ -192,6 +193,16 @@ export const ReviewImage = styled.div`
   border: 1px dashed var(--bl-2);
   border-radius: 6px;
   overflow: auto;
+  > label {
+  }
+  > input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
 `;
 export const ReviewText = styled.textarea`
   margin-top: 15px;
@@ -264,7 +275,7 @@ export const ItemWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-top: 50px;
+  margin-top: 80px;
   @media (max-width: 768px) {
     display: block;
     margin-top: 30px;

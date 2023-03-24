@@ -23,20 +23,20 @@ const List = () => {
   const URI = process.env.REACT_APP_API_URL;
   const [itemList, setItemList] = useState([]);
   const { searchText, setSearchTxt } = useSearchTextStore(state => state);
+  const navigate = useNavigate();
   const { searchSelected } = useSearchSelectedStore(state => state);
   const { searchApi } = useSearchApiStore(state => state);
-  const navigate = useNavigate();
+  const [itemList, setItemList] = useState([]);
   // 1. currentPage 초기값은 0으로 설정
   const [currentPage, setCurrentPage] = useState(1);
   const [totalLength, setTotalLength] = useState(0);
 
-  const PER_PAGE = 8;
+  const PER_PAGE = 16;
   const pageCount = Math.ceil(totalLength / PER_PAGE);
 
   const handlerPageClick = event => {
     setCurrentPage(event.selected + 1);
   };
-
   const handleImageError = e => {
     e.target.src = '/pharmpalm.png';
   };
