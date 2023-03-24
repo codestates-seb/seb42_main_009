@@ -120,7 +120,10 @@ const Header = () => {
                 background="#fff"
                 color="var(--mainbl)"
                 width="80px"
-                onClick={() => navigate(`/mypage/${userInfo.memberId}`)}
+                onClick={() => {
+                  panelOpen();
+                  navigate(`/mypage/${userInfo.memberId}`)
+                }}
               >
                 My Page
               </HeaderBtn>
