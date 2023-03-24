@@ -5,7 +5,10 @@ export const ContentList = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   flex-wrap: wrap;
-  margin-top: 50px;
+  margin-top: 80px;
+  @media (max-width: 768px){
+    margin-top: 50px;
+  }
 `;
 export const ContentBox = styled.div`
   position: relative;
@@ -74,13 +77,14 @@ export const ContentTit = styled.h3`
 export const ContentText = styled.div`
   width: 100%;
   overflow: hidden;
-  font-size: var(--fz-sm);
+  font-size: var(--fz-base);
   line-height: 20px;
   display: -webkit-box;
   text-overflow: ellipsis;
   overflow: hidden;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  word-break: keep-all;
   @media (max-width: 768px) {
     -webkit-line-clamp: 3;
   }

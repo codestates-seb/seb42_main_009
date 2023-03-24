@@ -30,7 +30,7 @@ const List = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalLength, setTotalLength] = useState(0);
 
-  const PER_PAGE = 8;
+  const PER_PAGE = 16;
   const pageCount = Math.ceil(totalLength / PER_PAGE);
 
   const handlerPageClick = event => {
