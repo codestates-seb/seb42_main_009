@@ -45,6 +45,10 @@ const Header = () => {
     localStorage.removeItem('NAVER_accessToken');
     localStorage.removeItem('accessToken_expiresAt');
     localStorage.removeItem('refreshToken_expiresAt');
+
+    // 세션 스토리지 삭제
+    sessionStorage.removeItem('isLogin');
+    sessionStorage.removeItem('userInfo');
     navigate('/');
   };
 
