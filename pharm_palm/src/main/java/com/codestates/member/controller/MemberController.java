@@ -1,9 +1,7 @@
 package com.codestates.member.controller;
 
 import com.codestates.auth.dto.ClaimsToMember;
-import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.auth.utils.JwtToMemberInfoUtils;
-import com.codestates.dto.MultiResponseDto;
 import com.codestates.dto.SingleResponseDto;
 import com.codestates.member.dto.MemberPatchDto;
 import com.codestates.member.dto.MemberPostDto;
@@ -12,21 +10,16 @@ import com.codestates.member.entity.Member;
 import com.codestates.member.mapper.MemberMapper;
 import com.codestates.member.service.MemberService;
 import com.codestates.utils.UriCreator;
-import com.mysql.cj.log.Log;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
@@ -157,16 +150,4 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-
-//    @GetMapping
-//    public ResponseEntity getMembers(@Positive @RequestParam int page,
-//                                     @Positive @RequestParam int size) {
-//        Page<Member> pageMembers = memberService.findMembers(page -1, size);
-//        List<Member> members = pageMembers.getContent();
-//
-//        return new ResponseEntity<>(
-//                new MultiResponseDto<>(
-//                        mapper.membersToMemberResponseDto(members), pageMembers), HttpStatus.OK);
-//                        mapper.membersToMemberResponseDtos(members), pageMembers), HttpStatus.OK);
-//    }
 }

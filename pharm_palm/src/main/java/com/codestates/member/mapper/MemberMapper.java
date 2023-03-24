@@ -17,8 +17,6 @@ public interface MemberMapper {
     Member memberPostDtoToMember(MemberPostDto memberPostDto);
     Member memberPatchDtoToMember(MemberPatchDto memberPatchDto);
     MemberResponseDto memberToMemberResponseDto(Member member);
-//    List<MemberResponseDto> membersToMemberResponseDto(List<Member> members);
-//    List<MemberResponseDto> membersToMemberResponses(List<Member> members);
 
 
     default MemberResponseDto memberToMemberResponse(Member member) {

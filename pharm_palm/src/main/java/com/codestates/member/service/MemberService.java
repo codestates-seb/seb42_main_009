@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -68,9 +67,6 @@ public class MemberService {
 
         Optional.ofNullable(member.getMemberAge())
                 .ifPresent(findMember::setMemberAge);
-
-//        Optional.ofNullable(member.getMemberState())
-//                .ifPresent(findMember::setMemberState);
 
         return memberRepository.save(findMember);
     }
