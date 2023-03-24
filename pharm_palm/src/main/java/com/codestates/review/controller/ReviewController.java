@@ -74,7 +74,7 @@ public class ReviewController {
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
                         mapper.reviewToReviewResponseDtos(reviewService.findMedicineReviews(medicineId, page - 1, size).getContent())
-                        , reviewService.findReviews(page - 1, size)), HttpStatus.OK);
+                        , reviewService.findMemberReviews(medicineId,page - 1, size)), HttpStatus.OK);
     }
 
     @GetMapping("/members/{member-id}")
@@ -84,7 +84,7 @@ public class ReviewController {
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
                         mapper.reviewToReviewResponseDtos(reviewService.findMemberReviews(memberId, page - 1, size).getContent())
-                        , reviewService.findReviews(page - 1, size)), HttpStatus.OK);
+                        , reviewService.findMemberReviews(memberId,page - 1, size)), HttpStatus.OK);
     }
 
     @GetMapping

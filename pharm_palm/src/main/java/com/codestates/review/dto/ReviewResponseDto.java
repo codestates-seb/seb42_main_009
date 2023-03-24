@@ -19,7 +19,6 @@ public class ReviewResponseDto {
     private Long memberId;
     private String memberName;
     private Long medicineId;
-    private Boolean oauthMember;
     private String createdAt;
     private String lastModifiedAt;
     private List<Disease> diseases;

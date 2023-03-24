@@ -2,6 +2,7 @@ package com.codestates.review.entity;
 
 import com.codestates.audit.Auditable;
 
+import com.codestates.medicine.entity.Medicine;
 import com.codestates.member.entity.Member;
 
 import com.codestates.disease.entity.Disease;
@@ -9,6 +10,8 @@ import com.codestates.disease.entity.Disease;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
@@ -40,6 +43,16 @@ public class Review {
 
     @Column
     private Long medicineId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medicine")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Medicine medicine;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Member member;
 
     @Column
     private String createdAt;
