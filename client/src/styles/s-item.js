@@ -194,12 +194,13 @@ export const ReviewImage = styled.div`
   border-radius: 6px;
   overflow: auto;
   > label {
-
   }
   > input {
     position: absolute;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     opacity: 0;
   }
 `;
