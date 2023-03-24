@@ -3,6 +3,7 @@ package com.codestates.member.dto;
 import com.codestates.dose.dto.DoseResponseDto;
 import com.codestates.dose.entity.Dose;
 import com.codestates.member.entity.Member;
+import com.codestates.review.dto.ReviewResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,9 @@ public class MemberResponseDto {
     private String memberGender;
     private String memberAge;
     private String picture;
+    private Boolean oauthMember;
     private Member.MemberState memberState;
     private boolean alarm;
     private List<DoseResponseDto> doses;
+    private List<ReviewResponseDto> review;
 }

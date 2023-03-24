@@ -55,6 +55,8 @@ public class SecurityConfiguration {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .oauth2Login()
+                .and()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling(excep -> {excep.authenticationEntryPoint(new MemberAuthenticationEntryPoint())

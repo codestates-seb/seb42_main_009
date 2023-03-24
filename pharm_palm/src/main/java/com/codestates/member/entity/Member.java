@@ -48,12 +48,8 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Dose> doses = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Review> reviews;
-
-    public void addReview(Review review) {
-        this.reviews.add(review);
-    }
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Review> review;
 
     public void addDose(Dose dose) {
         this.doses.add(dose);

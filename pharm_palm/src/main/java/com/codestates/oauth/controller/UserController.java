@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 // 인증이 안된 사용자들이 출입할 수 있는 경로를 /auth/**허용
 // 그냥 주소가 / 이면 index.jsp 허용
@@ -168,9 +169,18 @@ public class UserController {
         member.setMemberState(Member.MemberState.ACTIVE);
         member.setRoles(List.of("USER"));
         member.setOauthMember(true);
-        memberRepository.save(member);
+        if (!memberRepository.existsByEmail(kakaoAccount.getString("email"))) {
+            memberRepository.save(member);
+        } else {
+            Optional<Member> alreadyMember = memberRepository.findByMemberEmail(kakaoAccount.getString("email"));
+            System.out.println("성공적으로 로그인이 완료되었습니다!");
+            return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(
+                    alreadyMember.get())), HttpStatus.OK);
+        }
+        Optional<Member> signMember = memberRepository.findByMemberEmail(kakaoAccount.getString("email"));
+        System.out.println("성공적으로 회원가입이 완료되었습니다!");
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(
-                member)), HttpStatus.CREATED);
+                signMember.get())), HttpStatus.CREATED);
     }
 
     @GetMapping("/auth/naver/info")
@@ -200,9 +210,18 @@ public class UserController {
         member.setMemberState(Member.MemberState.ACTIVE);
         member.setRoles(List.of("USER"));
         member.setOauthMember(true);
-        memberRepository.save(member);
+        if (!memberRepository.existsByEmail(response.getString("email"))) {
+            memberRepository.save(member);
+        } else {
+            Optional<Member> alreadyMember = memberRepository.findByMemberEmail(response.getString("email"));
+            System.out.println("성공적으로 로그인이 완료되었습니다!");
+            return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(
+                    alreadyMember.get())), HttpStatus.OK);
+        }
+        Optional<Member> signMember = memberRepository.findByMemberEmail(response.getString("email"));
+        System.out.println("성공적으로 회원가입이 완료되었습니다!");
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(
-                member)), HttpStatus.CREATED);
+                signMember.get())), HttpStatus.CREATED);
     }
 
     @GetMapping("/user/updateForm")

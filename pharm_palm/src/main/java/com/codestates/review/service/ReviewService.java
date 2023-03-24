@@ -42,11 +42,8 @@ public class ReviewService {
         review.setMedicineId(medicineId);
         review.setMemberName(member.getMemberName());
         review.setMemberImg(member.getPicture());
-
-        member.addReview(review);
-        memberRepository.save(member);
-
-        medicine.addReview(review);
+        review.setMember(member);
+        review.setMedicine(medicine);
 
         //S3 이미지 업로드
         if (!image.isEmpty()) {
