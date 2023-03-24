@@ -74,6 +74,25 @@ public class MemberController {
         return ResponseEntity.created(location).build();
     }
 
+    @PostMapping("/password/{member-id}")
+    public ResponseEntity checkPassword(@PathVariable("member-id") @Positive long memberId,
+                                        @Valid @RequestBody MemberPatchDto memberPatchDto) {
+        memberPatchDto.setMemberId(memberId);
+        Member member = mapper.memberPatchDtoToMember(memberPatchDto);
+        memberService.passwordCheck(member);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PatchMapping("/password/{member-id}")
+    public ResponseEntity patchPassword(@PathVariable("member-id") @Positive long memberId,
+                                        @Valid @RequestBody MemberPatchDto memberPatchDto) {
+        memberPatchDto.setMemberId(memberId);
+        Member member = mapper.memberPatchDtoToMember(memberPatchDto);
+        memberService.savePassword(member);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+    }
+
     @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
                                       @Valid @RequestBody MemberPatchDto memberPatchDto) {

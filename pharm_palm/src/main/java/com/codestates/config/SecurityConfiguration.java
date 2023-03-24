@@ -1,6 +1,5 @@
 package com.codestates.config;
 
-import com.codestates.AppConfig;
 import com.codestates.auth.filter.JwtAuthenticationFilter;
 import com.codestates.auth.filter.JwtVerificationFilter;
 import com.codestates.auth.handler.MemberAccessDeniedHandler;
@@ -8,15 +7,11 @@ import com.codestates.auth.handler.MemberAuthenticationEntryPoint;
 import com.codestates.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.auth.jwt.JwtTokenizer;
-import com.codestates.auth.refreshToken.repository.RefreshTokenRepository;
+import com.codestates.auth.reissueToken.repository.RefreshTokenRepository;
 import com.codestates.auth.utils.CustomAuthorityUtils;
 
 import com.codestates.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

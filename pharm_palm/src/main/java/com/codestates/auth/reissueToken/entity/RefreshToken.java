@@ -1,4 +1,4 @@
-package com.codestates.auth.refreshToken.entity;
+package com.codestates.auth.reissueToken.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
