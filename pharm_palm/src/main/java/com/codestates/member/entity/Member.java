@@ -8,7 +8,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -32,12 +31,10 @@ public class Member extends Auditable {
     @Column(length = 100)
     private String memberPwd;
 
-    //    @Enumerated(EnumType.STRING)
-//    private MemberGender memberGender = MemberGender.PRIVATE;
-    @Column
+    @Column(length = 10, nullable = false)
     private String memberGender;
 
-    @Column
+    @Column(length = 10, nullable = false)
     private String memberAge;
 
     @Enumerated(EnumType.STRING)
@@ -58,23 +55,9 @@ public class Member extends Auditable {
         }
     }
 
-    //diseaseId 와 medicineId 나중에 추가
-
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    //    public enum MemberGender {
-//        FEMALE("여성"),
-//        MALE("남성"),
-//        PRIVATE("비밀")
-//        ;
-//        @Getter
-//        private String gender;
-//
-//        MemberGender(String gender) {
-//            this.gender = gender;
-//        }
-//    }
     @Column
     private Boolean oauthMember;
 
