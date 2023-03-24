@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { BiSearchAlt } from 'react-icons/bi';
+// import { BiSearchAlt } from 'react-icons/bi';
 import { useIsLoginStore } from '../Stores/loginStore';
 import {
   HeaderWrap,
   Flexbox,
   Logo,
   Menu,
-  Search,
+  // Search,
   ButtonWrap,
   HeaderBtn,
   MobileBtn,
@@ -21,12 +21,12 @@ import { useUserInfoStore } from '../Stores/userInfoStore';
 const Header = () => {
   const navigate = useNavigate();
   const { isLogin, setIsLogin } = useIsLoginStore(state => state);
-  const [searchOn, setSearchOn] = useState(false);
+  // const [searchOn, setSearchOn] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { userInfo } = useUserInfoStore(state => state);
-  const searchOpen = () => {
-    setSearchOn(!searchOn);
-  };
+  // const searchOpen = () => {
+  //   setSearchOn(!searchOn);
+  // };
   const tempLogin = () => {
     // setIsLogin(!isLogin);
     navigate('/');
@@ -38,7 +38,6 @@ const Header = () => {
     { title: '의약품 조회', linkSrc: '/list' },
     { title: '내 약 관리', linkSrc: `/mypharm/${userInfo.memberId}` },
     { title: '차트데이터', linkSrc: '/chart' },
-    { title: 'NEWS', linkSrc: '/' },
   ];
   const logoutHandler = () => {
     setIsLogin(false);
@@ -66,12 +65,12 @@ const Header = () => {
           </Menu>
         </Flexbox>
         <Flexbox flexjc="flex-end">
-          <Search className={searchOn ? 'active' : null}>
+          {/* <Search className={searchOn ? 'active' : null}>
             <input type="text" />
             <button onClick={searchOpen}>
               <BiSearchAlt />
             </button>
-          </Search>
+          </Search> */}
           {isLogin ? (
             <ButtonWrap>
               <HeaderBtn

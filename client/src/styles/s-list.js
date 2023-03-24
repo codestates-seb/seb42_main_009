@@ -107,6 +107,7 @@ export const Pagination = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 50px;
   > ul {
     display: flex;
     justify-content: center;
@@ -115,6 +116,7 @@ export const Pagination = styled.div`
       height: 25px;
       width: 25px;
       display: flex;
+      margin: 0 3px;
       justify-content: center;
       align-items: center;
       > a {
@@ -123,6 +125,7 @@ export const Pagination = styled.div`
         align-items: center;
         width: 100%;
         height: 100%;
+        font-size: 11px;
       }
       &.previous,
       &.next {
