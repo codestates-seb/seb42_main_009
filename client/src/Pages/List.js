@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 import { FaRegThumbsUp } from 'react-icons/fa';
 import {
   ContentList,
@@ -21,15 +21,17 @@ import Banner from '../components/Banner';
 import Search from '../components/Search';
 
 const List = () => {
-  const navigate = useNavigate();
   const URI = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
   const { searchText } = useSearchTextStore(state => state);
   const { searchSelected } = useSearchSelectedStore(state => state);
   const { searchApi } = useSearchApiStore(state => state);
   const [itemList, setItemList] = useState([]);
+  // 1. currentPage 초기값은 0으로 설정
   const [currentPage, setCurrentPage] = useState(1);
   const [totalLength, setTotalLength] = useState(0);
   const [totalPageCount, setTotalPageCount] = useState(0);
+
   const PER_PAGE = 16;
   const pageCount = Math.ceil(totalLength / PER_PAGE);
 
@@ -40,31 +42,30 @@ const List = () => {
     e.target.src = '/pharmpalm.png';
   };
 
-  useEffect(() => {
+  useEffect(() => { // FIX: async 삭제 
     if (searchText === '') {
-      axios
+      axios // FIX: await 삭제 
         .get(`${URI}/pp/medicines?page=${currentPage}&size=${PER_PAGE}`)
         .then(res => {
           console.log(res);
           setItemList(res.data.data);
           setTotalLength(res.data.pageInfo.totalElements);
-          setTotalPageCount(res.data.pageInfo.totalPages);
-          setLoading(!(page === res.data.pageInfo.totalPages));
-          console.log('dfasdfas >', res.data.pageInfo.totalPages);
+          setTotalPageCount(res.data.pageInfo.totalPages); // FIX: setLoading 삭제
+          console.log('dfasdfas >', res.data.pageInfo.totalPages)
         })
         .catch(err => {
           console.log(err);
         });
-    } else {
-      console.log('검색 성공');
-      console.log(searchText);
-      axios
+      } else {
+        console.log('검색 성공');
+        console.log(searchText);
+        axios // FIX: await 삭제 
         .get(
           `${URI}/pp/medicines/${searchSelected}?${searchApi}=${searchText}&page=${currentPage}&size=${PER_PAGE}`,
-        )
-        .then(res => {
-          // 검색한 아이템이 없으면, 빈 배열 출력
-          if (!res.data) {
+          )
+          .then(res => {
+            // 검색한 아이템이 없으면, 빈 배열 출력
+            if (!res.data) {
             setItemList([]);
             setTotalLength(0);
             setTotalPageCount(0);
@@ -73,19 +74,20 @@ const List = () => {
           else {
             setItemList(res.data.data);
             setTotalLength(res.data.pageInfo.totalElements);
-            setTotalPageCount(res.data.pageInfo.totalPages);
-            setLoading(!(page === res.data.pageInfo.totalPages));
+            setTotalPageCount(res.data.pageInfo.totalPages); // FIX: setLoading 삭제
           }
         })
         .catch(err => {
           console.log(err);
         });
-    }
-  }, [currentPage, searchText, searchSelected]);
+      }
+    }, [currentPage, searchText, searchSelected]);
+    
+    const itemOnClickHandler = medicineId => {
+      navigate(`/item/${medicineId}`);
+      // window.location.reload();
+    };
 
-  const itemOnClickHandler = medicineId => {
-    navigate(`/item/${medicineId}`);
-  };
 
   // 무한스크롤
   const [pins, setPins] = useState([]);
@@ -102,87 +104,84 @@ const List = () => {
     };
   });
 
-  const pageEnd = useRef();
-
-  const loadMore = () => {
-    console.log(totalPageCount);
-    console.log(page);
-    if (totalPageCount !== 0 && totalPageCount > page) {
-      setPage(prev => prev + 1);
-    }
-  };
-  const submitPageHandler = () => {
-    setCurrentPage(1);
-    setPage(1);
-  };
-  useEffect(() => {
-    fetchPins(page);
-  }, [page, searchText, searchSelected]);
+  const pageEnd = useRef()
+  const loadMore=()=>{
+    setPage(prev=>prev+1) // FIX: if 문 불필요해서 삭제
+  }
+  const submitPageHandler=()=>{
+    setCurrentPage(1)
+    setPage(1)
+  }
+  useEffect(()=>{
+    fetchPins(page)
+  },[page,searchText,searchSelected])
 
   const fetchPins = async page => {
-    if (searchText === '') {
-      console.log('aaaa >>> ', page);
+    if(searchText===''){
+      console.log('aaaa >>> ', page)
       await axios
-        .get(`${URI}/pp/medicines?page=${page}&size=6`)
-        .then(res => {
+      .get(`${URI}/pp/medicines?page=${page}&size=6`)
+      .then(res=>{
+        setTotalPageCount(res.data.pageInfo.totalPages);
+        if(page === 1) {
+          setPins(prev => [...res.data.data]);
+        } else {
+          setPins(prev => [...prev, ...res.data.data]);
+        }
+        setLoading(!(page === res.data.pageInfo.totalPages)); // FIX: setLoading 추가
+        console.log('성공')
+      })
+      .catch(err=>console.log(err))
+    }else{
+      console.log('aaaa >>> ', page)
+      console.log('aaaa >>> ', totalPageCount)
+      await axios
+      .get(`${URI}/pp/medicines/${searchSelected}?${searchApi}=${searchText}&page=${page}&size=6`)
+      .then(res=>{
+        console.log('검색어입력했을때성공했는지')
+        if(!res.data){
+          setPins([])
+        }else{
+          console.log('fetchpin>>>', res.data.pageInfo.totalPages)
           setTotalPageCount(res.data.pageInfo.totalPages);
-          if (page === 1) {
+          if(page === 1) {
             setPins(prev => [...res.data.data]);
           } else {
             setPins(prev => [...prev, ...res.data.data]);
           }
-          console.log('성공');
-        })
-        .catch(err => console.log(err));
-    } else {
-      console.log('aaaa >>> ', page);
-      console.log('aaaa >>> ', totalPageCount);
-      await axios
-        .get(
-          `${URI}/pp/medicines/${searchSelected}?${searchApi}=${searchText}&page=${page}&size=6`,
-        )
-        .then(res => {
-          console.log('검색어입력했을때성공했는지');
-          if (!res.data) {
-            setPins([]);
-          } else {
-            console.log('fetchpin>>>', res.data.pageInfo.totalPages);
-            setTotalPageCount(res.data.pageInfo.totalPages);
-            if (page === 1) {
-              setPins(prev => [...res.data.data]);
-            } else {
-              setPins(prev => [...prev, ...res.data.data]);
-            }
 
-            setLoading(!(page === res.data.pageInfo.totalPages));
-          }
-        })
-        .catch(err => console.log(err));
+          setLoading(!(page === res.data.pageInfo.totalPages));
+        }
+      })
+      .catch(err=>console.log(err))
     }
     // setLoading(true);
-  };
+  }
 
-  useEffect(() => {
+	useEffect(() => {
     if (windowSize <= 768) {
+
       let observer;
       if (loading) {
-        observer = new IntersectionObserver(
-          entries => {
-            if (entries[0].isIntersecting) {
-              loadMore();
-            }
-          },
-          {
-            threshold: 0.4,
-          },
-        );
+        observer = new IntersectionObserver(entries => {
+          if (entries[0].isIntersecting) {
+            loadMore();
+          }
+        }, {
+          threshold: 0.4,
+        });
         observer.observe(pageEnd.current);
       }
       return () => observer && observer.disconnect();
     }
   }, [loading]);
 
-  console.log(page);
+
+  console.log(page)
+
+
+
+
 
   return (
     <>
@@ -191,55 +190,58 @@ const List = () => {
       </Banner>
       <div className="bodywrap">
         <Search submitPageHandler={submitPageHandler} />
-        {windowSize > 768 ? (
-          <ContentList>
-            {itemList.map((item, idx) => (
-              <ContentBox
-                key={idx}
-                onClick={() => itemOnClickHandler(item.medicineId)}
-              >
-                <img
-                  src={item.medicineImg}
-                  alt={item.medicineName}
-                  onError={handleImageError}
-                />
-                <ContentTit>{item.medicineName}</ContentTit>
-                <ContentText>{item.medicineUse}</ContentText>
-                <LikeCount>
-                  <FaRegThumbsUp /> <p>{item.medicineLike}</p>
-                </LikeCount>
-              </ContentBox>
-            ))}
-          </ContentList>
-        ) : (
-          <ContentList>
-            {pins.map((item, idx) => (
-              <ContentBox
-                key={idx}
-                onClick={() => itemOnClickHandler(item.medicineId)}
-              >
-                <img
-                  src={item.medicineImg}
-                  alt={item.medicineName}
-                  onError={handleImageError}
-                />
-                <ContentTit>{item.medicineName}</ContentTit>
-                <ContentText>{item.medicineUse}</ContentText>
-                <LikeCount>
-                  <FaRegThumbsUp /> <p>{item.medicineLike}</p>
-                </LikeCount>
-              </ContentBox>
-            ))}
 
-            {loading ? (
-              <div ref={pageEnd} className="page-end">
-                <span>{}</span>
-                <span>{}</span>
-                <span>{}</span>
-              </div>
-            ) : null}
-          </ContentList>
-        )}
+        {
+          windowSize > 768 ? (
+            <ContentList>
+              {itemList.map((item, idx) => (
+                <ContentBox
+                  key={idx}
+                  onClick={() => itemOnClickHandler(item.medicineId)}
+                >
+                  <img
+                    src={item.medicineImg}
+                    alt={item.medicineName}
+                    onError={handleImageError}
+                  />
+                  <ContentTit>{item.medicineName}</ContentTit>
+                  <ContentText>{item.medicineUse}</ContentText>
+                  <LikeCount>
+                    <FaRegThumbsUp /> <p>{item.medicineLike}</p>
+                  </LikeCount>
+                </ContentBox>
+              ))}
+            </ContentList>
+          ) : (
+            <ContentList>
+              {pins.map((item, idx) => (
+                <ContentBox
+                  key={idx}
+                  onClick={() => itemOnClickHandler(item.medicineId)}
+                >
+                  <img
+                    src={item.medicineImg}
+                    alt={item.medicineName}
+                    onError={handleImageError}
+                  />
+                  <ContentTit>{item.medicineName}</ContentTit>
+                  <ContentText>{item.medicineUse}</ContentText>
+                  <LikeCount>
+                    <FaRegThumbsUp /> <p>{item.medicineLike}</p>
+                  </LikeCount>
+                </ContentBox>
+              ))}
+              {loading ? (
+                <div ref={pageEnd} className="page-end">
+                  <span>{}</span>
+                  <span>{}</span>
+                  <span>{}</span>
+                </div>
+              ) : null}
+            </ContentList>
+          )
+        }
+
 
         {/* Pagination */}
         <Pagination>
@@ -256,7 +258,7 @@ const List = () => {
             // containerClassName="pagination"
             subContainerClassName=""
             activeClassName="active"
-            forcePage={currentPage - 1}
+            forcePage={currentPage-1}
           />
         </Pagination>
       </div>
