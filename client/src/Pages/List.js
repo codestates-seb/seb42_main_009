@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable */
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { useNavigate } from 'react-router-dom';
@@ -82,6 +83,65 @@ const List = () => {
     // window.location.reload();
   };
 
+
+  // 무한스크롤
+  const [pins, setPins] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const pageEnd = useRef()
+  const loadMore=()=>{
+    setPage(prev=>prev+1)
+  }
+
+  useEffect(()=>{
+    const fetchPins = async page => {
+      if(searchText===''){
+        axios
+        .get(`${URI}/pp/medicines?page=${page}&size=6`)
+        .then(res=>{
+          setPins(prev => [...prev, ...res.data.data]);
+          console.log('성공')
+        })
+        .catch(err=>console.log(err))
+      }else{
+        axios
+        .get(`${URI}/pp/medicines/${searchSelected}?${searchApi}=${searchText}&page=${page}&size=6`)
+        .then(res=>{
+          setPage(0);
+          console.log('검색어입력했을때성공했는지')
+          if(!res.data){
+            setPins([])
+          }else{
+            setPins(prev => [...prev, ...res.data.data]);
+          }
+        })
+        .catch(err=>console.log(err))
+      }
+      setLoading(true);
+    }
+    fetchPins(page)
+  },[page,searchText,searchSelected])
+	useEffect(() => {
+    if (loading) {
+      const observer = new IntersectionObserver(
+        entries => {
+          if (entries[0].isIntersecting) {
+            loadMore();
+          }
+        },
+        { threshold: 1 }
+      );
+      observer.observe(pageEnd.current);
+    }
+  }, [loading]);
+
+
+  console.log(page)
+
+
+
+
+
   return (
     <>
       <Banner>
@@ -89,7 +149,7 @@ const List = () => {
       </Banner>
       <div className="bodywrap">
         <Search />
-        <ContentList>
+        <ContentList className='none-mo'>
           {itemList.map((item, idx) => (
             <ContentBox
               key={idx}
@@ -107,6 +167,28 @@ const List = () => {
               </LikeCount>
             </ContentBox>
           ))}
+        </ContentList>
+        <ContentList className='none-pc'>
+
+          {pins.map((item, idx) => (
+            <ContentBox
+              key={idx}
+              onClick={() => itemOnClickHandler(item.medicineId)}
+            >
+              <img
+                src={item.medicineImg}
+                alt={item.medicineName}
+                onError={handleImageError}
+              />
+              <ContentTit>{item.medicineName}</ContentTit>
+              <ContentText>{item.medicineUse}</ContentText>
+              <LikeCount>
+                <FaRegThumbsUp /> <p>{item.medicineLike}</p>
+              </LikeCount>
+            </ContentBox>
+          ))}
+
+          <div ref={pageEnd} style={{width:'100%', marginTop:'100px', height: '200px', background:'tomato'}} />
         </ContentList>
         {/* Pagination */}
         <Pagination>

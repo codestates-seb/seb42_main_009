@@ -6,8 +6,13 @@ export const ContentList = styled.div`
   align-items: flex-start;
   flex-wrap: wrap;
   margin-top: 80px;
+  .target {display: none;}
+  &.none-pc {display: none;} 
   @media (max-width: 768px) {
     margin-top: 50px;
+    .target {display: block;}
+    &.none-pc {display: flex;}
+    &.none-mo {display: none;}
   }
 `;
 export const ContentBox = styled.div`
@@ -146,5 +151,6 @@ export const Pagination = styled.div`
   }
   @media (max-width: 768px) {
     margin-top: 30px;
+    display: none;
   }
 `;

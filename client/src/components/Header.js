@@ -161,8 +161,8 @@ const Header = () => {
           )}
           <PanelMenu>
             {menuList.map((item, idx) => (
-              <Link to={item.linkSrc}>
-                <button key={idx} onClick={panelOpen}>
+              <Link to={item.linkSrc} key={idx}>
+                <button onClick={panelOpen}>
                   {item.title}
                 </button>
               </Link>

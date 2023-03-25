@@ -35,9 +35,9 @@ const Home = () => {
   useEffect(() => {
     AOS.init({ disable: 'mobile' });
     axios
-      .get(`${URI}/pp/reviews?page=1&size=10`)
+      .get(`${URI}/pp/reviews/random`)
       .then(res => {
-        setReviewArr(res.data.data);
+        setReviewArr(res.data);
       })
       .catch(err => console.log(err));
   }, []);
@@ -225,6 +225,7 @@ const Home = () => {
                 </ReviewCardBox>
               </ReviewCard>
             ))}
+
           </ReviewRow>
         </HomeReview>
       </SectionReview>
