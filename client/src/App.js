@@ -6,6 +6,7 @@ import './styles/variable.css';
 import { GlobalStyle } from './styles/globalStyle';
 import { useIsLoginStore } from './Stores/loginStore';
 import { useUserInfoStore } from './Stores/userInfoStore';
+import { useDiseasesTagsStore } from './Stores/diseasesTagsStore';
 import Header from './components/Header';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
@@ -26,6 +27,7 @@ axios.defaults.withCredentials = true;
 function App() {
   const { setIsLogin } = useIsLoginStore(state => state);
   const { setUserInfo } = useUserInfoStore(state => state);
+  const { setDiseasesTags } = useDiseasesTagsStore(state => state);
   const navigate = useNavigate();
 
   const authHandler = () => {
@@ -202,6 +204,12 @@ function App() {
     } else {
       authHandler();
     }
+
+    // 질병 태그 전체 조회
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/pp/diseases?page=1&size=200`)
+      .then(res => setDiseasesTags(res.data.data))
+      .catch(err => console.log(err));
   }, []);
 
   return (

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { BsFillImageFill } from 'react-icons/bs';
 import { HeaderBtn } from '../styles/s-header';
@@ -101,14 +103,16 @@ const DefaultProfile = styled.div`
 
 const Profile = () => {
   const { userInfo } = useUserInfoStore(state => state);
-  console.log('프로필 컴포넌트');
-  console.log(userInfo);
+  const [changedInfo, setChangedInfo] = useState({});
   const [editMode, setEditMode] = useState(false);
-  const [inputName, setInputName] = useState('');
   const [image, setImage] = useState({
     image_file: '',
     preview_URL: '',
   });
+  // memberId 추출
+  const location = useLocation();
+  const memberId = location.pathname.split('/')[2];
+
   const saveImage = e => {
     e.preventDefault();
     const fileReader = new FileReader();
@@ -127,13 +131,36 @@ const Profile = () => {
   const editModeHandler = () => {
     setEditMode(!editMode);
   };
-  const editNameHandler = e => {
-    const newName = e.target.value;
-    setInputName(newName);
+
+  const submitHandler = () => {
+    const patchData = {
+      memberName: changedInfo.name,
+      memberGender: changedInfo.gender,
+      memberAge: changedInfo.age,
+    };
+    axios
+      .patch(
+        `${process.env.REACT_APP_API_URL}/pp/members/${memberId}`,
+        patchData,
+        {
+          withCredentials: true,
+        },
+      )
+      .then(res => {
+        console.log(res);
+        // 입력값 초기화
+        setChangedInfo({});
+      })
+      .catch(err => console.log(err));
   };
-  const editNameSubmit = e => {
+
+  // Input 정보 처리
+  const handleInputValue = key => e => {
+    setChangedInfo({ ...changedInfo, [key]: e.target.value });
+  };
+  const editInputSubmit = key => e => {
     if (e.key === 'Enter') {
-      setInputName(inputName);
+      setChangedInfo({ ...changedInfo, [key]: e.target.value });
     }
   };
 
@@ -141,6 +168,8 @@ const Profile = () => {
     if (gender === 'male' || gender === '남성') return '남성';
     return '여성';
   };
+
+  console.log(changedInfo);
 
   return (
     <div>
@@ -169,20 +198,58 @@ const Profile = () => {
                 <p>
                   <EditInput
                     type="text"
-                    onChange={e => editNameHandler(e)}
-                    onKeyDown={editNameSubmit}
+                    onChange={handleInputValue('name')}
+                    onKeyDown={editInputSubmit('name')}
                   />
                 </p>
               </li>
               <li>
-                <SmBtn>성별</SmBtn> <p>남성</p>
+                <SmBtn>성별</SmBtn>{' '}
+                <p>
+                  <input
+                    type="radio"
+                    id="남성"
+                    name="gender"
+                    value="남성"
+                    onClick={handleInputValue('gender')}
+                    checked
+                  />
+                  <label htmlFor="남성">남성</label>
+                </p>
+                <p>
+                  <input
+                    type="radio"
+                    id="여성"
+                    name="gender"
+                    value="여성"
+                    onClick={handleInputValue('gender')}
+                  />
+                  <label htmlFor="여성">여성</label>
+                </p>
               </li>
               <li>
-                <SmBtn>나이</SmBtn> <p>생일수정?/연령대따로?</p>
+                <SmBtn>나이</SmBtn>
+                <p>
+                  <select id="age" name="age" onClick={handleInputValue('age')}>
+                    <option value="0-9">10세 미만</option>
+                    <option value="10-19">10대</option>
+                    <option value="20-29">20대</option>
+                    <option value="30-39">30대</option>
+                    <option value="40-49">40대</option>
+                    <option value="50-59">50대</option>
+                    <option value="60-">60세 이상</option>
+                  </select>
+                </p>
               </li>
             </ProfileItem>
 
-            <HeaderBtn onClick={editModeHandler} width="70px">
+            <HeaderBtn
+              onClick={() => {
+                editModeHandler();
+                submitHandler();
+              }}
+              width="70px"
+            >
               수정완료
             </HeaderBtn>
           </ProfileContent>
@@ -211,7 +278,15 @@ const Profile = () => {
               </li>
             </ProfileItem>
             {!userInfo.socialLogin ? (
-              <HeaderBtn onClick={editModeHandler} width="70px">
+              <HeaderBtn
+                onClick={editModeHandler}
+                width="70px"
+                disabled={
+                  changedInfo.name === '' ||
+                  changedInfo.gender === '' ||
+                  changedInfo.age === ''
+                }
+              >
                 정보수정
               </HeaderBtn>
             ) : null}

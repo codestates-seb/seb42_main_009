@@ -1,7 +1,19 @@
+import axios from 'axios';
+import { useEffect } from 'react';
 import ApexCharts from 'react-apexcharts';
 
 const Chart = () => {
   console.log('차트 페이지');
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/pp/doses/gender?gender=남성`)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
   return (
     <>
       <ApexCharts
@@ -15,6 +27,53 @@ const Chart = () => {
           chart: {
             height: 500,
             width: 500,
+          },
+        }}
+      />
+      <ApexCharts
+        className="top10 w-80 h-80"
+        type="donut"
+        series={[44, 55, 13, 33]}
+        options={{
+          chart: {
+            width: 200,
+          },
+        }}
+      />
+      <ApexCharts
+        className="top10 w-80 h-80"
+        type="bar"
+        series={[
+          {
+            data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+          },
+        ]}
+        options={{
+          chart: {
+            width: 200,
+          },
+          plotOptions: {
+            bar: {
+              borderRadius: 4,
+              horizontal: true,
+            },
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          xaxis: {
+            categories: [
+              'South Korea',
+              'Canada',
+              'United Kingdom',
+              'Netherlands',
+              'Italy',
+              'France',
+              'Japan',
+              'United States',
+              'China',
+              'Germany',
+            ],
           },
         }}
       />
