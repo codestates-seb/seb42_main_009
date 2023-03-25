@@ -36,9 +36,8 @@ public class DiseaseController {
     }
 
     @GetMapping
-    public ResponseEntity getDiseases(@Positive @RequestParam int page,
-                                      @Positive @RequestParam int size) {
-        Page<DiseaseResponseDto> diseaseResponses = diseaseService.findDiseases(page -1,size);
+    public ResponseEntity getDiseases() {
+        Page<DiseaseResponseDto> diseaseResponses = diseaseService.findDiseases();
         List<DiseaseResponseDto> diseaseList = diseaseResponses.getContent();
 
         return new ResponseEntity<>(
