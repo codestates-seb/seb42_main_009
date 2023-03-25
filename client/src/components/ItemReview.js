@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { useMedicineItemStore } from '../Stores/medicineItemStore';
+import { useDiseasesTagsStore } from '../Stores/diseasesTagsStore';
 import { useUserInfoStore } from '../Stores/userInfoStore';
 import { SmBtn } from '../styles/globalStyle';
 import { IoMdClose } from 'react-icons/io';
@@ -34,6 +35,8 @@ const ItemReview = () => {
   const [updateIndex, setUpdateIndex] = useState(0);
   const [reviewMedInput, setReviewMedInput] = useState('');
   const [reviewTags, setReviewTags] = useState([]);
+  const [searchTags, setSearchTags] = useState([]);
+  const { diseasesTags } = useDiseasesTagsStore(state => state);
   const [image, setImage] = useState({
     image_file: '',
     preview_URL: 'img/default_image.png',
@@ -44,42 +47,7 @@ const ItemReview = () => {
     reviewTag: '',
     reviewId: 0,
   });
-  const [reviewList, setReviewList] = useState([
-    {
-      reviewImg: '',
-      reviewContent: `Enforce onClick is accompanied by at least one of the following:
-                onKeyUp, onKeyDown, onKeyPress. Coding for the keyboard is
-                important for users with physical disabilities who cannot use a
-                mouse, AT compatibility, and screenreader users. This does not
-                apply for interactive or hidden elements. Enforce onClick is
-                accompanied by at least one of the following: onKeyUp,
-                onKeyDown, onKeyPress. Coding for the keyboard is important for
-                users with physical disabilities who cannot use a mouse, AT
-                compatibility, and screenreader users. This does not apply for
-                interactive or hidden elements. Enforce onClick is accompanied
-                by at least one of the following: onKeyUp, onKeyDown,
-                onKeyPress. Coding for the keyboard is important for users with
-                physical disabilities who cannot use a mouse, AT compatibility,
-                and screenreader users. This does not apply for interactive or
-                hidden elements. Enforce onClick is accompanied by at least one
-                of the following: onKeyUp, onKeyDown, onKeyPress. Coding for the
-                keyboard is important for users with physical disabilities who
-                cannot use a mouse, AT compatibility, and screenreader users.
-                This does not apply for interactive or hidden elements. Enforce
-                onClick is accompanied by at least one of the following:
-                onKeyUp, onKeyDown, onKeyPress. Coding for the keyboard is
-                important for users with physical disabilities who cannot use a
-                mouse, AT compatibility, and screenreader users. This does not
-                apply for interactive or hidden elements. Enforce onClick is
-                accompanied by at least one of the following: onKeyUp,
-                onKeyDown, onKeyPress. Coding for the keyboard is important for
-                users with physical disabilities who cannot use a mouse, AT
-                compatibility, and screenreader users. This does not apply for
-                interactive or hidden elements.`,
-      reviewTag: '',
-      reviewStretch: false,
-    },
-  ]);
+  const [reviewList, setReviewList] = useState([]);
 
   // Pagination
   // 1. currentPage 초기값은 0으로 설정
@@ -110,6 +78,11 @@ const ItemReview = () => {
   const tagInputHandler = e => {
     const content = e.target.value;
     setReviewMedInput(content);
+    if (content.length > 0) {
+      setSearchTags(
+        diseasesTags.filter(el => el.diseaseName.indexOf(content) !== -1),
+      );
+    }
   };
 
   const tagDeleteHandler = id => {
@@ -142,6 +115,7 @@ const ItemReview = () => {
       preview_URL: 'img/default_image.png',
     });
     setReviewMedInput('');
+    setSearchTags([]);
     setReviewTags([]);
   };
 
@@ -149,6 +123,7 @@ const ItemReview = () => {
     const formData = new FormData();
     formData.append('reviewImage', reviewItem.reviewImg.image_file);
     formData.append('reviewContent', reviewItem.reviewContent);
+    formData.append('reviewOtherMedicine', JSON.stringify(reviewTags));
     formData.append('memberId', userInfo.memberId);
     console.log(formData);
     axios
@@ -190,7 +165,7 @@ const ItemReview = () => {
     const patchData = {
       reviewContent: reviewItem.reviewContent,
       reviewImg: reviewItem.reviewImg.preview_URL,
-      reviewOtherMedicine: '',
+      reviewOtherMedicine: JSON.stringify(reviewTags),
     };
     console.log(patchData);
     axios
@@ -232,6 +207,12 @@ const ItemReview = () => {
     };
   };
 
+  const tagSearchClickHandler = content => {
+    setReviewTags([...reviewTags, content]);
+    setSearchTags([]);
+    setReviewMedInput('');
+  };
+
   useEffect(() => {
     axios
       .get(
@@ -247,6 +228,8 @@ const ItemReview = () => {
         console.log(err);
       });
   }, [currentPage, isUpdate]);
+
+  console.log(reviewTags);
 
   return (
     <ReviewWrap>
@@ -340,6 +323,18 @@ const ItemReview = () => {
                   onChange={tagInputHandler}
                   onKeyDown={tagInputEnter}
                 />
+                <ul>
+                  {searchTags.map((item, idx) => {
+                    return (
+                      <li
+                        key={idx}
+                        onClick={() => tagSearchClickHandler(item.diseaseName)}
+                      >
+                        {item.diseaseName}
+                      </li>
+                    );
+                  })}
+                </ul>
                 <div className="entered-med">
                   {reviewTags.map((item, idx) => {
                     return (
@@ -406,6 +401,18 @@ const ItemReview = () => {
                     );
                   })}
                 </div>
+                <ul>
+                  {searchTags.map((item, idx) => {
+                    return (
+                      <li
+                        key={idx}
+                        onClick={() => tagSearchClickHandler(item.diseaseName)}
+                      >
+                        {item.diseaseName}
+                      </li>
+                    );
+                  })}
+                </ul>
               </ReviewMedSelect>
               <ReviewSubmitBtn
                 onClick={reviewUpdateHandler}
