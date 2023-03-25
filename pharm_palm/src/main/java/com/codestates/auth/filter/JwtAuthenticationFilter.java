@@ -3,8 +3,6 @@ package com.codestates.auth.filter;
 import com.codestates.auth.dto.JwtConvertor;
 import com.codestates.auth.dto.LoginDto;
 import com.codestates.auth.jwt.JwtTokenizer;
-import com.codestates.auth.reissueToken.entity.RefreshToken;
-import com.codestates.auth.reissueToken.repository.RefreshTokenRepository;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
@@ -33,7 +31,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
     private final MemberRepository memberRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     @SneakyThrows
     @Override
@@ -72,7 +69,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         sendJwtToken(response, accessToken, refreshToken, accessToken_expiresAt, refreshToken_expiresAt);
 
-        refreshTokenRepository.save(new RefreshToken(refreshToken));
+        findMember.setRefreshToken(refreshToken);
+        memberRepository.save(findMember);
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }

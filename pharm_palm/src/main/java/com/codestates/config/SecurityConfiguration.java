@@ -7,7 +7,6 @@ import com.codestates.auth.handler.MemberAuthenticationEntryPoint;
 import com.codestates.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.auth.jwt.JwtTokenizer;
-import com.codestates.auth.reissueToken.repository.RefreshTokenRepository;
 import com.codestates.auth.utils.CustomAuthorityUtils;
 
 import com.codestates.member.repository.MemberRepository;
@@ -39,7 +38,6 @@ public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -92,7 +90,7 @@ public class SecurityConfiguration {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
             JwtAuthenticationFilter jwtAuthenticationFilter =
-                    new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, memberRepository, refreshTokenRepository);
+                    new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, memberRepository);
             jwtAuthenticationFilter.setFilterProcessesUrl("/pp/login");
 
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
