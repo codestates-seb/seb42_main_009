@@ -14,7 +14,7 @@ import {
   SearchSelectDown,
 } from '../styles/s-top';
 
-const Search = () => {
+const Search = ({ submitPageHandler }) => {
   const { setSearchText } = useSearchTextStore(state => state);
   const { setSearchSelected } = useSearchSelectedStore(state => state);
   const { setSearchApi } = useSearchApiStore(state => state);
@@ -40,6 +40,7 @@ const Search = () => {
       e.preventDefault();
       setSearchText(searchTxt);
       navigate('/list');
+      submitPageHandler();
     }
   };
   return (
@@ -67,6 +68,7 @@ const Search = () => {
           e.preventDefault();
           setSearchText(searchTxt);
           navigate('/list');
+          submitPageHandler();
         }}
       >
         검색

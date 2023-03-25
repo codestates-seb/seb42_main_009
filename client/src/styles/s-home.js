@@ -193,24 +193,27 @@ export const HomeReview = styled.div`
 `;
 export const textflowPc = keyframes`
   0% {transform: translateX(0);}
-  100% {transform: translate(-1600px);}
+  100% {transform: translate(-20%);}
 `;
 export const textflowMo = keyframes`
   0% {transform: translateX(0);}
-  100% {transform: translate(-600px);}
+  100% {transform: translate(-90%);}
 `;
 export const ReviewRow = styled.ul`
-  animation: ${textflowPc} 40s linear infinite;
-  width: 300%;
+  animation: ${textflowPc} 30s linear infinite;
+  width: 200%;
   column-count: 8;
   column-gap: 30px;
   @media (max-width: 768px) {
-    overflow: hidden;
+    width: 450%;
+    column-count: 5;
+    animation: ${textflowMo} 40s linear infinite;
   }
 `;
 export const ReviewCard = styled.li`
-  display: grid;
-  grid-template-rows: 1fr auto;
+  /* display: grid; */
+  /* grid-template-rows: 1fr auto; */
+  width: 100%;
   margin-bottom: 30px;
   break-inside: avoid;
   background: var(--palebl);
@@ -220,8 +223,11 @@ export const ReviewCard = styled.li`
     margin-left: 250px;
     margin-right: -250px;
   }
-
   @media (max-width: 768px) {
+    &:nth-of-type(2n) {
+      margin-left: 150px;
+      margin-right: -150px;
+    }
   }
 `;
 export const ReviewCardBox = styled.div`
@@ -252,12 +258,13 @@ export const ReviewCardBox = styled.div`
       width: 100%;
       font-size: var(--fz-base);
       line-height: 1.5;
+      height: 40px;
       width: 100%;
       margin-top: 15px;
       display: -webkit-box;
       text-overflow: ellipsis;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
+      -webkit-line-clamp: 2;
       overflow: hidden;
     }
   }
@@ -330,6 +337,9 @@ export const Footer = styled.footer`
       ul {
         padding: 30px 0;
         justify-content: center;
+        li {
+          padding: 0 12px;
+        }
       }
     }
     .footer-link {
