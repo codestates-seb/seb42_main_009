@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,6 +95,14 @@ public class ReviewController {
                 new MultiResponseDto<>(
                         mapper.reviewToReviewResponseDtos(reviewService.findReviews(page - 1, size).getContent())
                         , reviewService.findReviews(page - 1, size)), HttpStatus.OK);
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity getRandomReviews() {
+        List<Review> reviews = reviewService.findRandomReviews();
+        Collections.shuffle(reviews); // 리뷰 리스트 랜덤 섞기
+        List<Review> randomReviews = reviews.subList(0, Math.min(reviews.size(), 10)); // 랜덤 리뷰 10개 이하일 경우 전체 리스트 가져오기
+        return new ResponseEntity<>(mapper.reviewToReviewResponseDtos(randomReviews), HttpStatus.OK);
     }
 
     @DeleteMapping("/{review-id}")

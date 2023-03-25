@@ -75,6 +75,10 @@ public class ReviewService {
                 Sort.by("reviewId").descending()));
     }
 
+    public List<Review> findRandomReviews() {
+        return reviewRepository.findAll();
+    }
+
     public Page<Review> findMedicineReviews(Long medicineId, int page, int size) {
         return reviewRepository.findAllByMedicineId(medicineId ,PageRequest.of(page, size,
                 Sort.by("reviewId").descending()));
