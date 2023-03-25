@@ -62,7 +62,7 @@ public class UserController {
         params.add("grant_type", "authorization_code");
         String myProperty = System.getenv("K_CLIENT_ID");
         params.add("client_id", myProperty);
-        params.add("redirect_uri", "http://localhost:3000/auth/kakao/callback");
+        params.add("redirect_uri", "http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/auth/kakao/callback");
         params.add("code", code);
 
         // 요청하기 위해 헤더(Header)와 데이터(Body)를 합칩니다.
