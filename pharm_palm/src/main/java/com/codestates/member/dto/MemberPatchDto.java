@@ -4,7 +4,6 @@ import com.codestates.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @AllArgsConstructor

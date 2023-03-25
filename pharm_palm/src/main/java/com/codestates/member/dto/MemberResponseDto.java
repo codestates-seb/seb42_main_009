@@ -1,7 +1,6 @@
 package com.codestates.member.dto;
 
 import com.codestates.dose.dto.DoseResponseDto;
-import com.codestates.dose.entity.Dose;
 import com.codestates.member.entity.Member;
 import com.codestates.review.dto.ReviewResponseDto;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,6 @@ public class MemberResponseDto {
     private long memberId;
     private String memberEmail;
     private String memberName;
-    //    private String memberPwd; reponse에 pwd가 필요한가?
     private String memberGender;
     private String memberAge;
     private String picture;
