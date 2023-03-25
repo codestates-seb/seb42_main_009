@@ -1,13 +1,45 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
+export const dots = keyframes`
+  0% {transform: translateY(0);}
+  50% {transform: translateY(-20px);}
+  100% {transform: translateY(0);}
+`;
 export const ContentList = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   flex-wrap: wrap;
   margin-top: 80px;
+  .page-end {
+    display: none;
+  }
   @media (max-width: 768px) {
     margin-top: 50px;
+    .page-end {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 50px;
+      position: relative;
+      > span {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin: 0 10px;
+        background: var(--mainbl);
+        animation: ${dots} 1s forwards infinite;
+        &:nth-of-type(1) {
+        }
+        &:nth-of-type(2) {
+          animation-delay: 0.3s;
+        }
+        &:nth-of-type(3) {
+          animation-delay: 0.5s;
+        }
+      }
+    }
   }
 `;
 export const ContentBox = styled.div`
@@ -146,5 +178,6 @@ export const Pagination = styled.div`
   }
   @media (max-width: 768px) {
     margin-top: 30px;
+    display: none;
   }
 `;
