@@ -1,51 +1,118 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ApexCharts from 'react-apexcharts';
 
 const Chart = () => {
   console.log('차트 페이지');
+  const [likesTop10, setLikesTop10] = useState({});
+  const [maleRegisterTop10, setMaleRegisterTop10] = useState({});
+  const [femaleRegisterTop10, setFemaleRegisterTop10] = useState({});
 
   useEffect(() => {
+    // 전체 좋아요 Top 10
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/pp/medicines/likeDesc`)
+      .then(res => {
+        const resData = res.data;
+        const top10Data = [];
+        const top10Category = [];
+        resData.forEach(element => {
+          top10Data.push(element.medicineLike);
+          top10Category.push(element.medicineName);
+        });
+        setLikesTop10({
+          data: top10Data,
+          categories: top10Category,
+        });
+      })
+      .catch(err => console.log(err));
+
+    // 남성 등록 약품 수 Top 10
     axios
       .get(`${process.env.REACT_APP_API_URL}/pp/doses/gender?gender=남성`)
       .then(res => {
+        console.log(res, '남성 등록 약품 top10');
+        const resData = res.data;
+        const maleSeries = [];
+        const maleLabels = [];
+        resData.forEach(element => {
+          maleSeries.push(element.count);
+          maleLabels.push(element.medicineName);
+        });
+        setMaleRegisterTop10({
+          series: maleSeries,
+          labels: maleLabels,
+        });
+      })
+      .catch(err => console.log(err));
+
+    // 여성 등록 약품 수 Top 10
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/pp/doses/gender?gender=여성`)
+      .then(res => {
         console.log(res);
+        const resData = res.data;
+        const femaleSeries = [];
+        const femaleLabels = [];
+        resData.forEach(element => {
+          femaleSeries.push(element.count);
+          femaleLabels.push(element.medicineName);
+        });
+        setFemaleRegisterTop10({
+          series: femaleSeries,
+          labels: femaleLabels,
+        });
       })
       .catch(err => console.log(err));
   }, []);
 
+  console.log(likesTop10);
+  console.log(maleRegisterTop10, femaleRegisterTop10);
   return (
     <>
+      {/* 남성 */}
+      <div className="flex flex-row items-center">
+        <div className="flex flex-col">
+          <p className=" mt-40">남성 등록 의약품 Top 10</p>
+          <ApexCharts
+            className="top10 w-80 h-80"
+            type="donut"
+            series={maleRegisterTop10.series}
+            options={{
+              chart: {
+                width: 200,
+                type: 'donut',
+              },
+              labels: [...maleRegisterTop10.labels],
+            }}
+            width={400}
+          />
+        </div>
+
+        {/* 여성 */}
+        <div className="flex flex-col">
+          <p className="mt-40">여성 등록 의약품 Top 10</p>
+          <ApexCharts
+            className="top10 w-80 h-80"
+            type="donut"
+            series={femaleRegisterTop10.series}
+            labels={femaleRegisterTop10.labels}
+            options={{
+              chart: {
+                width: 200,
+              },
+            }}
+          />
+        </div>
+      </div>
+
+      <p>전체 좋아요 Top 10</p>
       <ApexCharts
-        className="line-chart mt-20 w-80 h-80"
-        type="line"
-        series={[
-          { name: '오늘의 기온', data: [19, 26, 20, 9] },
-          { name: '내일의 기온', data: [30, 26, 34, 10] },
-        ]}
-        options={{
-          chart: {
-            height: 500,
-            width: 500,
-          },
-        }}
-      />
-      <ApexCharts
-        className="top10 w-80 h-80"
-        type="donut"
-        series={[44, 55, 13, 33]}
-        options={{
-          chart: {
-            width: 200,
-          },
-        }}
-      />
-      <ApexCharts
-        className="top10 w-80 h-80"
+        className="top10 w-500 h-80"
         type="bar"
         series={[
           {
-            data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+            data: likesTop10.data,
           },
         ]}
         options={{
@@ -62,71 +129,10 @@ const Chart = () => {
             enabled: false,
           },
           xaxis: {
-            categories: [
-              'South Korea',
-              'Canada',
-              'United Kingdom',
-              'Netherlands',
-              'Italy',
-              'France',
-              'Japan',
-              'United States',
-              'China',
-              'Germany',
-            ],
+            categories: likesTop10.categories,
           },
         }}
       />
-      <ApexCharts
-        className="area-chart w-80 h-80 복용시간"
-        type="area"
-        series={[
-          {
-            name: '남성',
-            data: [31, 40, 28, 51, 42, 109, 100, 90, 80, 60, 50, 40],
-          },
-          {
-            name: '여성',
-            data: [11, 32, 45, 32, 34, 52, 41, 32, 78, 82, 4, 62],
-          },
-        ]}
-        options={{
-          chart: {
-            height: 200,
-            type: 'area',
-          },
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            curve: 'smooth',
-          },
-          xaxis: {
-            type: 'category',
-            categories: [
-              '06:00',
-              '07:30',
-              '09:00',
-              '10:30',
-              '12:00',
-              '13:30',
-              '15:00',
-              '16:30',
-              '18:00',
-              '19:30',
-              '21:00',
-              '22:30',
-              '24:00',
-            ],
-          },
-          tooltip: {
-            x: {
-              format: 'HH:mm',
-            },
-          },
-        }}
-      />
-      <div>차트페이지</div>
     </>
   );
 };
