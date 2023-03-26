@@ -43,16 +43,14 @@ public class DiseaseService {
         return new PageImpl<>(diseaseResponses);
     }
 
-    public Page<DiseaseResponseDto> findDiseases(int page, int size) {
+    public Page<DiseaseResponseDto> findDiseases() {
         List<Disease> diseases = diseaseRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparing(Disease::getDiseaseName))
                 .collect(Collectors.toList());
         List<DiseaseResponseDto> diseaseResponses = mapper.diseasesToResponseDto(diseases);
 
-        int startIndex = page * size;
-        int endIndex = Math.min(startIndex + size, diseaseResponses.size());
 
-        return new PageImpl<>(diseaseResponses.subList(startIndex, endIndex), PageRequest.of(page, size), diseaseResponses.size());
+        return new PageImpl<>(diseaseResponses);
     }
 }
