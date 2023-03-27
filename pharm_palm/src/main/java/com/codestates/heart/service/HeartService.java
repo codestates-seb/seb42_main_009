@@ -55,4 +55,16 @@ public class HeartService {
             medicineRepository.save(findMedicine);
         }
     }
+
+    public boolean findLike(HeartPostDto heartPostDto) {
+        Medicine medicine = mapper.HeartPostDtoToMedicine(heartPostDto);
+        Member member = mapper.HeartPostDtoToMember(heartPostDto);
+        Optional<Heart> heartOptional = heartRepository.findByMedicineAndMember(medicine, member);
+
+        if (heartOptional.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
