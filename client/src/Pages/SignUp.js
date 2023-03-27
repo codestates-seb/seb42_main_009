@@ -164,7 +164,7 @@ const SignUp = () => {
               <input
                 type="radio"
                 id="male_link"
-                value="male"
+                value="남성"
                 name="gender"
                 onClick={e => setGender(e.target.value)}
               />
@@ -174,7 +174,7 @@ const SignUp = () => {
               <input
                 type="radio"
                 id="female_link"
-                value="female"
+                value="여성"
                 name="gender"
                 onClick={e => setGender(e.target.value)}
               />

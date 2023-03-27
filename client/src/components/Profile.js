@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { BsFillImageFill } from 'react-icons/bs';
+import { IoMdCloseCircle } from 'react-icons/io';
 import { HeaderBtn } from '../styles/s-header';
 import { SmBtn } from '../styles/globalStyle';
 import { useUserInfoStore } from '../Stores/userInfoStore';
+import { useIsLoginStore, useIsSocialLoginStore } from '../Stores/loginStore';
 
 const ProfileWrap = styled.article`
+  position: relative;
   width: 250px;
   padding: 15px 15px 5px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
@@ -15,6 +18,13 @@ const ProfileWrap = styled.article`
   @media (max-width: 768px) {
     width: 100%;
   }
+`;
+const CloseButton = styled.button`
+  position: absolute;
+  font-size: x-large;
+  top: 5%;
+  right: 5%;
+  color: var(--mainbl);
 `;
 const ProfileContent = styled.div`
   position: relative;
@@ -102,8 +112,16 @@ const DefaultProfile = styled.div`
 `;
 
 const Profile = () => {
+  const { setIsLogin } = useIsLoginStore(state => state);
+  const { setIsSocialLogin } = useIsSocialLoginStore(state => state);
+  const [profileInfo, setProfileInfo] = useState([]);
   const { userInfo } = useUserInfoStore(state => state);
-  const [changedInfo, setChangedInfo] = useState({});
+  const [changedInfo, setChangedInfo] = useState({
+    name: '',
+    gender: '',
+    age: '0-9',
+  });
+  const [isUpdate, setIsUpdate] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [image, setImage] = useState({
     image_file: '',
@@ -112,6 +130,16 @@ const Profile = () => {
   // memberId 추출
   const location = useLocation();
   const memberId = location.pathname.split('/')[2];
+
+  const navigate = useNavigate();
+
+  const initializeChange = () => {
+    setChangedInfo({
+      name: '',
+      gender: '',
+      age: '0-9',
+    });
+  };
 
   const saveImage = e => {
     e.preventDefault();
@@ -133,11 +161,35 @@ const Profile = () => {
   };
 
   const submitHandler = () => {
+    // const formData = new FormData();
+    // formData.append('reviewContent', reviewItem.reviewContent);
+    // formData.append('reviewImage', reviewItem.reviewImg.image_file);
+    // formData.append('reviewOtherMedicine', JSON.stringify(reviewTags));
+    // formData.append('memberId', userInfo.memberId);
+
+    // axios
+    //   .post(
+    //     `${process.env.REACT_APP_API_URL}/pp/reviews/${medicineItem.medicineId}`,
+    //     formData,
+    //     {
+    //       'Content-Type': 'multipart/form-data',
+    //       withCredentials: true,
+    //     },
+    //   )
+    //   .then(res => {
+    //     console.log(res);
+    //     setIsUpdate(true);
+    //     setReviewAddOpen(!reviewAddOpen);
+    //     initializeItem();
+    //   })
+    //   .catch(err => console.log(err));
+
     const patchData = {
       memberName: changedInfo.name,
       memberGender: changedInfo.gender,
       memberAge: changedInfo.age,
     };
+
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/pp/members/${memberId}`,
@@ -148,8 +200,30 @@ const Profile = () => {
       )
       .then(res => {
         console.log(res);
+        if (image.image_file !== '') {
+          // 이미지 추가
+          const formData = new FormData();
+          formData.append('memberImage', image.image_file);
+
+          axios
+            .patch(
+              `${process.env.REACT_APP_API_URL}/pp/members/image/${memberId}`,
+              formData,
+              {
+                'Content-Type': 'multipart/form-data',
+                withCredentials: true,
+              },
+            )
+            .then(response => {
+              console.log(response);
+            })
+            .catch(err => console.log(err));
+        }
+
+        setIsUpdate(true);
         // 입력값 초기화
-        setChangedInfo({});
+        initializeChange();
+        editModeHandler();
       })
       .catch(err => console.log(err));
   };
@@ -163,18 +237,63 @@ const Profile = () => {
       setChangedInfo({ ...changedInfo, [key]: e.target.value });
     }
   };
-
   const genderCheck = gender => {
     if (gender === 'male' || gender === '남성') return '남성';
     return '여성';
   };
 
+  // 회원 삭제 Handler
+  const deleteProfileHandler = e => {
+    e.preventDefault();
+    if (window.confirm('확인을 누르면 회원 정보가 삭제됩니다.')) {
+      axios
+        .delete(
+          `${process.env.REACT_APP_API_URL}/pp/members/withdraw/${memberId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+              withCredentials: true,
+            },
+          },
+        )
+        .then(() => {
+          localStorage.clear();
+          setIsLogin(false);
+          setIsSocialLogin(false);
+          setProfileInfo([]);
+          alert('그동안 이용해주셔서 감사합니다.');
+          navigate('/');
+        })
+        .catch(err => console.log(err));
+    }
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/pp/members/${memberId}`)
+      .then(res => {
+        console.log(res);
+        setProfileInfo(res.data.data);
+        setImage({
+          image_file: '',
+          preview_URL: res.data.data.picture,
+        });
+        setIsUpdate(false);
+      })
+      .catch(err => console.log(err));
+  }, [isUpdate]);
+
   console.log(changedInfo);
+  console.log(profileInfo);
 
   return (
     <div>
       {editMode ? (
         <ProfileWrap>
+          <CloseButton onClick={editModeHandler}>
+            <IoMdCloseCircle />
+          </CloseButton>
           <ProfileImg className={image.preview_URL ? 'uploaded' : null}>
             <label htmlFor="imageUpload">
               <BsFillImageFill />
@@ -212,7 +331,6 @@ const Profile = () => {
                     name="gender"
                     value="남성"
                     onClick={handleInputValue('gender')}
-                    checked
                   />
                   <label htmlFor="남성">남성</label>
                 </p>
@@ -231,7 +349,9 @@ const Profile = () => {
                 <SmBtn>나이</SmBtn>
                 <p>
                   <select id="age" name="age" onClick={handleInputValue('age')}>
-                    <option value="0-9">10세 미만</option>
+                    <option value="0-9" checked>
+                      10세 미만
+                    </option>
                     <option value="10-19">10대</option>
                     <option value="20-29">20대</option>
                     <option value="30-39">30대</option>
@@ -245,9 +365,13 @@ const Profile = () => {
 
             <HeaderBtn
               onClick={() => {
-                editModeHandler();
                 submitHandler();
               }}
+              disabled={
+                changedInfo.name === '' ||
+                changedInfo.gender === '' ||
+                changedInfo.age === ''
+              }
               width="70px"
             >
               수정완료
@@ -257,8 +381,8 @@ const Profile = () => {
       ) : (
         <ProfileWrap>
           <ProfileImg>
-            {image.preview_URL ? (
-              <img src={image.preview_URL} alt="내 프로필" />
+            {profileInfo.picture ? (
+              <img src={profileInfo.picture} alt="내 프로필" />
             ) : (
               <DefaultProfile>
                 <BsFillImageFill />
@@ -268,31 +392,27 @@ const Profile = () => {
           <ProfileContent>
             <ProfileItem>
               <li>
-                <SmBtn>이름</SmBtn> <p>{userInfo.memberName}</p>{' '}
+                <SmBtn>이름</SmBtn> <p>{profileInfo.memberName}</p>{' '}
               </li>
               <li>
-                <SmBtn>성별</SmBtn> <p>{genderCheck(userInfo.memberGender)}</p>{' '}
+                <SmBtn>성별</SmBtn>{' '}
+                <p>{genderCheck(profileInfo.memberGender)}</p>{' '}
               </li>
               <li>
-                <SmBtn>나이</SmBtn> <p>{userInfo.memberAge}</p>{' '}
+                <SmBtn>나이</SmBtn> <p>{profileInfo.memberAge}</p>{' '}
               </li>
             </ProfileItem>
             {!userInfo.socialLogin ? (
-              <HeaderBtn
-                onClick={editModeHandler}
-                width="70px"
-                disabled={
-                  changedInfo.name === '' ||
-                  changedInfo.gender === '' ||
-                  changedInfo.age === ''
-                }
-              >
+              <HeaderBtn onClick={editModeHandler} width="70px">
                 정보수정
               </HeaderBtn>
             ) : null}
           </ProfileContent>
         </ProfileWrap>
       )}
+      <button className="mt-4" onClick={deleteProfileHandler}>
+        회원탈퇴
+      </button>
     </div>
   );
 };

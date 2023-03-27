@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
+import defaultProfileImg from '../images/default_profileImg.png';
 import { useMedicineItemStore } from '../Stores/medicineItemStore';
 import { useDiseasesTagsStore } from '../Stores/diseasesTagsStore';
 import { useUserInfoStore } from '../Stores/userInfoStore';
@@ -91,9 +92,14 @@ const ItemReview = () => {
   };
 
   const tagInputEnter = e => {
-    if (e.key === 'Enter' || e.key === ',' || e.key === '+' || e.key === ' ') {
-      setReviewTags([...reviewTags, reviewMedInput]);
-      setReviewMedInput('');
+    //  if (e.key === 'Enter' || e.key === ',' || e.key === '+' || e.key === ' ') {
+    if (e.key === 'Enter') {
+      if (searchTags.indexOf(reviewMedInput) === -1) {
+        window.alert('태그에 없는 입력값 입니다.\n다시 입력해주세요');
+      } else {
+        setReviewTags([...reviewTags, reviewMedInput]);
+        setReviewMedInput('');
+      }
     }
   };
 
@@ -122,11 +128,11 @@ const ItemReview = () => {
 
   const reviewAddHandler = () => {
     const formData = new FormData();
-    formData.append('reviewImage', reviewItem.reviewImg.image_file);
     formData.append('reviewContent', reviewItem.reviewContent);
+    formData.append('reviewImage', reviewItem.reviewImg.image_file);
     formData.append('reviewOtherMedicine', JSON.stringify(reviewTags));
     formData.append('memberId', userInfo.memberId);
-    console.log(formData);
+
     axios
       .post(
         `${process.env.REACT_APP_API_URL}/pp/reviews/${medicineItem.medicineId}`,
@@ -168,6 +174,7 @@ const ItemReview = () => {
       reviewImg: reviewItem.reviewImg.preview_URL,
       reviewOtherMedicine: JSON.stringify(reviewTags),
     };
+
     console.log(patchData);
     axios
       .patch(
@@ -231,6 +238,7 @@ const ItemReview = () => {
   }, [currentPage, isUpdate]);
 
   console.log(reviewTags);
+  console.log(reviewList);
 
   return (
     <ReviewWrap>
@@ -273,13 +281,18 @@ const ItemReview = () => {
               </div>
               <ReviewContent>
                 <UserImage>
-                  <img src="https://picsum.photos/300/200" alt="user" />
+                  <img
+                    src={!item.memberImg ? defaultProfileImg : item.memberImg}
+                    alt="user"
+                  />
                 </UserImage>
                 <UserInputs>
                   <span className="username">{item.memberName}</span>
                   <span className="writedate">{item.lastModifiedAt}</span>
                   <div>
-                    {item.reviewImg ? <img src={item.reviewImg} /> : null}
+                    {item.reviewImg.length !== 0 ? (
+                      <img src={item.reviewImg} />
+                    ) : null}
 
                     {item.reviewContent}
                   </div>
@@ -304,12 +317,12 @@ const ItemReview = () => {
                 <IoMdClose />
               </button>
               <ReviewImage className={image.preview_URL ? 'uploaded' : null}>
-                <label htmlFor='addReviewImg'>
+                <label htmlFor="addReviewImg">
                   <BsFillImageFill />
                   <span>클릭해서 업로드</span>
                 </label>
                 <input
-                  id='addReviewImg'
+                  id="addReviewImg"
                   type="file"
                   accept="image/*"
                   onChange={saveImage}
@@ -328,7 +341,7 @@ const ItemReview = () => {
                   value={reviewMedInput}
                   onChange={tagInputHandler}
                   onKeyDown={tagInputEnter}
-                  placeholder='태그를 입력하세요'
+                  placeholder="태그를 입력하세요"
                 />
                 <ul>
                   {searchTags.map((item, idx) => {
@@ -378,12 +391,12 @@ const ItemReview = () => {
                 <IoMdClose />
               </button>
               <ReviewImage className={image.preview_URL ? 'uploaded' : null}>
-                <label htmlFor='updateReviewImg'>
+                <label htmlFor="updateReviewImg">
                   <BsFillImageFill />
                   <span>클릭해서 업로드</span>
                 </label>
                 <input
-                  id='updateReviewImg'
+                  id="updateReviewImg"
                   type="file"
                   accept="image/*"
                   onChange={saveImage}
@@ -402,7 +415,7 @@ const ItemReview = () => {
                   value={reviewMedInput}
                   onChange={tagInputHandler}
                   onKeyDown={tagInputEnter}
-                  placeholder='태그를 입력하세요'
+                  placeholder="태그를 입력하세요"
                 />
                 <div className="entered-med">
                   {reviewTags.map((item, idx) => {

@@ -4,9 +4,18 @@ import ApexCharts from 'react-apexcharts';
 
 const Chart = () => {
   console.log('차트 페이지');
-  const [likesTop10, setLikesTop10] = useState({});
-  const [maleRegisterTop10, setMaleRegisterTop10] = useState({});
-  const [femaleRegisterTop10, setFemaleRegisterTop10] = useState({});
+  const [likesTop10, setLikesTop10] = useState({
+    data: [],
+    categories: [],
+  });
+  const [maleRegisterTop10, setMaleRegisterTop10] = useState({
+    series: [],
+    labels: [],
+  });
+  const [femaleRegisterTop10, setFemaleRegisterTop10] = useState({
+    series: [],
+    labels: [],
+  });
 
   useEffect(() => {
     // 전체 좋아요 Top 10
@@ -83,56 +92,59 @@ const Chart = () => {
                 width: 200,
                 type: 'donut',
               },
-              labels: [...maleRegisterTop10.labels],
+              labels: maleRegisterTop10.labels,
             }}
             width={400}
           />
         </div>
 
         {/* 여성 */}
-        <div className="flex flex-col">
+        <div className="flex flex-col ml-20">
           <p className="mt-40">여성 등록 의약품 Top 10</p>
           <ApexCharts
             className="top10 w-80 h-80"
             type="donut"
             series={femaleRegisterTop10.series}
-            labels={femaleRegisterTop10.labels}
             options={{
               chart: {
                 width: 200,
               },
+              labels: femaleRegisterTop10.labels,
             }}
+            width={400}
           />
         </div>
       </div>
 
-      <p>전체 좋아요 Top 10</p>
-      <ApexCharts
-        className="top10 w-500 h-80"
-        type="bar"
-        series={[
-          {
-            data: likesTop10.data,
-          },
-        ]}
-        options={{
-          chart: {
-            width: 200,
-          },
-          plotOptions: {
-            bar: {
-              borderRadius: 4,
-              horizontal: true,
+      <div>
+        <p>전체 좋아요 Top 10</p>
+        <ApexCharts
+          className="top10 w-500 h-80"
+          type="bar"
+          series={[
+            {
+              data: likesTop10.data,
             },
-          },
-          dataLabels: {
-            enabled: false,
-          },
-          xaxis: {
-            categories: likesTop10.categories,
-          },
-        }}
-      />
+          ]}
+          options={{
+            chart: {
+              width: 200,
+            },
+            plotOptions: {
+              bar: {
+                borderRadius: 4,
+                horizontal: true,
+              },
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            xaxis: {
+              categories: likesTop10.categories,
+            },
+          }}
+        />
+      </div>
     </>
   );
 };

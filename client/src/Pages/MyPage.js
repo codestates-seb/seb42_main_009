@@ -30,6 +30,7 @@ import {
   UserInputs,
 } from '../styles/s-item';
 import { useMyPharmUpdateStore } from '../Stores/myPharmStore';
+import defaultProfileImg from '../images/default_profileImg.png';
 
 const MyPage = () => {
   const [curTab, setCurTab] = useState(0);
@@ -222,7 +223,14 @@ const MyPage = () => {
                       </div>
                       <ReviewContent>
                         <UserImage>
-                          <img src="https://picsum.photos/300/200" alt="user" />
+                          <img
+                            src={
+                              !item.memberImg
+                                ? defaultProfileImg
+                                : item.memberImg
+                            }
+                            alt="user"
+                          />
                         </UserImage>
                         <UserInputs>
                           <span className="username">{item.memberName}</span>
