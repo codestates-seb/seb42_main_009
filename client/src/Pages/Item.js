@@ -62,6 +62,25 @@ const Item = () => {
       .catch(err => {
         console.log(err);
       });
+
+    if (sessionStorage.getItem('isLogin')) {
+      const sessionUserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+      console.log(sessionUserInfo);
+      const getBody = {
+        memberId: sessionUserInfo.memberId,
+        medicineId,
+      };
+      console.log(getBody);
+
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/pp/heart`, getBody)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (
@@ -78,6 +97,7 @@ const Item = () => {
                 <button
                   onClick={likeHandler}
                   className={like ? 'like-btn liked' : 'like-btn'}
+                  disabled={!sessionStorage.getItem('isLogin')}
                 >
                   {like ? <FaThumbsUp /> : <FaRegThumbsUp />}
                   <span>
