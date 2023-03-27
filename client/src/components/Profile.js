@@ -332,28 +332,6 @@ const Profile = () => {
                     <label htmlFor="여성">여성</label>
                   </RadioBox>
                 </InputItemProfile>
-                {/* <p>
-                  <input
-                    type="radio"
-                    id="남성"
-                    name="gender"
-                    value="남성"
-                    onClick={handleInputValue('gender')}
-                  />
-                  <label htmlFor="남성">남성</label>
-                </p>
-                <p>
-                  <input
-                    type="radio"
-                    id="여성"
-                    name="gender"
-                    value="여성"
-                    onClick={handleInputValue('gender')}
-                  />
-                  <label htmlFor="여성" className=" pl-10">
-                    여성
-                  </label>
-                </p> */}
               </li>
               <li>
                 <SmBtn>나이</SmBtn>

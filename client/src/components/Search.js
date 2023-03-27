@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaChevronDown } from 'react-icons/fa';
 import {
   useSearchTextStore,
   useSearchSelectedStore,
   useSearchApiStore,
+  useSearchIsUpdateStore,
 } from '../Stores/listSearchStore';
 import {
   SearchBox,
@@ -18,6 +19,7 @@ const Search = ({ submitPageHandler }) => {
   const { setSearchText } = useSearchTextStore(state => state);
   const { setSearchSelected } = useSearchSelectedStore(state => state);
   const { setSearchApi } = useSearchApiStore(state => state);
+  const { setSearchIsUpdate } = useSearchIsUpdateStore(state => state);
   const navigate = useNavigate();
 
   const [searchTxt, setSearchTxt] = useState('');
@@ -39,10 +41,20 @@ const Search = ({ submitPageHandler }) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       setSearchText(searchTxt);
-      navigate('/list');
       submitPageHandler();
+      setSearchIsUpdate(true);
+      navigate('/list');
     }
   };
+
+  useEffect(() => {
+    console.log('시작');
+    setSearchText('');
+    setSearchApi('medicineName');
+    setSearchSelected('name');
+    setSearchIsUpdate(false);
+  }, []);
+
   return (
     <SearchBox>
       <label htmlFor="search">의약품 검색</label>
@@ -69,6 +81,7 @@ const Search = ({ submitPageHandler }) => {
           setSearchText(searchTxt);
           navigate('/list');
           submitPageHandler();
+          setSearchIsUpdate(true);
         }}
       >
         검색
