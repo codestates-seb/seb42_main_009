@@ -42,6 +42,10 @@ public class Member extends Auditable {
 
     @Column
     private boolean alarm;
+
+    @Column
+    private String refreshToken;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Dose> doses = new ArrayList<>();
 

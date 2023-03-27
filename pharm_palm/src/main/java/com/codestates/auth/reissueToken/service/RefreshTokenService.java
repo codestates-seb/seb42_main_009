@@ -2,8 +2,8 @@ package com.codestates.auth.reissueToken.service;
 
 
 import com.codestates.auth.jwt.JwtTokenizer;
-import com.codestates.auth.reissueToken.AccessTokenValue;
-import com.codestates.auth.reissueToken.repository.RefreshTokenRepository;
+import com.codestates.exception.BusinessLogicException;
+import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
 import com.codestates.member.service.MemberService;
 import io.jsonwebtoken.Claims;
@@ -19,10 +19,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
-    private final RefreshTokenRepository refreshTokenRepository;
-
     private final JwtTokenizer jwtTokenizer;
-
     private final MemberService memberService;
 
     public String reissueAccessToken (HttpHeaders httpHeaders){
@@ -34,6 +31,9 @@ public class RefreshTokenService {
     private String delegateNewAccessToken(Claims refreshToken){
         String tokenId = (String) refreshToken.get("id");
         Member member = memberService.findVerifiedMemberEmail(tokenId);
+        if (member.getRefreshToken() == null){
+            throw new BusinessLogicException(ExceptionCode.LOGOUT_MEMBER);
+        }
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", member.getMemberEmail());
         claims.put("memberName", member.getMemberName());
