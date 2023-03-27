@@ -1,7 +1,6 @@
-/* eslint-disable */
-import React, { useState } from 'react';
-import { useIsModalOpen, useUpdateModalOpen } from '../Stores/pharmModalStore';
+import React from 'react';
 import { FaPen } from 'react-icons/fa';
+import { useIsModalOpen, useUpdateModalOpen } from '../Stores/pharmModalStore';
 import {
   MyPillItem,
   MyPill,
