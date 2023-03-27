@@ -31,7 +31,7 @@ export const MyPharmModalWrap = styled.div`
   }
   @media (max-width: 768px) {
     width: calc(100% - 30px);
-    padding: 0 15px 30px;
+    padding: 0 10px 30px;
   }
 `;
 export const MyPharmModalBox = styled.div`
@@ -50,6 +50,9 @@ export const FieldTitle = styled.h2`
   font-size: var(--fz-md);
   margin-bottom: 10px;
   font-weight: 600;
+  @media (max-width: 768px){
+    font-size: var(--fz-base);
+  }
 `;
 export const FieldBox = styled.div`
   position: relative;
@@ -73,6 +76,9 @@ export const FieldBox = styled.div`
       color: var(--mainbl);
       margin-left: 7px;
     }
+    @media (max-width: 768px){
+      width: 70px;
+    }
   }
   > span {
     padding-left: 10px;
@@ -87,6 +93,9 @@ export const FieldInput = styled.input`
   padding: 0 10px;
   border: 1px solid var(--mainbl);
   width: ${props => props.width || '80px'};
+  @media (max-width: 768px){
+    width: ${props=>props.mobileWidth} !important;
+  }
 `;
 export const FieldSelect = styled.div`
   position: relative;
@@ -191,6 +200,15 @@ export const TimeSelect = styled.div`
     align-self: flex-start;
   }
 `;
+export const SearchBtn = styled.button`
+  flex: none;
+  width: 55px; 
+  height: 34px;
+  margin-left: 5px;
+  background: var(--mainbl);
+  color: #fff;
+  border-radius: 6px;
+`;
 export const SearchList = styled.ul`
   opacity: 0;
   visibility: hidden;
@@ -211,5 +229,8 @@ export const SearchList = styled.ul`
     font-size: var(--fz-sm);
     line-height: 2;
     cursor: pointer;
+  }
+  @media (max-width: 768px){
+    left: 80px;
   }
 `;
