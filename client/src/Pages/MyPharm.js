@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { React, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import ApexCharts from 'react-apexcharts';
 import Banner from '../components/Banner';
 import MyPharmModal from '../components/MyPharmModal';
@@ -58,8 +58,6 @@ const MyPharm = () => {
     }, 500);
   }, [myPharmUpdate]);
 
-  console.log(chartData);
-
   return (
     <>
       <Banner>
@@ -91,7 +89,9 @@ const MyPharm = () => {
             </MyPillList>
           )}
         </MyPillSection>
-        <MyPharmAddDone>내 약 추가 완료</MyPharmAddDone>
+        <MyPharmAddDone>
+          <Link to={`/mypage/${memberId}`}>내 약 추가 완료</Link>
+        </MyPharmAddDone>
         <ApexCharts
           className="area-chart 복용시간"
           type="rangeBar"

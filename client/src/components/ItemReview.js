@@ -130,7 +130,7 @@ const ItemReview = () => {
     const formData = new FormData();
     formData.append('reviewContent', reviewItem.reviewContent);
     formData.append('reviewImage', reviewItem.reviewImg.image_file);
-    formData.append('reviewOtherMedicine', JSON.stringify(reviewTags));
+    formData.append('disease', JSON.stringify(reviewTags));
     formData.append('memberId', userInfo.memberId);
 
     axios
@@ -172,9 +172,8 @@ const ItemReview = () => {
     const patchData = {
       reviewContent: reviewItem.reviewContent,
       reviewImg: reviewItem.reviewImg.preview_URL,
-      reviewOtherMedicine: JSON.stringify(reviewTags),
+      disease: JSON.stringify(reviewTags),
     };
-
     console.log(patchData);
     axios
       .patch(
