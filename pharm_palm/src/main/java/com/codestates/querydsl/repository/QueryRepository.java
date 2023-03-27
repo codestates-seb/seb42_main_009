@@ -4,6 +4,7 @@ import com.codestates.dose.dto.ChartResponseDto;
 import com.codestates.dose.entity.Dose;
 import com.codestates.dose.entity.QDose;
 import com.codestates.dose.repository.DoseRepository;
+import com.codestates.medicine.dto.MedicineLikeResponseDto;
 import com.codestates.medicine.entity.Medicine;
 import com.codestates.medicine.entity.QMedicine;
 import com.codestates.member.entity.QMember;
@@ -33,9 +34,11 @@ public class QueryRepository {
     }
 
 
-    public List<Medicine> findByMedicineLikeDESC() {
+    public List<MedicineLikeResponseDto> findByMedicineLikeDESC() {
         QMedicine medicine = new QMedicine("medicine");
-        return jpaQueryFactory.selectFrom(medicine)
+        return jpaQueryFactory.select(Projections.bean(MedicineLikeResponseDto.class,
+                        medicine.medicineLike,medicine.medicineName))
+                .from(medicine)
                 .orderBy(medicine.medicineLike.desc())
                 .limit(10)
                 .fetch();

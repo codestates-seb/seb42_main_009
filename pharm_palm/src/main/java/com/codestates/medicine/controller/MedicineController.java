@@ -1,6 +1,7 @@
 package com.codestates.medicine.controller;
 
 import com.codestates.dto.MultiResponseDto;
+import com.codestates.medicine.dto.MedicineLikeResponseDto;
 import com.codestates.medicine.entity.Medicine;
 import com.codestates.medicine.mapper.MedicineMapper;
 
@@ -55,7 +56,7 @@ public class MedicineController {
     }
     @GetMapping("/likeDesc")
     public ResponseEntity getMedicinesByLike() {
-        List<Medicine> medicines = queryRepository.findByMedicineLikeDESC();
+        List<MedicineLikeResponseDto> medicines = queryRepository.findByMedicineLikeDESC();
         return new ResponseEntity(medicines,HttpStatus.OK);
     }
 
