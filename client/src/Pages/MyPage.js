@@ -21,6 +21,7 @@ import {
   MypageAlarm,
   MyPillList,
   PillAddBtn,
+  Flexbox
 } from '../styles/s-mypage';
 import {
   ReviewList,
@@ -160,36 +161,36 @@ const MyPage = () => {
             </Tab>
             {curTab === 0 ? (
               <MypageTabContent>
-                <MypageAlarm>
-                  <ToggleWrap>
-                    <ToggleBox onClick={toggleHandler}>
-                      <div
-                        className={`toggle-wrap ${
-                          toggleOn ? 'toggle-checked' : ''
-                        }`}
-                      >
-                        {}
-                      </div>
-                      <div
-                        className={`toggle-circle ${
-                          toggleOn ? 'toggle-checked' : ''
-                        }`}
-                      >
-                        {}
-                      </div>
-                    </ToggleBox>
-                    <p className={toggleOn ? 'toggle-checked' : null}>
-                      {toggleOn ? '알림 받기' : '알림 해제'}
-                    </p>
-                  </ToggleWrap>
-                  <FieldTooltip>
-                    <FaInfoCircle />
-                    <p>복용 시간 알림을 받으려면 알림 받기로 설정하세요.</p>
-                  </FieldTooltip>
-                </MypageAlarm>
-
-                <PillAddBtn onClick={modalHandler}>약 추가하기</PillAddBtn>
-
+                <Flexbox>
+                  <PillAddBtn onClick={modalHandler}>약 추가하기</PillAddBtn>
+                  <MypageAlarm>
+                    <ToggleWrap>
+                      <ToggleBox onClick={toggleHandler}>
+                        <div
+                          className={`toggle-wrap ${
+                            toggleOn ? 'toggle-checked' : ''
+                          }`}
+                        >
+                          {}
+                        </div>
+                        <div
+                          className={`toggle-circle ${
+                            toggleOn ? 'toggle-checked' : ''
+                          }`}
+                        >
+                          {}
+                        </div>
+                      </ToggleBox>
+                      <p className={toggleOn ? 'toggle-checked' : null}>
+                        {toggleOn ? '알림 받기' : '알림 해제'}
+                      </p>
+                    </ToggleWrap>
+                    <FieldTooltip>
+                      <FaInfoCircle />
+                      <p>복용 시간 알림을 받으려면 알림 받기로 설정하세요.</p>
+                    </FieldTooltip>
+                  </MypageAlarm>
+                </Flexbox>
                 {modalOpen ? (
                   <MyPharmModal setModalOpen={setModalOpen} />
                 ) : null}
