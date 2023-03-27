@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { BsFillImageFill } from 'react-icons/bs';
+import { IoMdCloseCircle } from 'react-icons/io';
 import { HeaderBtn } from '../styles/s-header';
 import { SmBtn } from '../styles/globalStyle';
 import { useUserInfoStore } from '../Stores/userInfoStore';
 import { useIsLoginStore, useIsSocialLoginStore } from '../Stores/loginStore';
 
 const ProfileWrap = styled.article`
+  position: relative;
   width: 250px;
   padding: 15px 15px 5px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
@@ -16,6 +18,13 @@ const ProfileWrap = styled.article`
   @media (max-width: 768px) {
     width: 100%;
   }
+`;
+const CloseButton = styled.button`
+  position: absolute;
+  font-size: x-large;
+  top: 5%;
+  right: 5%;
+  color: var(--mainbl);
 `;
 const ProfileContent = styled.div`
   position: relative;
@@ -105,12 +114,14 @@ const DefaultProfile = styled.div`
 const Profile = () => {
   const { setIsLogin } = useIsLoginStore(state => state);
   const { setIsSocialLogin } = useIsSocialLoginStore(state => state);
-  const { userInfo, setUserInfo } = useUserInfoStore(state => state);
+  const [profileInfo, setProfileInfo] = useState([]);
+  const { userInfo } = useUserInfoStore(state => state);
   const [changedInfo, setChangedInfo] = useState({
     name: '',
     gender: '',
     age: '0-9',
   });
+  const [isUpdate, setIsUpdate] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [image, setImage] = useState({
     image_file: '',
@@ -178,27 +189,43 @@ const Profile = () => {
       memberGender: changedInfo.gender,
       memberAge: changedInfo.age,
     };
-    const formData = new FormData();
-    formData.append('memberName', changedInfo.name);
-    formData.append('memberGender', changedInfo.gender);
-    formData.append('memberAge', changedInfo.age);
-    formData.append('memberImage', image.preview_URL);
-    console.log(patchData);
+
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/pp/members/${memberId}`,
-        formData,
+        patchData,
         {
           withCredentials: true,
         },
       )
       .then(res => {
         console.log(res);
+        if (image.image_file !== '') {
+          // 이미지 추가
+          const formData = new FormData();
+          formData.append('memberImage', image.image_file);
+
+          axios
+            .patch(
+              `${process.env.REACT_APP_API_URL}/pp/members/image/${memberId}`,
+              formData,
+              {
+                'Content-Type': 'multipart/form-data',
+                withCredentials: true,
+              },
+            )
+            .then(response => {
+              console.log(response);
+            })
+            .catch(err => console.log(err));
+        }
+
+        setIsUpdate(true);
         // 입력값 초기화
-        setChangedInfo({});
+        initializeChange();
+        editModeHandler();
       })
       .catch(err => console.log(err));
-    initializeChange();
   };
 
   // Input 정보 처리
@@ -222,6 +249,7 @@ const Profile = () => {
       axios
         .delete(
           `${process.env.REACT_APP_API_URL}/pp/members/withdraw/${memberId}`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -233,7 +261,7 @@ const Profile = () => {
           localStorage.clear();
           setIsLogin(false);
           setIsSocialLogin(false);
-          setUserInfo({});
+          setProfileInfo([]);
           alert('그동안 이용해주셔서 감사합니다.');
           navigate('/');
         })
@@ -241,12 +269,31 @@ const Profile = () => {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/pp/members/${memberId}`)
+      .then(res => {
+        console.log(res);
+        setProfileInfo(res.data.data);
+        setImage({
+          image_file: '',
+          preview_URL: res.data.data.picture,
+        });
+        setIsUpdate(false);
+      })
+      .catch(err => console.log(err));
+  }, [isUpdate]);
+
   console.log(changedInfo);
+  console.log(profileInfo);
 
   return (
     <div>
       {editMode ? (
         <ProfileWrap>
+          <CloseButton onClick={editModeHandler}>
+            <IoMdCloseCircle />
+          </CloseButton>
           <ProfileImg className={image.preview_URL ? 'uploaded' : null}>
             <label htmlFor="imageUpload">
               <BsFillImageFill />
@@ -318,7 +365,6 @@ const Profile = () => {
 
             <HeaderBtn
               onClick={() => {
-                editModeHandler();
                 submitHandler();
               }}
               disabled={
@@ -335,8 +381,8 @@ const Profile = () => {
       ) : (
         <ProfileWrap>
           <ProfileImg>
-            {image.preview_URL ? (
-              <img src={image.preview_URL} alt="내 프로필" />
+            {profileInfo.picture ? (
+              <img src={profileInfo.picture} alt="내 프로필" />
             ) : (
               <DefaultProfile>
                 <BsFillImageFill />
@@ -346,13 +392,14 @@ const Profile = () => {
           <ProfileContent>
             <ProfileItem>
               <li>
-                <SmBtn>이름</SmBtn> <p>{userInfo.memberName}</p>{' '}
+                <SmBtn>이름</SmBtn> <p>{profileInfo.memberName}</p>{' '}
               </li>
               <li>
-                <SmBtn>성별</SmBtn> <p>{genderCheck(userInfo.memberGender)}</p>{' '}
+                <SmBtn>성별</SmBtn>{' '}
+                <p>{genderCheck(profileInfo.memberGender)}</p>{' '}
               </li>
               <li>
-                <SmBtn>나이</SmBtn> <p>{userInfo.memberAge}</p>{' '}
+                <SmBtn>나이</SmBtn> <p>{profileInfo.memberAge}</p>{' '}
               </li>
             </ProfileItem>
             {!userInfo.socialLogin ? (

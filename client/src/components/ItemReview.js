@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
+import defaultProfileImg from '../images/default_profileImg.png';
 import { useMedicineItemStore } from '../Stores/medicineItemStore';
 import { useDiseasesTagsStore } from '../Stores/diseasesTagsStore';
 import { useUserInfoStore } from '../Stores/userInfoStore';
@@ -93,8 +94,12 @@ const ItemReview = () => {
   const tagInputEnter = e => {
     //  if (e.key === 'Enter' || e.key === ',' || e.key === '+' || e.key === ' ') {
     if (e.key === 'Enter') {
-      setReviewTags([...reviewTags, reviewMedInput]);
-      setReviewMedInput('');
+      if (searchTags.indexOf(reviewMedInput) === -1) {
+        window.alert('태그에 없는 입력값 입니다.\n다시 입력해주세요');
+      } else {
+        setReviewTags([...reviewTags, reviewMedInput]);
+        setReviewMedInput('');
+      }
     }
   };
 
@@ -233,6 +238,7 @@ const ItemReview = () => {
   }, [currentPage, isUpdate]);
 
   console.log(reviewTags);
+  console.log(reviewList);
 
   return (
     <ReviewWrap>
@@ -275,13 +281,18 @@ const ItemReview = () => {
               </div>
               <ReviewContent>
                 <UserImage>
-                  <img src="https://picsum.photos/300/200" alt="user" />
+                  <img
+                    src={!item.memberImg ? defaultProfileImg : item.memberImg}
+                    alt="user"
+                  />
                 </UserImage>
                 <UserInputs>
                   <span className="username">{item.memberName}</span>
                   <span className="writedate">{item.lastModifiedAt}</span>
                   <div>
-                    {item.reviewImg ? <img src={item.reviewImg} /> : null}
+                    {item.reviewImg.length !== 0 ? (
+                      <img src={item.reviewImg} />
+                    ) : null}
 
                     {item.reviewContent}
                   </div>
