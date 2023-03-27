@@ -1,8 +1,18 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ApexCharts from 'react-apexcharts';
+import AOS from 'aos';
+import Banner from '../components/Banner';
+import { BodyWrap,ChartTitle,ChartWrap,
+  ChartBox,BarChart,OverBox
+} from '../styles/s-chart';
 
 const Chart = () => {
+  useEffect(() => {
+    AOS.init({ disable: 'mobile' });
+  }, []);
+
+
   console.log('차트 페이지');
   const [likesTop10, setLikesTop10] = useState({
     data: [],
@@ -79,72 +89,101 @@ const Chart = () => {
   console.log(maleRegisterTop10, femaleRegisterTop10);
   return (
     <>
-      {/* 남성 */}
-      <div className="flex flex-row items-center">
-        <div className="flex flex-col">
-          <p className=" mt-40">남성 등록 의약품 Top 10</p>
-          <ApexCharts
-            className="top10 w-80 h-80"
-            type="donut"
-            series={maleRegisterTop10.series}
-            options={{
-              chart: {
-                width: 200,
-                type: 'donut',
-              },
-              labels: maleRegisterTop10.labels,
-            }}
-            width={400}
-          />
-        </div>
+      <Banner>
+        <div>Top List Chart</div>
+      </Banner>
+      <BodyWrap>
+        <ChartTitle>PharmPalm의 Top 10 의약품</ChartTitle>
+        <ChartWrap>
+          <ChartBox 
+            data-aos="fade-down"
+            data-aos-duration="2000"
+            data-aos-once="true"
+          >
+            <h3>남성 등록 의약품 Top 10</h3>
+            <ApexCharts
+              type="donut"
+              series={maleRegisterTop10.series}
+              options={{
+                chart: {
+                  type: 'donut',
+                },
+                labels: maleRegisterTop10.labels,
+              }}
+            />
+          </ChartBox>
+          <ChartBox 
+            data-aos="fade-down"
+            data-aos-duration="2000"
+            data-aos-delay="400"
+            data-aos-once="true"
+          >
+            <h3>여성 등록 의약품 Top 10</h3>
+            <ApexCharts
+              type="donut"
+              series={femaleRegisterTop10.series}
+              options={{
+                chart: {
+                  type: 'donut',
+                },
+                labels: femaleRegisterTop10.labels,
+              }}
+            />
+          </ChartBox>
+        </ChartWrap>
 
-        {/* 여성 */}
-        <div className="flex flex-col ml-20">
-          <p className="mt-40">여성 등록 의약품 Top 10</p>
-          <ApexCharts
-            className="top10 w-80 h-80"
-            type="donut"
-            series={femaleRegisterTop10.series}
-            options={{
-              chart: {
-                width: 200,
-              },
-              labels: femaleRegisterTop10.labels,
-            }}
-            width={400}
-          />
-        </div>
-      </div>
+        <BarChart
+          className='bar-chart'
+          data-aos="fade-down"
+          data-aos-duration="2000"
+          data-aos-once="true"
+        >
+          <h2>전체 좋아요 Top 10</h2>
+          <OverBox>
+            <ApexCharts
+              type="bar"
+              series={[
+                {
+                  data: likesTop10.data,
+                },
+              ]}
+              options={{
+                chart: {
 
-      <div>
-        <p>전체 좋아요 Top 10</p>
-        <ApexCharts
-          className="top10 w-500 h-80"
-          type="bar"
-          series={[
-            {
-              data: likesTop10.data,
-            },
-          ]}
-          options={{
-            chart: {
-              width: 200,
-            },
-            plotOptions: {
-              bar: {
-                borderRadius: 4,
-                horizontal: true,
-              },
-            },
-            dataLabels: {
-              enabled: false,
-            },
-            xaxis: {
-              categories: likesTop10.categories,
-            },
-          }}
-        />
-      </div>
+                },
+                plotOptions: {
+                  bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                  },
+                },
+                dataLabels: {
+                  enabled: false,
+                },
+                xaxis: {
+                  categories: likesTop10.categories,
+                },
+                responsive: [{
+                  breakpoint: 768,
+                  options: {
+                    plotOptions: {
+                      bar: {
+                        horizontal: false
+                      }
+                    },
+                    legend: {
+                      position: "bottom"
+                    },
+                    chart: {
+                      width : '500px'
+                    },
+                  },
+                }]
+              }}
+            />
+          </OverBox>
+        </BarChart>
+      </BodyWrap>
     </>
   );
 };

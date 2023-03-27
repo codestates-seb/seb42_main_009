@@ -18,6 +18,7 @@ import {
   MyPharmBtnWrap,
   MyPharmSubmit,
   SearchList,
+  SearchBtn
 } from '../styles/s-mypharmmodal';
 import TimeInput from './TimeInput';
 import { useSearchTextStore } from '../Stores/listSearchStore';
@@ -109,6 +110,27 @@ const MyPharmModal = ({ setModalOpen }) => {
         })
         .catch(err => console.log(err));
     }
+  };
+  const searchClickSubmit = async e => {
+    e.preventDefault();
+    setListOpen(true);
+    setSearchText(searchTxt);
+    await axios
+      .get(
+        `${URI}/pp/medicines/name?medicineName=${searchTxt}&page=1&size=12`,
+      )
+      .then(res => {
+        const searchMedicine = res.data.data.map(item => {
+          const newObj = {};
+          return {
+            ...newObj,
+            medicineId: item.medicineId,
+            medicineName: item.medicineName,
+          };
+        });
+        setSearchResult(searchMedicine);
+      })
+      .catch(err => console.log(err));
   };
   const listSelect = (e, id) => {
     const selected = e.target.textContent;
@@ -248,11 +270,13 @@ const MyPharmModal = ({ setModalOpen }) => {
                   type="text"
                   id="medicine_name"
                   width="160px"
+                  mobileWidth='120px'
                   value={searchTxt}
                   onChange={searchHandler}
                   onKeyDown={searchSubmit}
                   required
                 />
+                <SearchBtn onClick={searchClickSubmit}>검색</SearchBtn>
                 <SearchList className={listOpen ? 'list-open' : null}>
                   {searchResult.map(item => (
                     <li
