@@ -68,6 +68,36 @@ export const InputItem = styled.li`
     }
   }
 `;
+export const InputItemProfile = styled.li`
+  > label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: var(--fz-base);
+    font-weight: 500;
+  }
+  > input {
+    width: 100%;
+    border-bottom: 1px solid var(--bl-1);
+    font-size: var(--fz-base);
+    padding: 3px 0;
+    &:focus {
+      border-color: var(--mainbl);
+    }
+  }
+  @media (max-width: 768px) {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 0;
+    > label {
+      width: 90px;
+      margin-bottom: 0;
+    }
+    > input {
+      width: calc(100% - 100px);
+    }
+  }
+`;
 export const RadioBox = styled.div`
   display: inline-block;
   margin-right: 30px;

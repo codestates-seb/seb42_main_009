@@ -8,6 +8,7 @@ import { HeaderBtn } from '../styles/s-header';
 import { SmBtn } from '../styles/globalStyle';
 import { useUserInfoStore } from '../Stores/userInfoStore';
 import { useIsLoginStore, useIsSocialLoginStore } from '../Stores/loginStore';
+import { InputItemProfile, RadioBox } from '../styles/s-auth';
 
 const ProfileWrap = styled.article`
   position: relative;
@@ -110,6 +111,14 @@ const DefaultProfile = styled.div`
   font-size: 60px;
   color: var(--mainbl);
 `;
+const WithdrawButton = styled.button`
+  font-weight: 600;
+  float: right;
+  display: inline-block;
+  :hover {
+    color: var(--mainbl);
+  }
+`;
 
 const Profile = () => {
   const { setIsLogin } = useIsLoginStore(state => state);
@@ -161,29 +170,6 @@ const Profile = () => {
   };
 
   const submitHandler = () => {
-    // const formData = new FormData();
-    // formData.append('reviewContent', reviewItem.reviewContent);
-    // formData.append('reviewImage', reviewItem.reviewImg.image_file);
-    // formData.append('reviewOtherMedicine', JSON.stringify(reviewTags));
-    // formData.append('memberId', userInfo.memberId);
-
-    // axios
-    //   .post(
-    //     `${process.env.REACT_APP_API_URL}/pp/reviews/${medicineItem.medicineId}`,
-    //     formData,
-    //     {
-    //       'Content-Type': 'multipart/form-data',
-    //       withCredentials: true,
-    //     },
-    //   )
-    //   .then(res => {
-    //     console.log(res);
-    //     setIsUpdate(true);
-    //     setReviewAddOpen(!reviewAddOpen);
-    //     initializeItem();
-    //   })
-    //   .catch(err => console.log(err));
-
     const patchData = {
       memberName: changedInfo.name,
       memberGender: changedInfo.gender,
@@ -324,7 +310,29 @@ const Profile = () => {
               </li>
               <li>
                 <SmBtn>성별</SmBtn>{' '}
-                <p>
+                <InputItemProfile className="pl-2">
+                  <RadioBox>
+                    <input
+                      type="radio"
+                      id="남성"
+                      name="gender"
+                      value="남성"
+                      onClick={handleInputValue('gender')}
+                    />
+                    <label htmlFor="남성">남성</label>
+                  </RadioBox>
+                  <RadioBox>
+                    <input
+                      type="radio"
+                      id="여성"
+                      name="gender"
+                      value="여성"
+                      onClick={handleInputValue('gender')}
+                    />
+                    <label htmlFor="여성">여성</label>
+                  </RadioBox>
+                </InputItemProfile>
+                {/* <p>
                   <input
                     type="radio"
                     id="남성"
@@ -342,8 +350,10 @@ const Profile = () => {
                     value="여성"
                     onClick={handleInputValue('gender')}
                   />
-                  <label htmlFor="여성">여성</label>
-                </p>
+                  <label htmlFor="여성" className=" pl-10">
+                    여성
+                  </label>
+                </p> */}
               </li>
               <li>
                 <SmBtn>나이</SmBtn>
@@ -410,9 +420,9 @@ const Profile = () => {
           </ProfileContent>
         </ProfileWrap>
       )}
-      <button className="mt-4" onClick={deleteProfileHandler}>
+      <WithdrawButton className="mt-4" onClick={deleteProfileHandler}>
         회원탈퇴
-      </button>
+      </WithdrawButton>
     </div>
   );
 };
