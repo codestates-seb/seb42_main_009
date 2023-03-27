@@ -50,7 +50,7 @@ export const FieldTitle = styled.h2`
   font-size: var(--fz-md);
   margin-bottom: 10px;
   font-weight: 600;
-  @media (max-width: 768px){
+  @media (max-width: 768px) {
     font-size: var(--fz-base);
   }
 `;
@@ -76,7 +76,7 @@ export const FieldBox = styled.div`
       color: var(--mainbl);
       margin-left: 7px;
     }
-    @media (max-width: 768px){
+    @media (max-width: 768px) {
       width: 70px;
     }
   }
@@ -93,8 +93,8 @@ export const FieldInput = styled.input`
   padding: 0 10px;
   border: 1px solid var(--mainbl);
   width: ${props => props.width || '80px'};
-  @media (max-width: 768px){
-    width: ${props=>props.mobileWidth} !important;
+  @media (max-width: 768px) {
+    width: ${props => props.mobileWidth} !important;
   }
 `;
 export const FieldSelect = styled.div`
@@ -202,7 +202,7 @@ export const TimeSelect = styled.div`
 `;
 export const SearchBtn = styled.button`
   flex: none;
-  width: 55px; 
+  width: 55px;
   height: 34px;
   margin-left: 5px;
   background: var(--mainbl);
@@ -230,7 +230,7 @@ export const SearchList = styled.ul`
     line-height: 2;
     cursor: pointer;
   }
-  @media (max-width: 768px){
+  @media (max-width: 768px) {
     left: 80px;
   }
 `;

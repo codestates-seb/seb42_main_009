@@ -18,7 +18,7 @@ import {
   MyPharmBtnWrap,
   MyPharmSubmit,
   SearchList,
-  SearchBtn
+  SearchBtn,
 } from '../styles/s-mypharmmodal';
 import TimeInput from './TimeInput';
 import { useSearchTextStore } from '../Stores/listSearchStore';
@@ -116,9 +116,7 @@ const MyPharmModal = ({ setModalOpen }) => {
     setListOpen(true);
     setSearchText(searchTxt);
     await axios
-      .get(
-        `${URI}/pp/medicines/name?medicineName=${searchTxt}&page=1&size=12`,
-      )
+      .get(`${URI}/pp/medicines/name?medicineName=${searchTxt}&page=1&size=12`)
       .then(res => {
         const searchMedicine = res.data.data.map(item => {
           const newObj = {};
@@ -270,7 +268,7 @@ const MyPharmModal = ({ setModalOpen }) => {
                   type="text"
                   id="medicine_name"
                   width="160px"
-                  mobileWidth='120px'
+                  mobileWidth="120px"
                   value={searchTxt}
                   onChange={searchHandler}
                   onKeyDown={searchSubmit}

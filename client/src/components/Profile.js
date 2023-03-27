@@ -112,11 +112,12 @@ const DefaultProfile = styled.div`
   color: var(--mainbl);
 `;
 const WithdrawButton = styled.button`
+  display: block;
+  margin-top: 20px;
+  margin-left: auto;
   font-weight: 600;
-  float: right;
-  display: inline-block;
-  :hover {
-    color: var(--mainbl);
+  &:hover {
+    color: var(--red-2);
   }
 `;
 
@@ -398,9 +399,7 @@ const Profile = () => {
           </ProfileContent>
         </ProfileWrap>
       )}
-      <WithdrawButton className="mt-4" onClick={deleteProfileHandler}>
-        회원탈퇴
-      </WithdrawButton>
+      <WithdrawButton onClick={deleteProfileHandler}>회원탈퇴</WithdrawButton>
     </div>
   );
 };

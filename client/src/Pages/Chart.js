@@ -3,15 +3,19 @@ import { useEffect, useState } from 'react';
 import ApexCharts from 'react-apexcharts';
 import AOS from 'aos';
 import Banner from '../components/Banner';
-import { BodyWrap,ChartTitle,ChartWrap,
-  ChartBox,BarChart,OverBox
+import {
+  BodyWrap,
+  ChartTitle,
+  ChartWrap,
+  ChartBox,
+  BarChart,
+  OverBox,
 } from '../styles/s-chart';
 
 const Chart = () => {
   useEffect(() => {
     AOS.init({ disable: 'mobile' });
   }, []);
-
 
   console.log('차트 페이지');
   const [likesTop10, setLikesTop10] = useState({
@@ -95,7 +99,7 @@ const Chart = () => {
       <BodyWrap>
         <ChartTitle>PharmPalm의 Top 10 의약품</ChartTitle>
         <ChartWrap>
-          <ChartBox 
+          <ChartBox
             data-aos="fade-down"
             data-aos-duration="2000"
             data-aos-once="true"
@@ -112,7 +116,7 @@ const Chart = () => {
               }}
             />
           </ChartBox>
-          <ChartBox 
+          <ChartBox
             data-aos="fade-down"
             data-aos-duration="2000"
             data-aos-delay="400"
@@ -133,7 +137,7 @@ const Chart = () => {
         </ChartWrap>
 
         <BarChart
-          className='bar-chart'
+          className="bar-chart"
           data-aos="fade-down"
           data-aos-duration="2000"
           data-aos-once="true"
@@ -148,9 +152,7 @@ const Chart = () => {
                 },
               ]}
               options={{
-                chart: {
-
-                },
+                chart: {},
                 plotOptions: {
                   bar: {
                     borderRadius: 4,
@@ -163,22 +165,24 @@ const Chart = () => {
                 xaxis: {
                   categories: likesTop10.categories,
                 },
-                responsive: [{
-                  breakpoint: 768,
-                  options: {
-                    plotOptions: {
-                      bar: {
-                        horizontal: false
-                      }
-                    },
-                    legend: {
-                      position: "bottom"
-                    },
-                    chart: {
-                      width : '500px'
+                responsive: [
+                  {
+                    breakpoint: 768,
+                    options: {
+                      plotOptions: {
+                        bar: {
+                          horizontal: false,
+                        },
+                      },
+                      legend: {
+                        position: 'bottom',
+                      },
+                      chart: {
+                        width: '500px',
+                      },
                     },
                   },
-                }]
+                ],
               }}
             />
           </OverBox>
