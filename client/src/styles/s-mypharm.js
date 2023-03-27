@@ -71,7 +71,8 @@ export const MyPillList = styled.ul`
         background: var(--nightbl);
         color: #fff;
         font-size: var(--fz-base);
-        margin-right: 7px;
+        margin-right: 4px;
+        margin-bottom: 4px;
       }
     }
     @media (max-width: 768px) {
