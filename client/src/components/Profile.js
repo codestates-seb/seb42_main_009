@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { BsFillImageFill } from 'react-icons/bs';
 import { HeaderBtn } from '../styles/s-header';
 import { SmBtn } from '../styles/globalStyle';
 import { useUserInfoStore } from '../Stores/userInfoStore';
+import { useIsLoginStore, useIsSocialLoginStore } from '../Stores/loginStore';
 
 const ProfileWrap = styled.article`
   width: 250px;
@@ -102,8 +103,14 @@ const DefaultProfile = styled.div`
 `;
 
 const Profile = () => {
-  const { userInfo } = useUserInfoStore(state => state);
-  const [changedInfo, setChangedInfo] = useState({});
+  const { setIsLogin } = useIsLoginStore(state => state);
+  const { setIsSocialLogin } = useIsSocialLoginStore(state => state);
+  const { userInfo, setUserInfo } = useUserInfoStore(state => state);
+  const [changedInfo, setChangedInfo] = useState({
+    name: '',
+    gender: '',
+    age: '0-9',
+  });
   const [editMode, setEditMode] = useState(false);
   const [image, setImage] = useState({
     image_file: '',
@@ -112,6 +119,16 @@ const Profile = () => {
   // memberId 추출
   const location = useLocation();
   const memberId = location.pathname.split('/')[2];
+
+  const navigate = useNavigate();
+
+  const initializeChange = () => {
+    setChangedInfo({
+      name: '',
+      gender: '',
+      age: '0-9',
+    });
+  };
 
   const saveImage = e => {
     e.preventDefault();
@@ -133,15 +150,44 @@ const Profile = () => {
   };
 
   const submitHandler = () => {
+    // const formData = new FormData();
+    // formData.append('reviewContent', reviewItem.reviewContent);
+    // formData.append('reviewImage', reviewItem.reviewImg.image_file);
+    // formData.append('reviewOtherMedicine', JSON.stringify(reviewTags));
+    // formData.append('memberId', userInfo.memberId);
+
+    // axios
+    //   .post(
+    //     `${process.env.REACT_APP_API_URL}/pp/reviews/${medicineItem.medicineId}`,
+    //     formData,
+    //     {
+    //       'Content-Type': 'multipart/form-data',
+    //       withCredentials: true,
+    //     },
+    //   )
+    //   .then(res => {
+    //     console.log(res);
+    //     setIsUpdate(true);
+    //     setReviewAddOpen(!reviewAddOpen);
+    //     initializeItem();
+    //   })
+    //   .catch(err => console.log(err));
+
     const patchData = {
       memberName: changedInfo.name,
       memberGender: changedInfo.gender,
       memberAge: changedInfo.age,
     };
+    const formData = new FormData();
+    formData.append('memberName', changedInfo.name);
+    formData.append('memberGender', changedInfo.gender);
+    formData.append('memberAge', changedInfo.age);
+    formData.append('memberImage', image.preview_URL);
+    console.log(patchData);
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/pp/members/${memberId}`,
-        patchData,
+        formData,
         {
           withCredentials: true,
         },
@@ -152,6 +198,7 @@ const Profile = () => {
         setChangedInfo({});
       })
       .catch(err => console.log(err));
+    initializeChange();
   };
 
   // Input 정보 처리
@@ -163,10 +210,35 @@ const Profile = () => {
       setChangedInfo({ ...changedInfo, [key]: e.target.value });
     }
   };
-
   const genderCheck = gender => {
     if (gender === 'male' || gender === '남성') return '남성';
     return '여성';
+  };
+
+  // 회원 삭제 Handler
+  const deleteProfileHandler = e => {
+    e.preventDefault();
+    if (window.confirm('확인을 누르면 회원 정보가 삭제됩니다.')) {
+      axios
+        .delete(
+          `${process.env.REACT_APP_API_URL}/pp/members/withdraw/${memberId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+              withCredentials: true,
+            },
+          },
+        )
+        .then(() => {
+          localStorage.clear();
+          setIsLogin(false);
+          setIsSocialLogin(false);
+          setUserInfo({});
+          alert('그동안 이용해주셔서 감사합니다.');
+          navigate('/');
+        })
+        .catch(err => console.log(err));
+    }
   };
 
   console.log(changedInfo);
@@ -212,7 +284,6 @@ const Profile = () => {
                     name="gender"
                     value="남성"
                     onClick={handleInputValue('gender')}
-                    checked
                   />
                   <label htmlFor="남성">남성</label>
                 </p>
@@ -231,7 +302,9 @@ const Profile = () => {
                 <SmBtn>나이</SmBtn>
                 <p>
                   <select id="age" name="age" onClick={handleInputValue('age')}>
-                    <option value="0-9">10세 미만</option>
+                    <option value="0-9" checked>
+                      10세 미만
+                    </option>
                     <option value="10-19">10대</option>
                     <option value="20-29">20대</option>
                     <option value="30-39">30대</option>
@@ -248,6 +321,11 @@ const Profile = () => {
                 editModeHandler();
                 submitHandler();
               }}
+              disabled={
+                changedInfo.name === '' ||
+                changedInfo.gender === '' ||
+                changedInfo.age === ''
+              }
               width="70px"
             >
               수정완료
@@ -278,21 +356,16 @@ const Profile = () => {
               </li>
             </ProfileItem>
             {!userInfo.socialLogin ? (
-              <HeaderBtn
-                onClick={editModeHandler}
-                width="70px"
-                disabled={
-                  changedInfo.name === '' ||
-                  changedInfo.gender === '' ||
-                  changedInfo.age === ''
-                }
-              >
+              <HeaderBtn onClick={editModeHandler} width="70px">
                 정보수정
               </HeaderBtn>
             ) : null}
           </ProfileContent>
         </ProfileWrap>
       )}
+      <button className="mt-4" onClick={deleteProfileHandler}>
+        회원탈퇴
+      </button>
     </div>
   );
 };
