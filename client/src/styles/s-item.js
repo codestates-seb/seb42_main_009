@@ -122,7 +122,7 @@ export const UserInputs = styled.div`
     object-fit: cover;
     margin-bottom: 15px;
     ${ReviewItem}.review-open & {
-      width: 60%;
+      max-width: 60%;
       height: auto;
     }
   }
@@ -194,6 +194,24 @@ export const ReviewImage = styled.div`
   border-radius: 6px;
   overflow: auto;
   > label {
+    cursor: pointer;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    color: var(--mainbl);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 30px;
+    > span {
+      font-size: var(--fz-base);
+      padding-top: 10px;
+      line-height: 1.2;
+    }
   }
   > input {
     position: absolute;
@@ -201,6 +219,10 @@ export const ReviewImage = styled.div`
     top: 0;
     width: 100%;
     height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  &.uploaded > label {
     opacity: 0;
   }
 `;
