@@ -100,7 +100,7 @@ const Item = () => {
                   <div>{medicineItem.medicineName}</div>
                 </li>
                 <li>
-                  <span className="w-[89px]">성분</span>
+                  <span>성분</span>
                   <div>{medicineItem.medicineIngredient}</div>
                 </li>
                 <li>
