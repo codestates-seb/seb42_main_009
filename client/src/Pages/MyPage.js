@@ -252,7 +252,7 @@ const MyPage = () => {
                   ))}
                 </ReviewList>
                 {/* Pagination */}
-                <Pagination>
+                <Pagination className='always'>
                   <ReactPaginate
                     previousLabel="<"
                     nextLabel=">"
