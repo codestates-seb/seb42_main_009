@@ -43,13 +43,16 @@ public class ReviewController {
 
     @PostMapping(value = "/{medicine-id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postMedicineReview(HttpServletRequest request,
-                                             @RequestParam(value="reviewImage") List<MultipartFile> image,
+                                             @RequestParam(value = "reviewImage", required = false) List<MultipartFile> image,
                                              @PathVariable("medicine-id") @Positive long medicineId,
                                              @Valid ReviewPostDto reviewPostDto) throws IOException {
+        if (image == null) {
+            image = Collections.emptyList();
+        }
         System.out.println(image);
         System.out.println(reviewPostDto.getMemberId());
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.reviewToReviewResponseDto(
-                reviewService.createReview(image ,mapper.reviewPostDtoToReview(reviewPostDto), medicineId))), HttpStatus.CREATED);
+                reviewService.createReview(image, mapper.reviewPostDtoToReview(reviewPostDto), medicineId))), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{review-id}")
