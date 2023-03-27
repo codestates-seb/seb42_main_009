@@ -28,6 +28,7 @@ function App() {
   const { setIsLogin } = useIsLoginStore(state => state);
   const { setUserInfo } = useUserInfoStore(state => state);
   const { setDiseasesTags } = useDiseasesTagsStore(state => state);
+
   const navigate = useNavigate();
 
   const authHandler = () => {

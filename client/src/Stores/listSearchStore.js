@@ -16,7 +16,7 @@ const useSearchApiStore = create(set => ({
 }));
 
 const useSearchIsUpdateStore = create(set => ({
-  searchIsUpdate: '',
+  searchIsUpdate: false,
   setSearchIsUpdate: state => set(() => ({ searchIsUpdate: state })),
 }));
 
