@@ -371,6 +371,7 @@ export const ItemOverview = styled.div`
         position: relative;
         padding: 0 15px 0 10px;
         flex: none;
+        width: 80px;
         white-space: nowrap;
         color: var(--mainbl);
         &:after {
@@ -382,6 +383,10 @@ export const ItemOverview = styled.div`
           width: 3px;
           height: 20px;
         }
+      }
+      > div {
+        width: calc(100% - 80px);
+        word-break: keep-all;
       }
       @media (max-width: 768px) {
         font-size: var(--fz-base);

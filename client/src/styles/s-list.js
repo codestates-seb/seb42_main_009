@@ -179,5 +179,8 @@ export const Pagination = styled.div`
   @media (max-width: 768px) {
     margin-top: 30px;
     display: none;
+    &.always {
+      display: flex;
+    }
   }
 `;

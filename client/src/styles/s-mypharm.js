@@ -66,11 +66,13 @@ export const MyPillList = styled.ul`
       margin-top: 10px;
       > span {
         display: inline-block;
-        padding: 5px 10px;
+        width: 55px;
+        padding: 5px 0;
+        text-align: center;
         border-radius: 20px;
         background: var(--nightbl);
         color: #fff;
-        font-size: var(--fz-base);
+        font-size: var(--fz-sm);
         margin-right: 4px;
         margin-bottom: 4px;
       }
