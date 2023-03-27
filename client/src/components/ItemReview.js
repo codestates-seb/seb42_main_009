@@ -8,6 +8,7 @@ import { useUserInfoStore } from '../Stores/userInfoStore';
 import { SmBtn } from '../styles/globalStyle';
 import { IoMdClose } from 'react-icons/io';
 import { FaPlus } from 'react-icons/fa';
+import { BsFillImageFill } from 'react-icons/bs';
 import { Pagination } from '../styles/s-list';
 import {
   ReviewWrap,
@@ -39,7 +40,7 @@ const ItemReview = () => {
   const { diseasesTags } = useDiseasesTagsStore(state => state);
   const [image, setImage] = useState({
     image_file: '',
-    preview_URL: 'img/default_image.png',
+    preview_URL: '',
   });
   const [reviewItem, setReviewItem] = useState({
     reviewImg: {},
@@ -112,7 +113,7 @@ const ItemReview = () => {
     });
     setImage({
       image_file: '',
-      preview_URL: 'img/default_image.png',
+      preview_URL: '',
     });
     setReviewMedInput('');
     setSearchTags([]);
@@ -302,8 +303,13 @@ const ItemReview = () => {
               >
                 <IoMdClose />
               </button>
-              <ReviewImage>
+              <ReviewImage className={image.preview_URL ? 'uploaded' : null}>
+                <label htmlFor='addReviewImg'>
+                  <BsFillImageFill />
+                  <span>클릭해서 업로드</span>
+                </label>
                 <input
+                  id='addReviewImg'
                   type="file"
                   accept="image/*"
                   onChange={saveImage}
@@ -322,6 +328,7 @@ const ItemReview = () => {
                   value={reviewMedInput}
                   onChange={tagInputHandler}
                   onKeyDown={tagInputEnter}
+                  placeholder='태그를 입력하세요'
                 />
                 <ul>
                   {searchTags.map((item, idx) => {
@@ -370,8 +377,13 @@ const ItemReview = () => {
               >
                 <IoMdClose />
               </button>
-              <ReviewImage>
+              <ReviewImage className={image.preview_URL ? 'uploaded' : null}>
+                <label htmlFor='updateReviewImg'>
+                  <BsFillImageFill />
+                  <span>클릭해서 업로드</span>
+                </label>
                 <input
+                  id='updateReviewImg'
                   type="file"
                   accept="image/*"
                   onChange={saveImage}
@@ -390,6 +402,7 @@ const ItemReview = () => {
                   value={reviewMedInput}
                   onChange={tagInputHandler}
                   onKeyDown={tagInputEnter}
+                  placeholder='태그를 입력하세요'
                 />
                 <div className="entered-med">
                   {reviewTags.map((item, idx) => {
