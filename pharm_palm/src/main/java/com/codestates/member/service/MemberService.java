@@ -6,6 +6,8 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
+import com.codestates.review.entity.Review;
+import com.codestates.review.repository.ReviewRepository;
 import com.codestates.s3.uploader.S3Uploader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ import java.util.Optional;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final ReviewRepository reviewRepository;
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
@@ -31,8 +34,9 @@ public class MemberService {
     private final S3Uploader s3Uploader;
 
 
-    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils, S3Uploader s3Uploader) {
+    public MemberService(MemberRepository memberRepository, ReviewRepository reviewRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils, S3Uploader s3Uploader) {
         this.memberRepository = memberRepository;
+        this.reviewRepository = reviewRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
         this.s3Uploader = s3Uploader;
@@ -101,14 +105,18 @@ public class MemberService {
     public Member imageMember(MultipartFile image, Long memberId) throws IOException {
         System.out.println("Member service saveMember");
         Member member = memberRepository.findByMemberId(memberId);
+        List<Review> review = memberRepository.findAllReviewsByMemberId(memberId);
         if (member.getOauthMember().equals(true)) {
             throw new IllegalStateException("소셜 로그인 사용자는 프로필 이미지를 변경할 수 없습니다.");
         }
         if (!image.isEmpty()) {
             String storedFileName = s3Uploader.upload(image, "memberImages");
             member.setPicture(storedFileName);
+            for (Review r : review) {
+                r.setMemberImg(storedFileName); // Review 엔티티의 memberImg 변수에 "example.jpg" 값을 설정
+                reviewRepository.save(r);
+            }
         }
-
         return  memberRepository.save(member);
     }
 

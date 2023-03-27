@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ReviewPatchDto {
     private Long reviewId;
-    @NotBlank(message = "내용을 입력해 주세요.")
     private String reviewContent;
     private List<Disease> diseases;
 
