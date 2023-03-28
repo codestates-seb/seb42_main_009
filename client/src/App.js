@@ -34,10 +34,7 @@ function App() {
   const navigate = useNavigate();
 
   const authHandler = () => {
-    console.log(localStorage.getItem('accessToken'));
     const expireAt = localStorage.getItem('accessToken_expiresAt');
-
-    console.log(expireAt);
 
     // refresh token
     if (moment(expireAt).diff(moment()) < 0) {
@@ -140,15 +137,12 @@ function App() {
   };
 
   const naverAuthHandler = (code, state) => {
-    console.log(code);
-    console.log(state);
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/auth/naver/callback?code=${code}&state=${state}`,
       )
       .then(res => {
         localStorage.setItem('NAVER_accessToken', res.data.access_token);
-        console.log(localStorage.getItem('NAVER_accessToken'));
         setTimeout(() => {
           axios
             .get(
