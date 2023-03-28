@@ -31,14 +31,15 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final S3Uploader s3Uploader;
 
-    public Review createReview(List<MultipartFile> image, Review review, Long medicineId, Long memberId) throws IOException {
+    public Review createReview(List<MultipartFile> image, Review review, Long medicineId) throws IOException {
         Medicine medicine = medicineRepository.findByMedicineId(medicineId);
-        Member member = memberRepository.findByMemberId(memberId);
+        Member member = memberRepository.findByMemberId(review.getMemberId());
 
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
         String formattedDateLastModifiedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
         review.setCreatedAt(formattedDateTime);
         review.setLastModifiedAt(formattedDateLastModifiedTime);
+        review.setMedicineId(medicineId);
         review.setMemberName(member.getMemberName());
         review.setMemberImg(member.getPicture());
         review.setMember(member);
