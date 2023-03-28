@@ -1,15 +1,18 @@
 package com.codestates.oauth.controller;
 
 import com.codestates.auth.userdetails.MemberDetailsService;
+import com.codestates.dto.SingleResponseDto;
+import com.codestates.member.entity.Member;
+import com.codestates.member.mapper.MemberMapper;
+import com.codestates.member.repository.MemberRepository;
 import com.codestates.oauth.model.KakaoOAuthToken;
 import com.codestates.oauth.model.NaverOAuthToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
+import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -18,12 +21,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+import java.util.Optional;
+
 // 인증이 안된 사용자들이 출입할 수 있는 경로를 /auth/**허용
 // 그냥 주소가 / 이면 index.jsp 허용
 // static 이하에 있는 /js/**, /css/**, /image/** 허용
 
 @Controller
+@RequiredArgsConstructor
 public class UserController {
+
+    private final MemberRepository memberRepository;
+    private final MemberMapper mapper;
 
     @GetMapping("/auth/joinForm") // 회원가입하는데 인증필요없으므로 /auth
     public String joinForm() {
@@ -52,7 +62,7 @@ public class UserController {
         params.add("grant_type", "authorization_code");
         String myProperty = System.getenv("K_CLIENT_ID");
         params.add("client_id", myProperty);
-        params.add("redirect_uri", "http://ec2-3-38-166-142.ap-northeast-2.compute.amazonaws.com:8080/auth/kakao/callback");
+        params.add("redirect_uri", "http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/auth/kakao/callback");
         params.add("code", code);
 
         // 요청하기 위해 헤더(Header)와 데이터(Body)를 합칩니다.
@@ -132,7 +142,7 @@ public class UserController {
     }
 
     @GetMapping("/auth/kakao/info")
-    public @ResponseBody String kakaoToken(String token) { // Data를 리턴해주는 컨트롤러 함수
+    public @ResponseBody ResponseEntity kakaoToken(String token) { // Data를 리턴해주는 컨트롤러 함수
         RestTemplate rt = new RestTemplate();
         // HTTP POST를 요청할 때 보내는 데이터(body)를 설명해주는 헤더도 만들어 같이 보내줘야 합니다.
         HttpHeaders headers = new HttpHeaders();
@@ -140,33 +150,78 @@ public class UserController {
         headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
         HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> response = rt.exchange(
+        ResponseEntity<String> responseEntity = rt.exchange(
                 "https://kapi.kakao.com/v2/user/me", // https://{요청할 서버 주소}
                 HttpMethod.POST, // 요청할 방식
                 kakaoProfileRequest, // 요청할 때 보낼 데이터
                 String.class // 요청 시 반환되는 데이터 타입
         );
 
-        return response.getBody();
+        JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+        JSONObject kakaoAccount = jsonObject.getJSONObject("kakao_account");
+        JSONObject properties = jsonObject.getJSONObject("properties");
+        Member member = new Member();
+        member.setMemberEmail(kakaoAccount.getString("email"));
+        member.setMemberName(properties.getString("nickname"));
+        member.setPicture(properties.getString("profile_image"));
+        member.setMemberGender((kakaoAccount.getString("gender").equals("male")) ? "남성" : "여성");
+        member.setMemberAge(kakaoAccount.getString("age_range").replace("~", "-"));
+        member.setMemberState(Member.MemberState.ACTIVE);
+        member.setRoles(List.of("USER"));
+        member.setOauthMember(true);
+        if (!memberRepository.existsByEmail(kakaoAccount.getString("email"))) {
+            memberRepository.save(member);
+        } else {
+            Optional<Member> alreadyMember = memberRepository.findByMemberEmail(kakaoAccount.getString("email"));
+            System.out.println("성공적으로 로그인이 완료되었습니다!");
+            return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(
+                    alreadyMember.get())), HttpStatus.OK);
+        }
+        Optional<Member> signMember = memberRepository.findByMemberEmail(kakaoAccount.getString("email"));
+        System.out.println("성공적으로 회원가입이 완료되었습니다!");
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(
+                signMember.get())), HttpStatus.CREATED);
     }
 
     @GetMapping("/auth/naver/info")
-    public @ResponseBody String naverToken(String token) { // Data를 리턴해주는 컨트롤러 함수
+    public @ResponseBody ResponseEntity naverToken(String token) { // Data를 리턴해주는 컨트롤러 함수
         RestTemplate rt = new RestTemplate();
         // HTTP POST를 요청할 때 보내는 데이터(body)를 설명해주는 헤더도 만들어 같이 보내줘야 합니다.
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + token);
         headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> response = rt.exchange(
+        HttpEntity<MultiValueMap<String, String>> naverProfileRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> responseEntity = rt.exchange(
                 "https://openapi.naver.com/v1/nid/me", // https://{요청할 서버 주소}
                 HttpMethod.POST, // 요청할 방식
-                kakaoProfileRequest, // 요청할 때 보낼 데이터
+                naverProfileRequest, // 요청할 때 보낼 데이터
                 String.class // 요청 시 반환되는 데이터 타입
         );
 
-        return response.getBody();
+        JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+        JSONObject response = jsonObject.getJSONObject("response");
+        Member member = new Member();
+        member.setMemberEmail(response.getString("email"));
+        member.setMemberName(response.getString("name"));
+        member.setPicture(response.getString("profile_image"));
+        member.setMemberGender((response.getString("gender").equals("M")) ? "남성" : "여성");
+        member.setMemberAge(response.getString("age"));
+        member.setMemberState(Member.MemberState.ACTIVE);
+        member.setRoles(List.of("USER"));
+        member.setOauthMember(true);
+        if (!memberRepository.existsByEmail(response.getString("email"))) {
+            memberRepository.save(member);
+        } else {
+            Optional<Member> alreadyMember = memberRepository.findByMemberEmail(response.getString("email"));
+            System.out.println("성공적으로 로그인이 완료되었습니다!");
+            return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(
+                    alreadyMember.get())), HttpStatus.OK);
+        }
+        Optional<Member> signMember = memberRepository.findByMemberEmail(response.getString("email"));
+        System.out.println("성공적으로 회원가입이 완료되었습니다!");
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(
+                signMember.get())), HttpStatus.CREATED);
     }
 
     @GetMapping("/user/updateForm")

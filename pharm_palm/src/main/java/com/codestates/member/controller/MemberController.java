@@ -1,9 +1,7 @@
 package com.codestates.member.controller;
 
 import com.codestates.auth.dto.ClaimsToMember;
-import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.auth.utils.JwtToMemberInfoUtils;
-import com.codestates.dto.MultiResponseDto;
 import com.codestates.dto.SingleResponseDto;
 import com.codestates.member.dto.MemberPatchDto;
 import com.codestates.member.dto.MemberPostDto;
@@ -14,17 +12,17 @@ import com.codestates.member.service.MemberService;
 import com.codestates.utils.UriCreator;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -51,13 +49,13 @@ public class MemberController {
         try{
             token = httpHeaders.get("Authorization").get(0);
         }catch (NullPointerException exception){
+
             throw new MalformedJwtException("");
         }
-
         ClaimsToMember memberInfo = jwtToMemberInfoUtils.parseClaimsToUserInfo(token);
-
         return new ResponseEntity<>(new SingleResponseDto<>(memberInfo), HttpStatus.OK);
     }
+
 
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
@@ -69,27 +67,55 @@ public class MemberController {
         return ResponseEntity.created(location).build();
     }
 
-//    @PatchMapping("/{member-id}")
-//    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-//                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
-//
-//        memberPatchDto.setMemberId(memberId);
-//        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
-//
-//        return new ResponseEntity<>(
-//                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
-//    }
+    @PostMapping("/password/{member-id}")
+    public ResponseEntity checkPassword(@PathVariable("member-id") @Positive long memberId,
+                                        @Valid @RequestBody MemberPatchDto memberPatchDto) {
+        memberPatchDto.setMemberId(memberId);
+        Member member = mapper.memberPatchDtoToMember(memberPatchDto);
+        memberService.passwordCheck(member);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 
-    @PatchMapping("/mypage")
-    public ResponseEntity patchMemberInfo(Authentication authentication,
-                                          @Valid @RequestBody MemberPatchDto memberPatchDto) {
-        if (authentication == null) {
-            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-        }
+    @PatchMapping("/password/{member-id}")
+    public ResponseEntity patchPassword(@PathVariable("member-id") @Positive long memberId,
+                                        @Valid @RequestBody MemberPatchDto memberPatchDto) {
+        memberPatchDto.setMemberId(memberId);
+        Member member = mapper.memberPatchDtoToMember(memberPatchDto);
+        memberService.savePassword(member);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+    }
 
-        memberPatchDto.setMemberEmail(authentication.getName());
+    @PatchMapping("/{member-id}")
+    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
+                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
+
+        memberPatchDto.setMemberId(memberId);
         Member member = memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
 
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+    }
+
+    @PatchMapping("/alarm/{member-id}")
+    public ResponseEntity patchAlarm(@PathVariable("member-id") @Positive long memberId,
+                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
+
+        memberPatchDto.setMemberId(memberId);
+        Member member = memberService.updateAlarm(mapper.memberPatchDtoToMember(memberPatchDto));
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+    }
+
+
+    @PatchMapping(value="/image/{member-id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity saveImage(@RequestParam(value="memberImage") MultipartFile image,
+                                    @PathVariable("member-id") @Positive long memberId) throws IOException {
+        System.out.println("MemberController.saveImage");
+        System.out.println(image);
+        System.out.println(memberId);
+        Member member = memberService.imageMember(image, memberId);
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
     }
@@ -109,33 +135,6 @@ public class MemberController {
         return new ResponseEntity(
                 new SingleResponseDto<>(memberResponseDto), HttpStatus.OK);
     }
-    
-
-
-    @GetMapping("/mypage")
-    public ResponseEntity getMemberInfo(Authentication authentication) {
-        if (authentication == null) {
-            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-        }
-        Member member = memberService.findMemberInfo(authentication.getName());
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
-    }
-
-
-
-//    @GetMapping
-//    public ResponseEntity getMembers(@Positive @RequestParam int page,
-//                                     @Positive @RequestParam int size) {
-//        Page<Member> pageMembers = memberService.findMembers(page -1, size);
-//        List<Member> members = pageMembers.getContent();
-//
-//        return new ResponseEntity<>(
-//                new MultiResponseDto<>(
-//                        mapper.membersToMemberResponseDto(members), pageMembers), HttpStatus.OK);
-//                        mapper.membersToMemberResponseDtos(members), pageMembers), HttpStatus.OK);
-//    }
 
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
@@ -143,13 +142,12 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/info")
-    public ResponseEntity withdrawMember(Authentication authentication) {
-        if (authentication == null) {
-            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-        }
-        memberService.withdrawMember(authentication.getName());
+    @DeleteMapping("/withdraw/{member-id}")
+    public ResponseEntity withdrawMember(@PathVariable("member-id") @Positive long memberId) {
+
+        memberService.withdrawMember(memberId);
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
 }

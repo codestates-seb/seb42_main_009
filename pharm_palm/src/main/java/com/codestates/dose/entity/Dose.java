@@ -27,9 +27,10 @@ public class Dose {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "medicine_id", nullable = false)
+    @JoinColumn(name = "medicine_id", nullable = false )
     private Medicine medicine;
 
+    private String medicineName;
     @Column(nullable = false)
     private int doseNumber;
     @Column(nullable = false)

@@ -27,4 +27,10 @@ public class HeartController {
         heartService.addLike(heartPostDto);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @PostMapping("/check")
+    public ResponseEntity findHeart(@RequestBody HeartPostDto heartPostDto) {
+        boolean heart = heartService.findLike(heartPostDto);
+        return new ResponseEntity(heart, HttpStatus.OK);
+    }
 }

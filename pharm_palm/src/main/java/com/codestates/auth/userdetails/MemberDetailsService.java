@@ -38,6 +38,8 @@ public class MemberDetailsService implements UserDetailsService {
             this.setMemberEmail(member.getMemberEmail());
             this.setMemberPwd(member.getMemberPwd());
             this.setRoles(member.getRoles());
+            this.setMemberAge(member.getMemberAge());
+            this.setMemberGender(member.getMemberGender());
         }
 
         @Override

@@ -1,11 +1,12 @@
 package com.codestates.dose.controller;
 
+import com.codestates.dose.dto.ChartResponseDto;
+import com.codestates.dose.dto.DosePatchDto;
 import com.codestates.dose.dto.DosePostDto;
 import com.codestates.dose.dto.DoseResponseDto;
-import com.codestates.dose.entity.Dose;
 import com.codestates.dose.service.DoseService;
-import com.codestates.dto.SingleResponseDto;
-import com.codestates.utils.UriCreator;
+import com.codestates.querydsl.repository.QueryRepository;
+import com.querydsl.core.Tuple;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,9 +23,11 @@ import java.util.List;
 @Slf4j
 public class DoseController {
     private final DoseService doseService;
+    private final QueryRepository queryRepository;
 
-    public DoseController(DoseService doseService) {
+    public DoseController(DoseService doseService, QueryRepository queryRepository) {
         this.doseService = doseService;
+        this.queryRepository = queryRepository;
     }
 
     @PostMapping
@@ -40,11 +42,24 @@ public class DoseController {
         List<DoseResponseDto> doseResponseDto = doseService.findDoses(memberId);
         return new ResponseEntity<>(doseResponseDto, HttpStatus.OK);
     }
-    @GetMapping("/info/")
 
     @DeleteMapping("/{dose-id}")
     public ResponseEntity deleteDose(@PathVariable("dose-id") @Positive long doseId) {
         doseService.deleteDose(doseId);
         return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    @PatchMapping("/{dose-id}")
+    public ResponseEntity patchDose(@PathVariable("dose-id") @Positive long doseId,
+                                    @Valid @RequestBody DosePatchDto dosePatchDto) {
+        doseService.updateDose(doseId, dosePatchDto);
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/gender")
+    public ResponseEntity getByGender(@RequestParam String gender) {
+        List<ChartResponseDto> result = queryRepository.findByDoseGender(gender);
+                return new ResponseEntity(result,HttpStatus.OK);
     }
 }

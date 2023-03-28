@@ -60,10 +60,7 @@ public class Medicine {
     }
 
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Review> review;
 
-    public void addReview(Review review) {
-        this.review.add(review);
-    }
 }

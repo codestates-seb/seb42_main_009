@@ -2,15 +2,12 @@ package com.codestates.member.entity;
 
 import com.codestates.audit.Auditable;
 import com.codestates.dose.entity.Dose;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.codestates.review.entity.Review;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -34,12 +31,10 @@ public class Member extends Auditable {
     @Column(length = 100)
     private String memberPwd;
 
-    //    @Enumerated(EnumType.STRING)
-//    private MemberGender memberGender = MemberGender.PRIVATE;
-    @Column
+    @Column(length = 10, nullable = false)
     private String memberGender;
 
-    @Column
+    @Column(length = 10, nullable = false)
     private String memberAge;
 
     @Enumerated(EnumType.STRING)
@@ -47,8 +42,15 @@ public class Member extends Auditable {
 
     @Column
     private boolean alarm;
+
+    @Column
+    private String refreshToken;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Dose> doses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Review> review;
 
     public void addDose(Dose dose) {
         this.doses.add(dose);
@@ -57,34 +59,11 @@ public class Member extends Auditable {
         }
     }
 
-
-    public Member update (String memberEmail, String memberName, String picture, String memberGender, String memberAge) {
-        this.memberEmail = memberEmail;
-        this.memberName = memberName;
-        this.picture = picture;
-        this.memberGender = memberGender;
-        this.memberAge = memberAge;
-
-        return this;
-    }
-
-    //diseaseId 와 medicineId 나중에 추가
-
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-//    public enum MemberGender {
-//        FEMALE("여성"),
-//        MALE("남성"),
-//        PRIVATE("비밀")
-//        ;
-//        @Getter
-//        private String gender;
-//
-//        MemberGender(String gender) {
-//            this.gender = gender;
-//        }
-//    }
+    @Column
+    private Boolean oauthMember;
 
     public enum MemberState {
         ACTIVE("활동중"),

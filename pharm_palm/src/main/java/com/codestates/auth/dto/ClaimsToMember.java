@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -13,4 +12,6 @@ public class ClaimsToMember {
     private String memberName;
     private String id;
     private Object memberId;
+    private String memberGender;
+    private String memberAge;
 }

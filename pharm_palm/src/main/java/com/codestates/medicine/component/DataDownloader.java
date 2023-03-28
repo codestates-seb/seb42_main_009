@@ -67,7 +67,7 @@ public class DataDownloader implements CommandLineRunner {
 
 
 
-            if (dataNode == null || dataNode.size() == 0 || totalCount > 1000) {
+            if (dataNode == null || dataNode.size() == 0 || totalCount > 4500) {
                 break;
             }
 
@@ -104,6 +104,7 @@ public class DataDownloader implements CommandLineRunner {
                 atpnQesitm = atpnQesitm.replaceAll("<p>", "");
                 atpnQesitm = atpnQesitm.replaceAll("</p>", "");
                 atpnQesitm = atpnQesitm.replaceAll("\\n", "");
+                atpnQesitm = atpnQesitm.replaceAll("<br />", "");
                 medicine.setMedicineWarn(atpnQesitm);
 
                 String depositMethodQesitm = row.get("depositMethodQesitm").asText();
