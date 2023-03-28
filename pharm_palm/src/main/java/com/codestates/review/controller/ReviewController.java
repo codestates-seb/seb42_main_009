@@ -52,7 +52,7 @@ public class ReviewController {
         System.out.println(image);
         System.out.println(reviewPostDto.getMemberId());
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.reviewToReviewResponseDto(
-                reviewService.createReview(image, mapper.reviewPostDtoToReview(reviewPostDto), medicineId, reviewPostDto.getMemberId()))), HttpStatus.CREATED);
+                reviewService.createReview(image, mapper.reviewPostDtoToReview(reviewPostDto), medicineId))), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{review-id}")
