@@ -246,6 +246,7 @@ const Profile = () => {
         )
         .then(() => {
           localStorage.clear();
+          sessionStorage.clear();
           setIsLogin(false);
           setIsSocialLogin(false);
           setProfileInfo([]);
@@ -270,9 +271,6 @@ const Profile = () => {
       })
       .catch(err => console.log(err));
   }, [isUpdate]);
-
-  console.log(changedInfo);
-  console.log(profileInfo);
 
   return (
     <div>
