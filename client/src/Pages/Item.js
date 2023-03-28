@@ -63,19 +63,22 @@ const Item = () => {
         console.log(err);
       });
 
+    // 로그인한 유저, 좋아요 기록 표시
     if (sessionStorage.getItem('isLogin')) {
       const sessionUserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
       console.log(sessionUserInfo);
-      const getBody = {
+      const postData = {
         memberId: sessionUserInfo.memberId,
         medicineId,
       };
-      console.log(getBody);
-
       axios
-        .get(`${process.env.REACT_APP_API_URL}/pp/heart`, getBody)
+        .post(`${process.env.REACT_APP_API_URL}/pp/heart/check`, postData, {
+          headers: {
+            withCredentials: true,
+          },
+        })
         .then(res => {
-          console.log(res);
+          setLike(res.data);
         })
         .catch(err => {
           console.log(err);

@@ -8,6 +8,10 @@ import {
   useSearchIsUpdateStore,
 } from '../Stores/listSearchStore';
 import {
+  useListCurrentPageStore,
+  useListPageStore,
+} from '../Stores/listPageStore';
+import {
   SearchBox,
   SearchSelBox,
   SearchBtn,
@@ -15,11 +19,13 @@ import {
   SearchSelectDown,
 } from '../styles/s-top';
 
-const Search = ({ submitPageHandler }) => {
+const Search = () => {
   const { setSearchText } = useSearchTextStore(state => state);
   const { setSearchSelected } = useSearchSelectedStore(state => state);
   const { setSearchApi } = useSearchApiStore(state => state);
   const { setSearchIsUpdate } = useSearchIsUpdateStore(state => state);
+  const { setListPage } = useListPageStore(state => state);
+  const { setListCurrentPage } = useListCurrentPageStore(state => state);
   const navigate = useNavigate();
 
   const [searchTxt, setSearchTxt] = useState('');
@@ -27,6 +33,11 @@ const Search = ({ submitPageHandler }) => {
     const txt = e.target.value;
     setSearchTxt(txt);
   };
+  const submitPageHandler = () => {
+    setListCurrentPage(1);
+    setListPage(1);
+  };
+
   const selectHandler = e => {
     const selected = e.target.value;
     if (selected === 'name') {
@@ -35,6 +46,7 @@ const Search = ({ submitPageHandler }) => {
       setSearchApi('medicineIngredient');
     }
     setSearchSelected(selected);
+    setSearchIsUpdate(true);
   };
 
   const searchSubmit = e => {
@@ -53,6 +65,8 @@ const Search = ({ submitPageHandler }) => {
     setSearchApi('medicineName');
     setSearchSelected('name');
     setSearchIsUpdate(false);
+    setListCurrentPage(1);
+    setListPage(1);
   }, []);
 
   return (
@@ -79,9 +93,9 @@ const Search = ({ submitPageHandler }) => {
         onClick={e => {
           e.preventDefault();
           setSearchText(searchTxt);
-          navigate('/list');
           submitPageHandler();
           setSearchIsUpdate(true);
+          navigate('/list');
         }}
       >
         검색
