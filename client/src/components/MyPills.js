@@ -6,7 +6,6 @@ import {
   MyPill,
   MyPillImg,
   MyPillEdit,
-  MyPillTag,
   MyPillName,
 } from '../styles/s-mypage';
 import { useMyPharmDoseId } from '../Stores/myPharmStore';
@@ -30,7 +29,6 @@ const MyPills = ({ medicineName, doseId }) => {
           </button>
         </MyPillEdit>
       </MyPill>
-      <MyPillTag>감기약</MyPillTag>
       <MyPillName>
         <h3>{medicineName}</h3>
         <p>{medicineName}</p>
