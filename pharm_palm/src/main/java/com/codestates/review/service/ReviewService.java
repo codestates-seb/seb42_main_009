@@ -59,6 +59,8 @@ public class ReviewService {
 
         Optional.ofNullable(review.getReviewContent())
                 .ifPresent(findReview::setReviewContent);
+        Optional.ofNullable(review.getDiseases())
+                .ifPresent(findReview::setDiseases);
 
         String formattedDateLastModifiedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
         findReview.setLastModifiedAt(formattedDateLastModifiedTime);
