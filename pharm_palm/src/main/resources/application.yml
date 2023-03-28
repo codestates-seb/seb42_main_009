@@ -1,8 +1,4 @@
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://pharm-palm-deploy.cuuqf4019hgl.ap-northeast-2.rds.amazonaws.com:13306/pharm_palm?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -10,14 +6,11 @@ spring:
     password: ${RDS_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: none
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
-  sql:
-    init:
-      data-locations: classpath*:db/h2/data.sql
   security:
     oauth2:
       client:
