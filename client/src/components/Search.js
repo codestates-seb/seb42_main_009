@@ -60,7 +60,7 @@ const Search = () => {
   };
 
   useEffect(() => {
-    console.log('시작');
+    // 초기화
     setSearchText('');
     setSearchApi('medicineName');
     setSearchSelected('name');

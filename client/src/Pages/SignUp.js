@@ -23,24 +23,6 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
-  if (
-    !!userId &&
-    !!password &&
-    !!passwordChecked &&
-    !!username &&
-    !!birth &&
-    gender
-  ) {
-    console.log(`
-    ${userId}
-    ${password}
-    ${passwordChecked}
-    ${username}
-    ${birth}
-    ${gender}
-    `);
-  }
-
   const strValid = str => {
     if (str === '') return true;
     return false;
@@ -55,18 +37,6 @@ const SignUp = () => {
   };
 
   const register = () => {
-    const date = new Date();
-    const createdAt = date;
-    console.log(createdAt);
-    console.log({
-      member_email: userId,
-      member_pwd: password,
-      member_name: username,
-      member_age: birth,
-      member_gender: gender,
-      created_at: createdAt,
-    });
-
     if (!username || !userId || !password) {
       setErrorMessage('아이디와 비밀번호를 입력하세요');
       return;
@@ -192,7 +162,6 @@ const SignUp = () => {
           <SignUpBtn
             type="submit"
             onClick={() => {
-              console.log('register');
               register();
             }}
             disabled={

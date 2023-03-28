@@ -174,7 +174,6 @@ const ItemReview = () => {
       reviewImg: reviewItem.reviewImg.preview_URL,
       disease: JSON.stringify(reviewTags),
     };
-    console.log(patchData);
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/pp/reviews/${updateIndex}`,
@@ -236,9 +235,6 @@ const ItemReview = () => {
       });
   }, [currentPage, isUpdate]);
 
-  console.log(reviewTags);
-  console.log(reviewList);
-
   return (
     <ReviewWrap>
       <ReviewBtn onClick={reviewAddModalOpen}>
@@ -257,7 +253,6 @@ const ItemReview = () => {
                     onClick={e => {
                       reviewUpdateModalOpen(e);
                       setUpdateIndex(item.reviewId);
-                      console.log(item.reviewId);
                     }}
                   >
                     수정

@@ -36,7 +36,9 @@ const List = () => {
   );
   const { searchApi } = useSearchApiStore(state => state);
   const [itemList, setItemList] = useState([]);
-  const { listPage, setListPage, setScrollPage } = useListPageStore(state => state);
+  const { listPage, setListPage, setScrollPage } = useListPageStore(
+    state => state,
+  );
   const { listCurrentPage, setListCurrentPage } = useListCurrentPageStore(
     state => state,
   );
@@ -53,8 +55,6 @@ const List = () => {
     e.target.src = '/pharmpalm.png';
   };
   useEffect(() => {
-    console.log(listCurrentPage);
-
     // FIX: async 삭제
     if (searchText === '') {
       axios // FIX: await 삭제
@@ -71,8 +71,6 @@ const List = () => {
         });
     } else {
       if (searchIsUpdate === true) {
-        console.log('검색 성공');
-
         axios // FIX: await 삭제
           .get(
             `${URI}/pp/medicines/${searchSelected}?${searchApi}=${searchText}&page=${listCurrentPage}&size=${PER_PAGE}`,
