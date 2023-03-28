@@ -21,6 +21,7 @@ const Scroll = ({
   setTotalPageCount,
   windowSize,
   handleImageError,
+  itemOnClickHandler,
 }) => {
   const [pins, setPins] = useState([]);
   const [loading, setLoading] = useState(false);

@@ -7,6 +7,7 @@ import { GlobalStyle } from './styles/globalStyle';
 import { useIsLoginStore } from './Stores/loginStore';
 import { useUserInfoStore } from './Stores/userInfoStore';
 import { useDiseasesTagsStore } from './Stores/diseasesTagsStore';
+import { useSearchIsUpdateStore } from './Stores/listSearchStore';
 import Header from './components/Header';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
@@ -28,6 +29,7 @@ function App() {
   const { setIsLogin } = useIsLoginStore(state => state);
   const { setUserInfo } = useUserInfoStore(state => state);
   const { setDiseasesTags } = useDiseasesTagsStore(state => state);
+  const { searchIsUpdate } = useSearchIsUpdateStore(state => state);
 
   const navigate = useNavigate();
 
@@ -190,7 +192,7 @@ function App() {
     const url = new URL(window.location.href);
     const authorizationCode = url.searchParams.get('code');
 
-    console.log(url.pathname);
+    console.log(searchIsUpdate);
 
     if (sessionStorage.getItem('isLogin')) {
       setIsLogin(true);
