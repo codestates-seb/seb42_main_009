@@ -19,7 +19,6 @@ const MyPills = ({ medicineName, doseId }) => {
     setModalOpen(true);
     setUpdateModalOpen(true);
     setMyPharmDoseId(doseId);
-    console.log('모달 핸들러 클릭!');
   };
   return (
     <MyPillItem>

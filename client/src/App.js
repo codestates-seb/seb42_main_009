@@ -7,6 +7,7 @@ import { GlobalStyle } from './styles/globalStyle';
 import { useIsLoginStore } from './Stores/loginStore';
 import { useUserInfoStore } from './Stores/userInfoStore';
 import { useDiseasesTagsStore } from './Stores/diseasesTagsStore';
+import { useSearchIsUpdateStore } from './Stores/listSearchStore';
 import Header from './components/Header';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
@@ -28,14 +29,12 @@ function App() {
   const { setIsLogin } = useIsLoginStore(state => state);
   const { setUserInfo } = useUserInfoStore(state => state);
   const { setDiseasesTags } = useDiseasesTagsStore(state => state);
+  const { searchIsUpdate } = useSearchIsUpdateStore(state => state);
 
   const navigate = useNavigate();
 
   const authHandler = () => {
-    console.log(localStorage.getItem('accessToken'));
     const expireAt = localStorage.getItem('accessToken_expiresAt');
-
-    console.log(expireAt);
 
     // refresh token
     if (moment(expireAt).diff(moment()) < 0) {
@@ -138,15 +137,12 @@ function App() {
   };
 
   const naverAuthHandler = (code, state) => {
-    console.log(code);
-    console.log(state);
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/auth/naver/callback?code=${code}&state=${state}`,
       )
       .then(res => {
         localStorage.setItem('NAVER_accessToken', res.data.access_token);
-        console.log(localStorage.getItem('NAVER_accessToken'));
         setTimeout(() => {
           axios
             .get(
@@ -190,7 +186,7 @@ function App() {
     const url = new URL(window.location.href);
     const authorizationCode = url.searchParams.get('code');
 
-    console.log(url.pathname);
+    console.log(searchIsUpdate);
 
     if (sessionStorage.getItem('isLogin')) {
       setIsLogin(true);

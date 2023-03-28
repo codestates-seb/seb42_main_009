@@ -200,7 +200,6 @@ const MyPharmModal = ({ setModalOpen }) => {
       )
       .then(res => {
         console.log(res);
-        console.log('삭제 성공!');
         setMyPharmUpdate(true);
         modalCloseBtn();
       })

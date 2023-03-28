@@ -65,12 +65,13 @@ export const HomeSection = styled.section`
   position: relative;
   max-width: 1230px;
   width: 100%;
-  padding: 120px 15px;
-  margin: 0 auto;
+  padding: 0 15px;
+  margin: 120px auto;
   @media (max-width: 768px) {
     padding: 50px 15px;
     max-width: 100%;
     overflow: hidden;
+    margin: 0 auto;
   }
 `;
 export const SectionTit = styled.h2`

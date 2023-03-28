@@ -21,16 +21,17 @@ const Scroll = ({
   setTotalPageCount,
   windowSize,
   handleImageError,
+  itemOnClickHandler,
+  setScrollPage,
 }) => {
   const [pins, setPins] = useState([]);
   const [loading, setLoading] = useState(false);
   const pageEnd = useRef();
   const loadMore = () => {
-    setPage(prev => prev + 1); // FIX: if 문 불필요해서 삭제
+    setScrollPage(page + 1); // FIX: if 문 불필요해서 삭제
   };
   const fetchPins = async page => {
     if (searchText === '') {
-      console.log('aaaa >>> ', page);
       await axios
         .get(`${URI}/pp/medicines?page=${page}&size=6`)
         .then(res => {
@@ -41,22 +42,17 @@ const Scroll = ({
             setPins(prev => [...prev, ...res.data.data]);
           }
           setLoading(!(page === res.data.pageInfo.totalPages)); // FIX: setLoading 추가
-          console.log('성공');
         })
         .catch(err => console.log(err));
     } else {
-      console.log('aaaa >>> ', page);
-      console.log('aaaa >>> ', totalPageCount);
       await axios
         .get(
           `${URI}/pp/medicines/${searchSelected}?${searchApi}=${searchText}&page=${page}&size=6`,
         )
         .then(res => {
-          console.log('검색어입력했을때성공했는지');
           if (!res.data) {
             setPins([]);
           } else {
-            console.log('fetchpin>>>', res.data.pageInfo.totalPages);
             setTotalPageCount(res.data.pageInfo.totalPages);
             if (page === 1) {
               setPins(prev => [...res.data.data]);

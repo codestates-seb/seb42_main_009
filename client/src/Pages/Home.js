@@ -55,7 +55,7 @@ const Home = () => {
         <Slide clickToScroll={clickToScroll} />
         <HomeSection id="section1">
           <HomeSectionLine />
-          <SectionTit data-aos="fade-down" data-aos-duration="2000">
+          <SectionTit data-aos="fade-down" data-aos-duration="2000" data-aos-once="true" >
             복용 중인 약 정보
           </SectionTit>
           <FlexWrap flexai="center">
@@ -63,7 +63,7 @@ const Home = () => {
               order="2"
               data-aos="fade-down"
               data-aos-duration="2000"
-              data-aos-delay="300"
+              data-aos-delay="200"
               data-aos-once="true"
             >
               <ScreenContainer>
@@ -106,7 +106,7 @@ const Home = () => {
           >
             복용 스케줄 관리
           </SectionTit>
-          <FlexWrap>
+          <FlexWrap flexai="center">
             <FlexBox
               data-aos="fade-down"
               data-aos-duration="2000"
@@ -152,7 +152,7 @@ const Home = () => {
           >
             의약품 데이터별 차트
           </SectionTit>
-          <FlexWrap>
+          <FlexWrap flexai="center">
             <FlexBox
               order="2"
               data-aos="fade-down"
@@ -160,7 +160,7 @@ const Home = () => {
               data-aos-once="true"
             >
               <ScreenContainer>
-                <img src="/assets/home1.png" alt="이미지" />
+                <img src="/assets/home3.png" alt="이미지" />
               </ScreenContainer>
             </FlexBox>
             <FlexBox

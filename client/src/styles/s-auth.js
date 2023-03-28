@@ -30,7 +30,7 @@ export const Logo = styled.h2`
     object-fit: cover;
   }
   @media (max-width: 768px) {
-    width: 250px;
+    width: 150px;
     margin: 0 auto 30px;
   }
 `;
