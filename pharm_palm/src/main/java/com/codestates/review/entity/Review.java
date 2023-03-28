@@ -33,16 +33,10 @@ public class Review {
     private List<String> reviewImg;
 
     @Column
-    private Long memberId;
-
-    @Column
     private String memberName;
 
     @Column
     private String memberImg;
-
-    @Column
-    private Long medicineId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine")
