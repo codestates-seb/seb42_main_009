@@ -22,12 +22,13 @@ const Scroll = ({
   windowSize,
   handleImageError,
   itemOnClickHandler,
+  setScrollPage
 }) => {
   const [pins, setPins] = useState([]);
   const [loading, setLoading] = useState(false);
   const pageEnd = useRef();
   const loadMore = () => {
-    setPage(prev => prev + 1); // FIX: if 문 불필요해서 삭제
+    setScrollPage(page + 1); // FIX: if 문 불필요해서 삭제
   };
   const fetchPins = async page => {
     if (searchText === '') {

@@ -55,7 +55,7 @@ const Home = () => {
         <Slide clickToScroll={clickToScroll} />
         <HomeSection id="section1">
           <HomeSectionLine />
-          <SectionTit data-aos="fade-down" data-aos-duration="2000">
+          <SectionTit data-aos="fade-down" data-aos-duration="2000" data-aos-once="true" >
             복용 중인 약 정보
           </SectionTit>
           <FlexWrap flexai="center">
@@ -63,7 +63,7 @@ const Home = () => {
               order="2"
               data-aos="fade-down"
               data-aos-duration="2000"
-              data-aos-delay="300"
+              data-aos-delay="200"
               data-aos-once="true"
             >
               <ScreenContainer>

@@ -36,7 +36,7 @@ const List = () => {
   );
   const { searchApi } = useSearchApiStore(state => state);
   const [itemList, setItemList] = useState([]);
-  const { listPage, setListPage } = useListPageStore(state => state);
+  const { listPage, setListPage, setScrollPage } = useListPageStore(state => state);
   const { listCurrentPage, setListCurrentPage } = useListCurrentPageStore(
     state => state,
   );
@@ -147,6 +147,7 @@ const List = () => {
             URI={URI}
             page={listPage}
             setPage={setListPage}
+            setScrollPage={setScrollPage}
             searchText={searchText}
             searchSelected={searchSelected}
             searchApi={searchApi}
