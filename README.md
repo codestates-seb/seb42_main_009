@@ -1,7 +1,7 @@
 # seb42_main_009
 
-<img height="200" width="200" src="https://user-images.githubusercontent.com/77083074/228701085-358530b5-6f17-425a-a48a-baeac2eda5af.png" />
-* * *
+<img height="200" width="300" src="https://user-images.githubusercontent.com/77083074/228701085-358530b5-6f17-425a-a48a-baeac2eda5af.png" />
+--------------------------------------------------
 
 📖 About project
 ![image](https://user-images.githubusercontent.com/77083074/228701310-9275c4e4-f9ae-4e21-9ca4-a3b4caf83a5a.png)
@@ -10,6 +10,7 @@
 >> 내가 먹는 약의 용법이 궁금하거나 주의사항 확인이 필요할 때, 
 >> 내 손바닥 안의 PharmPalm으로 편리하게 정보를 확인이 가능.
 
+---------------------------------------------------
 
 💊Deployed Link
 
