@@ -30,7 +30,7 @@
 
 --- 
 | 이름 | 역할 | 개발내용 |
-| :----: | :---: | :----- | 
+| :----: | :---: | :-------- | 
 | 곽훈정 | BE | RDS, DB 관리 <br/> Open API Data Storage <br/> Medicine 도메인 <br/> Dose 도메인 <br/> 좋아요 기능 <br/> QueryDSL |
 | 김진영 | BE | EC2, 서버관리 <br/> S3 이미지 업로드 <br/> Review 도메인 <br/> OAuth2.0 네이버, 카카오 |
 | 심라율 | BE | S3 <br/> Spring Security <br/> JWT 인증, 권한 <br/> Member 도메인 <br/> Disease 도메인 |
