@@ -15,11 +15,15 @@
 
 💊Deployed Link
 
-[PharmPalm](http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/)
+> [PharmPalm](http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/)
 
-
+---------------------------------------------------
 
 * [사용자 요구사항 명세서](https://docs.google.com/spreadsheets/d/1uAmwpCabhF3UgcaC4mjddU54Ge-pdsUlFcKsP8p1-RE/edit#gid=0)
+* [화면정의서](https://www.figma.com/file/n1LDvEwktvxYySmqJyGRzY/pharm-palm?node-id=0%3A1&t=8bpaxMheY6TfJ7n1-1)
+* [개인 기술발표 영상](https://youtu.be/b2dhjYz09i0)
+* [서비스 매뉴얼 가이드 문서](https://www.notion.so/PharmPalm-c33bb4dcb34a44e4af9b7cf6ddc980b3?pvs=4)
+
 
 ## 사용 기술 스택
 
