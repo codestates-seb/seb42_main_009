@@ -2,6 +2,8 @@
 
 <img height="200" width="300" src="https://user-images.githubusercontent.com/77083074/228701085-358530b5-6f17-425a-a48a-baeac2eda5af.png" />
 
+<br/>
+
 --------------------------------------------------
 
 ## 📖 About project
@@ -11,11 +13,17 @@
 >> 내가 먹는 약의 용법이 궁금하거나 주의사항 확인이 필요할 때, 
 >> 내 손바닥 안의 PharmPalm으로 편리하게 정보를 확인이 가능.
 
+<br/>
+<br/>
+
 ---------------------------------------------------
 
 ## 💊Deployed Link
 
 > [PharmPalm](http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/)
+
+<br/>
+<br/>
 
 ---------------------------------------------------
 
@@ -23,6 +31,9 @@
 * [화면정의서](https://www.figma.com/file/n1LDvEwktvxYySmqJyGRzY/pharm-palm?node-id=0%3A1&t=8bpaxMheY6TfJ7n1-1)
 * [개인 기술발표 영상](https://youtu.be/b2dhjYz09i0)
 * [서비스 매뉴얼 가이드 문서](https://www.notion.so/PharmPalm-c33bb4dcb34a44e4af9b7cf6ddc980b3?pvs=4)
+
+<br/>
+<br/>
 
 ----------------------------------------
 
@@ -42,6 +53,9 @@
 | GitPage | AWS EC2 | AWS S3 | AWS RDS |
 | :---: | :---: | :---: | :---: |
 |  <img height="65" width="65" src="https://cdn.simpleicons.org/github" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/amazonec2" /> | <img height="65" width="65" src="https://cdn.simpleicons.org/amazons3" /> | <img height="65" width="65" src="https://cdn.simpleicons.org/amazonrds" />
+
+<br/>
+<br/>
 
 ---
 
