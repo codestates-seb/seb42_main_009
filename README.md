@@ -56,15 +56,6 @@
 | rename | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우 |
 | remove | 파일을 삭제하는 작업만 수행한 경우 |
 
-### Commit convention
--  Feat = 새로운 기능 추가
--  Fix = 버그 수정
--  Revise = 오타, 코드 수정
--  Docs = 문서 작성 및 수정
--  Style = 웹 스타일링
--  Refactor = 코드 리팩토링
--  Chore = 빌드 업무 수정, 패키지 매니저 수정
--  Test = 테스트 코드
 
 ### Contributor
 * FE : 이치윤, 김여진
