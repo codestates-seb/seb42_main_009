@@ -1,6 +1,6 @@
 # seb42_main_009
 
-![image](https://user-images.githubusercontent.com/77083074/228701085-358530b5-6f17-425a-a48a-baeac2eda5af.png)
+![image](https://user-images.githubusercontent.com/77083074/228701085-358530b5-6f17-425a-a48a-baeac2eda5af.png){: width="100" height="100"}
 
 📖 About project
 ![image](https://user-images.githubusercontent.com/77083074/228701310-9275c4e4-f9ae-4e21-9ca4-a3b4caf83a5a.png)
@@ -12,7 +12,8 @@
 내 손바닥 안의 PharmPalm으로 편리하게 정보를 확인이 가능.
 
 
-Deployed Link
+💊Deployed Link
+
 [PharmPalm](http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/)
 
 
