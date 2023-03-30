@@ -30,7 +30,7 @@
 ### 🧰 Back-end
 | Java| Spring Boot | Spring Security | Gradle | MySQL | JWT | OAuth2.0 | AWS |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-|  <img height="65" width="65" src="https://user-images.githubusercontent.com/97998938/221740290-7f2b2f08-8ca2-46e3-88ff-30897cfe6d22.png" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/springboot/#6DB33F" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/springsecurity" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/gradle" />  |  <img height="65" width="65" src="https://cdn.simpleicons.org/mysql" /> | <img height="65" width="65" src="https://cdn.simpleicons.org/JWT" /> | <img height="65" width="65" src="https://cdn.simpleicons.org/OAuth2.0" /> | <img height="65" width="65" src="https://cdn.simpleicons.org/AWS" /> |
+|  <img height="65" width="65" src="https://user-images.githubusercontent.com/97998938/221740290-7f2b2f08-8ca2-46e3-88ff-30897cfe6d22.png" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/springboot/#6DB33F" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/springsecurity" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/gradle" />  |  <img height="65" width="65" src="https://cdn.simpleicons.org/mysql" /> | <img height="65" width="65" src="https://cdn.simpleicons.org/JWT" /> | <img height="65" width="65" src="https://cdn.simpleicons.org/OAuth" /> | <img height="65" width="65" src="https://cdn.simpleicons.org/AWS" /> |
 
 ### 🔧 Deploy
 | GitPage | AWS EC2 | AWS S3 | AWS RDS |
