@@ -1,4 +1,4 @@
-# seb42_main_009
+# seb42_main_009_슬기로운 약국생활
 
 <img height="200" width="300" src="https://user-images.githubusercontent.com/77083074/228701085-358530b5-6f17-425a-a48a-baeac2eda5af.png" />
 
@@ -24,6 +24,7 @@
 * [개인 기술발표 영상](https://youtu.be/b2dhjYz09i0)
 * [서비스 매뉴얼 가이드 문서](https://www.notion.so/PharmPalm-c33bb4dcb34a44e4af9b7cf6ddc980b3?pvs=4)
 
+----------------------------------------
 
 ## 사용 기술 스택
 
