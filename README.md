@@ -4,7 +4,7 @@
 
 --------------------------------------------------
 
-📖 About project
+## 📖 About project
 ![image](https://user-images.githubusercontent.com/77083074/228701310-9275c4e4-f9ae-4e21-9ca4-a3b4caf83a5a.png)
 
 > 내 손 안에 약학 사전, PharmPalm
@@ -13,7 +13,7 @@
 
 ---------------------------------------------------
 
-💊Deployed Link
+## 💊Deployed Link
 
 > [PharmPalm](http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/)
 
