@@ -1,6 +1,7 @@
 # seb42_main_009
 
 <img height="200" width="300" src="https://user-images.githubusercontent.com/77083074/228701085-358530b5-6f17-425a-a48a-baeac2eda5af.png" />
+
 --------------------------------------------------
 
 📖 About project
@@ -25,12 +26,12 @@
 ### 💄 Front-end
 | React | React Router | React Icons | Styled-<br>Components | Zustand | OAuth2.0 |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-|  <img height="65" width="65" src="https://cdn.simpleicons.org/react/#61DAFB" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/reactrouter" /> |  <img height="65" width="65" src="https://camo.githubusercontent.com/48d099290b4cb2d7937bcd96e8497cf1845b54a810a6432c70cf944b60b40c77/68747470733a2f2f7261776769742e636f6d2f676f72616e67616a69632f72656163742d69636f6e732f6d61737465722f72656163742d69636f6e732e737667" />  |  <img height="65" width="65" src="https://cdn.simpleicons.org/styledComponents" /> | <img height="65" width="65" src="https://cdn.discordapp.com/attachments/1074553703329173596/1079638795395268689/bear.png" /> | <img height="65" width="65" src=" " /> |
+|  <img height="65" width="65" src="https://cdn.simpleicons.org/react/#61DAFB" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/reactrouter" /> |  <img height="65" width="65" src="https://camo.githubusercontent.com/48d099290b4cb2d7937bcd96e8497cf1845b54a810a6432c70cf944b60b40c77/68747470733a2f2f7261776769742e636f6d2f676f72616e67616a69632f72656163742d69636f6e732f6d61737465722f72656163742d69636f6e732e737667" />  |  <img height="65" width="65" src="https://cdn.simpleicons.org/styledComponents" /> | <img height="65" width="65" src="https://cdn.discordapp.com/attachments/1074553703329173596/1079638795395268689/bear.png" /> | <img height="65" width="65" src="![image](https://user-images.githubusercontent.com/77083074/228705146-5d1ac1e6-b78a-41cd-bd1b-c80803c7f380.png)" /> |
 
 ### 🧰 Back-end
 | Java| Spring Boot | Spring Security | Gradle | mySQL | AWS | OAuth2.0 | JWT |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-|  <img height="65" width="65" src="https://user-images.githubusercontent.com/97998938/221740290-7f2b2f08-8ca2-46e3-88ff-30897cfe6d22.png" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/springboot/#6DB33F" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/springsecurity" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/gradle" />  |  <img height="65" width="65" src="https://cdn.simpleicons.org/mysql" /> | <img height="65" width="65" src="https://cdn.simpleicons.org/amazonaws/" /> | <img height="65" width="65" src="https://media.discordapp.net/attachments/1083294900080103445/1090808585455403119/oauthretinapreview.png" /> | <img height="65" width="65" src="https://cdn.discordapp.com/attachments/1083294900080103445/1090807082552406016/icons8-json-web-token-144.png" /> |
+|  <img height="65" width="65" src="https://user-images.githubusercontent.com/97998938/221740290-7f2b2f08-8ca2-46e3-88ff-30897cfe6d22.png" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/springboot/#6DB33F" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/springsecurity" /> |  <img height="65" width="65" src="https://cdn.simpleicons.org/gradle" />  |  <img height="65" width="65" src="https://cdn.simpleicons.org/mysql" /> | <img height="65" width="65" src="https://cdn.simpleicons.org/amazonaws/" /> | <img height="65" width="65" src="![image](https://user-images.githubusercontent.com/77083074/228705176-7911e388-8fb8-4d33-a75a-3b4cfde3849a.png)" /> | <img height="65" width="65" src="https://cdn.discordapp.com/attachments/1083294900080103445/1090807082552406016/icons8-json-web-token-144.png" /> |
 
 ### 🔧 Deploy
 | GitPage | AWS EC2 | AWS S3 | AWS RDS |
