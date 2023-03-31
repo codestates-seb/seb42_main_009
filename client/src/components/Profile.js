@@ -280,8 +280,6 @@ const Profile = () => {
       .catch(err => console.log(err));
   }, [isUpdate]);
 
-  console.log(userInfo);
-
   return (
     <div>
       {editMode ? (
@@ -349,6 +347,7 @@ const Profile = () => {
                 <SmBtn>나이</SmBtn>
                 <p>
                   <select id="age" name="age" onClick={handleInputValue('age')}>
+
                     <option value="0-9" selected={changedInfo.age === '0-9'}>
                       10세 미만
                     </option>
