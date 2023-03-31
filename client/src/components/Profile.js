@@ -124,12 +124,13 @@ const WithdrawButton = styled.button`
 const Profile = () => {
   const { setIsLogin } = useIsLoginStore(state => state);
   const { setIsSocialLogin } = useIsSocialLoginStore(state => state);
+  const [errorMessage, setErrorMessage] = useState('');
   const [profileInfo, setProfileInfo] = useState([]);
   const { userInfo } = useUserInfoStore(state => state);
   const [changedInfo, setChangedInfo] = useState({
-    name: '',
-    gender: '',
-    age: '0-9',
+    name: userInfo.memberName,
+    gender: userInfo.memberGender,
+    age: userInfo.memberAge,
   });
   const [isUpdate, setIsUpdate] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -142,14 +143,6 @@ const Profile = () => {
   const memberId = location.pathname.split('/')[2];
 
   const navigate = useNavigate();
-
-  const initializeChange = () => {
-    setChangedInfo({
-      name: '',
-      gender: '',
-      age: '0-9',
-    });
-  };
 
   const saveImage = e => {
     e.preventDefault();
@@ -168,9 +161,19 @@ const Profile = () => {
 
   const editModeHandler = () => {
     setEditMode(!editMode);
+    setErrorMessage('');
   };
 
   const submitHandler = () => {
+    if (changedInfo.name === '') {
+      setErrorMessage('수정하실 이름을 입력해주세요.');
+      return;
+    }
+    if (changedInfo.gender === '') {
+      setErrorMessage('수정하실 성별을 입력해주세요.');
+      return;
+    }
+
     const patchData = {
       memberName: changedInfo.name,
       memberGender: changedInfo.gender,
@@ -209,8 +212,13 @@ const Profile = () => {
 
         setIsUpdate(true);
         // 입력값 초기화
-        initializeChange();
+        setChangedInfo({
+          name: changedInfo.name,
+          age: changedInfo.age,
+          gender: changedInfo.gender,
+        });
         editModeHandler();
+        setErrorMessage('');
       })
       .catch(err => console.log(err));
   };
@@ -304,6 +312,7 @@ const Profile = () => {
                     type="text"
                     onChange={handleInputValue('name')}
                     onKeyDown={editInputSubmit('name')}
+                    value={changedInfo.name}
                   />
                 </p>
               </li>
@@ -317,6 +326,7 @@ const Profile = () => {
                       name="gender"
                       value="남성"
                       onClick={handleInputValue('gender')}
+                      checked={changedInfo.gender === '남성'}
                     />
                     <label htmlFor="남성">남성</label>
                   </RadioBox>
@@ -327,6 +337,7 @@ const Profile = () => {
                       name="gender"
                       value="여성"
                       onClick={handleInputValue('gender')}
+                      checked={changedInfo.gender === '여성'}
                     />
                     <label htmlFor="여성">여성</label>
                   </RadioBox>
@@ -336,15 +347,43 @@ const Profile = () => {
                 <SmBtn>나이</SmBtn>
                 <p>
                   <select id="age" name="age" onClick={handleInputValue('age')}>
-                    <option value="0-9" checked>
+
+                    <option value="0-9" selected={changedInfo.age === '0-9'}>
                       10세 미만
                     </option>
-                    <option value="10-19">10대</option>
-                    <option value="20-29">20대</option>
-                    <option value="30-39">30대</option>
-                    <option value="40-49">40대</option>
-                    <option value="50-59">50대</option>
-                    <option value="60-">60세 이상</option>
+                    <option
+                      value="10-19"
+                      selected={changedInfo.age === '10-19'}
+                    >
+                      10대
+                    </option>
+                    <option
+                      value="20-29"
+                      selected={changedInfo.age === '20-29'}
+                    >
+                      20대
+                    </option>
+                    <option
+                      value="30-39"
+                      selected={changedInfo.age === '30-39'}
+                    >
+                      30대
+                    </option>
+                    <option
+                      value="40-49"
+                      selected={changedInfo.age === '40-49'}
+                    >
+                      40대
+                    </option>
+                    <option
+                      value="50-59"
+                      selected={changedInfo.age === '50-59'}
+                    >
+                      50대
+                    </option>
+                    <option value="60-" selected={changedInfo.age === '60-'}>
+                      60세 이상
+                    </option>
                   </select>
                 </p>
               </li>
@@ -354,16 +393,16 @@ const Profile = () => {
               onClick={() => {
                 submitHandler();
               }}
-              disabled={
-                changedInfo.name === '' ||
-                changedInfo.gender === '' ||
-                changedInfo.age === ''
-              }
               width="70px"
             >
               수정완료
             </HeaderBtn>
           </ProfileContent>
+          {errorMessage ? (
+            <p className=" mb-4 font-medium text-xs text-red-600">
+              {errorMessage}
+            </p>
+          ) : null}
         </ProfileWrap>
       ) : (
         <ProfileWrap>
