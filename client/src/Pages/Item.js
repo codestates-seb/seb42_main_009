@@ -66,7 +66,6 @@ const Item = () => {
     // 로그인한 유저, 좋아요 기록 표시
     if (sessionStorage.getItem('isLogin')) {
       const sessionUserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-      console.log(sessionUserInfo);
       const postData = {
         memberId: sessionUserInfo.memberId,
         medicineId,

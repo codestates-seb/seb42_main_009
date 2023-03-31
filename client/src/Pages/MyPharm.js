@@ -38,13 +38,11 @@ const MyPharm = () => {
         .then(res => {
           setMyPharmList(res.data);
           const resList = res.data;
-          console.log(resList);
           const chartList = [];
           resList.forEach(item => {
             const tiemTableList = item.doseTimes.split(', ');
             tiemTableList.forEach(timeTable => {
               const timeTableNumber = Number(timeTable.slice(0, 2));
-              console.log(chartData);
               chartList.push({
                 x: item.medicineName,
                 y: [timeTableNumber, timeTableNumber + 1],

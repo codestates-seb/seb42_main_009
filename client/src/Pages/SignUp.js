@@ -23,11 +23,6 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
-  const strValid = str => {
-    if (str === '') return true;
-    return false;
-  };
-
   // Email 유효성 검사 함수
   const isValidEmail = str => {
     const regex =
@@ -36,19 +31,45 @@ const SignUp = () => {
     return regex.test(str);
   };
 
+  // 유효성 검사 함수
+  const isValidPassword = str => {
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    return regex.test(str);
+  };
+
   const register = () => {
-    if (!username || !userId || !password) {
-      setErrorMessage('아이디와 비밀번호를 입력하세요');
+    if (!userId || !password) {
+      setErrorMessage('이메일과 비밀번호를 입력하세요');
       return;
     }
     if (!isValidEmail(userId)) {
       setErrorMessage('Email 형식에 맞게 입력해주세요');
       return;
     }
+    if (!isValidPassword(password)) {
+      setErrorMessage(
+        '최소 8글자, 문자 1개, 숫자 1개가 들어간 비밀번호를 입력해주세요',
+      );
+      return;
+    }
     if (password !== passwordChecked) {
       setErrorMessage('비밀번호가 다릅니다');
       return;
     }
+    if (!username) {
+      setErrorMessage('이름을 입력해주세요');
+      return;
+    }
+    if (!birth) {
+      setErrorMessage('생년월일을 입력해주세요');
+      return;
+    }
+    if (!gender) {
+      setErrorMessage('성별을 입력해주세요');
+      return;
+    }
+
     axios
       .post(
         `http://ec2-3-38-166-142.ap-northeast-2.compute.amazonaws.com:8080/pp/members`,
@@ -89,7 +110,7 @@ const SignUp = () => {
       <SignUpBox>
         <InputList>
           <InputItem>
-            <label htmlFor="id">아이디</label>
+            <label htmlFor="id">이메일</label>
             <input
               type="text"
               id="id"
@@ -164,14 +185,6 @@ const SignUp = () => {
             onClick={() => {
               register();
             }}
-            disabled={
-              strValid(userId) ||
-              strValid(password) ||
-              strValid(passwordChecked) ||
-              strValid(username) ||
-              strValid(birth) ||
-              strValid(gender)
-            }
           >
             회원가입
           </SignUpBtn>
