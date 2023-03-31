@@ -17,7 +17,6 @@ const Chart = () => {
     AOS.init({ disable: 'mobile' });
   }, []);
 
-  console.log('차트 페이지');
   const [likesTop10, setLikesTop10] = useState({
     data: [],
     categories: [],
@@ -88,9 +87,6 @@ const Chart = () => {
       })
       .catch(err => console.log(err));
   }, []);
-
-  console.log(likesTop10);
-  console.log(maleRegisterTop10, femaleRegisterTop10);
   return (
     <>
       <Banner>

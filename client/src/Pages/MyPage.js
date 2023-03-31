@@ -136,7 +136,6 @@ const MyPage = () => {
       });
   }, [myPharmUpdate, currentPage]);
 
-  console.log(myReviewList);
 
   return (
     <>
