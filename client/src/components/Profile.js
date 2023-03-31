@@ -272,6 +272,8 @@ const Profile = () => {
       .catch(err => console.log(err));
   }, [isUpdate]);
 
+  console.log(userInfo);
+
   return (
     <div>
       {editMode ? (
@@ -304,6 +306,7 @@ const Profile = () => {
                     type="text"
                     onChange={handleInputValue('name')}
                     onKeyDown={editInputSubmit('name')}
+                    value={userInfo.memberName}
                   />
                 </p>
               </li>
@@ -317,6 +320,7 @@ const Profile = () => {
                       name="gender"
                       value="남성"
                       onClick={handleInputValue('gender')}
+                      checked={userInfo.memberGender === '남성'}
                     />
                     <label htmlFor="남성">남성</label>
                   </RadioBox>
@@ -327,6 +331,7 @@ const Profile = () => {
                       name="gender"
                       value="여성"
                       onClick={handleInputValue('gender')}
+                      checked={userInfo.memberGender === '여성'}
                     />
                     <label htmlFor="여성">여성</label>
                   </RadioBox>
@@ -335,7 +340,12 @@ const Profile = () => {
               <li>
                 <SmBtn>나이</SmBtn>
                 <p>
-                  <select id="age" name="age" onClick={handleInputValue('age')}>
+                  <select
+                    id="age"
+                    name="age"
+                    onClick={handleInputValue('age')}
+                    value={userInfo.memberAge}
+                  >
                     <option value="0-9" checked>
                       10세 미만
                     </option>
