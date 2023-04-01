@@ -27,15 +27,11 @@
 ----------------------------------------
 
 ## 💻 팀원별 개발 내용 
+| 곽훈정(BE, 팀장) | 김진영(BE) | 심라율(BE) | 김여진(FE) | 이치윤(FE) |
+|--------|-------|-------|-------|-------|
+| [![![image](https://user-images.githubusercontent.com/77083074/229289151-34a53160-2f31-4292-b36b-69ebaee671d7.png)](https://avatars.githubusercontent.com/u/77083074?v=4)](https://github.com/hunjeong93) | [![![image](https://user-images.githubusercontent.com/77083074/229289214-8f2073d0-04ba-4027-ba44-fa77d7776e20.png)](https://avatars.githubusercontent.com/u/114801496?v=4)](https://github.com/jin-yeong-kim) | [![![image](https://user-images.githubusercontent.com/77083074/229289258-2a1e7d3f-dc0c-4418-9739-5f1aecee26ed.png)](https://avatars.githubusercontent.com/u/89818576?v=4)](https://github.com/RaYul18) | [![![image](https://user-images.githubusercontent.com/77083074/229289295-26a9b38f-e4f3-4ed7-acee-2eba93bc75a4.png)](https://avatars.githubusercontent.com/u/115647373?v=4)](https://github.com/yeojin15) | [![![image](https://user-images.githubusercontent.com/77083074/229289329-3927404e-155a-4a0b-b520-755cbfb8b66b.png)](https://avatars.githubusercontent.com/u/56662119?v=4)](https://github.com/leechiyun) |
+|RDS, DB 관리 <br/> Open API Data Storage <br/> Medicine 도메인 <br/> Dose 도메인 <br/> 좋아요 기능 <br/> QueryDSL(차트 데이터) | EC2, 서버관리 <br/> S3 이미지 업로드 <br/> Review 도메인 <br/> OAuth2.0 네이버, 카카오 | S3 <br/> Spring Security <br/> JWT 인증, 권한 <br/> Member 도메인 <br/> Disease 도메인 | 문서 작성 <br/> 전체 페이지 UI <br/> 랜딩 페이지 <br/> 약 조회 페이지 <br/> 약 관리 페이지 <br/> 무한 스크롤 | 로그인, 회원가입 <br/> 리뷰작성 <br/> 마이페이지 <br/> 약 관리 페이지 <br/> 검색 기능 <br/> 좋아요 기능 <br/> 전체 페이지 CRUD 기능 <br/> 페이지네이션 <br/> 차트  |
 
---- 
-| 이름 | 역할 | 개발내용 |
-| :----: | :---: | :-------- | 
-| 곽훈정 | BE | RDS, DB 관리 <br/> Open API Data Storage <br/> Medicine 도메인 <br/> Dose 도메인 <br/> 좋아요 기능 <br/> QueryDSL |
-| 김진영 | BE | EC2, 서버관리 <br/> S3 이미지 업로드 <br/> Review 도메인 <br/> OAuth2.0 네이버, 카카오 |
-| 심라율 | BE | S3 <br/> Spring Security <br/> JWT 인증, 권한 <br/> Member 도메인 <br/> Disease 도메인 |
-| 김여진 | FE | 문서 작성 <br/> 전체 페이지 UI <br/> 랜딩 페이지 <br/> 약 조회 페이지 <br/> 약 관리 페이지 <br/> 무한 스크롤 |
-| 이치윤 | FE | 로그인, 소셜로그인, 회원가입 <br/> 리뷰작성 <br/> 마이페이지 <br/> 약 관리 페이지 <br/> 검색 기능 <br/> 좋아요 기능 <br/> 전체 페이지 CRUD 기능 구현 <br/> 페이지네이션 <br/> 차트  |
 
 ------------------
 
@@ -74,5 +70,6 @@
 | chore | 빌드 업무 수정, 패키지 매니저 수정, 패키지 관리자 구성 등 업데이트, Production Code 변경 없음 |
 | rename | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우 |
 | remove | 파일을 삭제하는 작업만 수행한 경우 |
+
 
 
