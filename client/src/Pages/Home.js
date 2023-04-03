@@ -1,5 +1,7 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useUserInfoStore } from '../Stores/userInfoStore';
 import { Link, useNavigate } from 'react-router-dom';
 import AOS from 'aos';
 import { BsGithub } from 'react-icons/bs';
@@ -31,6 +33,7 @@ const Home = () => {
   const URI = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const [reviewArr, setReviewArr] = useState([]);
+  const { userInfo, setUserInfo } = useUserInfoStore(state => state);
 
   useEffect(() => {
     AOS.init({ disable: 'mobile' });
@@ -55,7 +58,11 @@ const Home = () => {
         <Slide clickToScroll={clickToScroll} />
         <HomeSection id="section1">
           <HomeSectionLine />
-          <SectionTit data-aos="fade-down" data-aos-duration="2000" data-aos-once="true" >
+          <SectionTit
+            data-aos="fade-down"
+            data-aos-duration="2000"
+            data-aos-once="true"
+          >
             복용 중인 약 정보
           </SectionTit>
           <FlexWrap flexai="center">
@@ -135,7 +142,7 @@ const Home = () => {
                   있어요!
                 </p>
                 <MainLinkBtn
-                  onClick={() => navigate('/mypharm')}
+                  onClick={() => navigate(`/mypharm/${userInfo.memberId}`)}
                   marginLeft="auto"
                 >
                   바로가기
