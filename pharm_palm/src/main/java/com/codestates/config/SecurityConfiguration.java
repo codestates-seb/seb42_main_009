@@ -73,7 +73,7 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://pharmpalm-bucket-deploy.s3-website.ap-northeast-2.amazonaws.com"));
 
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("*"));
