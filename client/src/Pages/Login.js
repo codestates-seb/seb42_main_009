@@ -9,13 +9,13 @@ import Input from '../components/Ui/Input';
 import { HeaderBtn } from '../styles/s-header';
 
 const Login = () => {
+  const URI = process.env.REACT_APP_API_URL;
+  const KAKAO_AUTH_URL = process.env.REACT_APP_KAKAO_URL;
+  const NAVER_AUTH_URL = process.env.REACT_APP_NAVER_URL;
   const navigate = useNavigate();
   const { loginInfo, setLoginInfo } = useLoginInfoStore(state => state);
   const { setIsLogin } = useIsLoginStore(state => state);
   const [setErrorMessage] = useState('');
-
-  const KAKAO_AUTH_URL = `http://ec2-3-38-166-142.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao`;
-  const NAVER_AUTH_URL = `http://ec2-3-38-166-142.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/naver`;
 
   // Input 정보 처리
   const handleInputValue = key => e => {
@@ -31,13 +31,9 @@ const Login = () => {
     }
 
     axios
-      .post(
-        `http://ec2-3-38-166-142.ap-northeast-2.compute.amazonaws.com:8080/pp/login`,
-        loginInfo,
-        {
-          withCredentials: true,
-        },
-      )
+      .post(`${URI}/pp/login`, loginInfo, {
+        withCredentials: true,
+      })
       .then(res => {
         setIsLogin(true);
         // data 확인
@@ -107,6 +103,7 @@ const Login = () => {
             onClick={() => {
               loginRequestHandler();
             }}
+            style={{ background: 'var(--mainbl)' }}
           >
             로그인
           </HeaderBtn>

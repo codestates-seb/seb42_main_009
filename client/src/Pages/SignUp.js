@@ -13,6 +13,7 @@ import {
 } from '../styles/s-auth';
 
 const SignUp = () => {
+  const URI = process.env.REACT_APP_API_URL;
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordChecked, setPasswordChecked] = useState('');
@@ -71,16 +72,13 @@ const SignUp = () => {
     }
 
     axios
-      .post(
-        `http://ec2-3-38-166-142.ap-northeast-2.compute.amazonaws.com:8080/pp/members`,
-        {
-          memberEmail: userId,
-          memberName: username,
-          memberPwd: password,
-          memberAge: birth,
-          memberGender: gender,
-        },
-      )
+      .post(`${URI}/pp/members`, {
+        memberEmail: userId,
+        memberName: username,
+        memberPwd: password,
+        memberAge: birth,
+        memberGender: gender,
+      })
       .then(res => {
         // Handle success.
         console.log('Well done!');
@@ -185,6 +183,7 @@ const SignUp = () => {
             onClick={() => {
               register();
             }}
+            style={{ background: 'var(--mainbl)' }}
           >
             회원가입
           </SignUpBtn>
