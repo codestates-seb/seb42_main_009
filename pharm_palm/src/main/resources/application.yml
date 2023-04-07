@@ -1,13 +1,13 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://pharm-palm-deploy.cuuqf4019hgl.ap-northeast-2.rds.amazonaws.com:13306/pharm_palm?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://pharm-palm-deploy.csrn9n2m9nh2.ap-northeast-2.rds.amazonaws.com:13306/pharm_palm?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${RDS_NAME}
     password: ${RDS_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: none
-    show-sql: false
+      ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
@@ -17,7 +17,7 @@ spring:
         registration:
           kakao:
             client-id: ${K_CLIENT_ID}
-            redirect-uri: "http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/auth/kakao/callback"
+            redirect-uri: "http://pharmpalm-bucket-deploy.s3-website.ap-northeast-2.amazonaws.com/auth/kakao/callback"
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             scope: profile_nickname, profile_image, account_email, gender, age_range
@@ -25,7 +25,7 @@ spring:
           naver:
             client-id: ${N_CLIENT_ID}
             client-secret: ${N_CLIENT_SECRET}
-            redirect-uri: "http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/auth/naver/callback"
+            redirect-uri: "http://pharmpalm-bucket-deploy.s3-website.ap-northeast-2.amazonaws.com/auth/naver/callback"
             authorization-grant-type: authorization_code
             scope: name, email, profile_image, gender, age
             client-name: Naver
@@ -62,7 +62,7 @@ cloud:
       accessKey: ${AWS_ACCESS_KEY}
       secretKey: ${AWS_SECRET_KEY}
     s3:
-      bucket: pharm-palm-deploy
+      bucket: pharmpalm-bucket-deploy
     region:
       static: ap-northeast-2
     stack:
