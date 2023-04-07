@@ -15,7 +15,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { loginInfo, setLoginInfo } = useLoginInfoStore(state => state);
   const { setIsLogin } = useIsLoginStore(state => state);
-  const [setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Input 정보 처리
   const handleInputValue = key => e => {
@@ -26,7 +26,7 @@ const Login = () => {
   const loginRequestHandler = () => {
     const { id, password } = loginInfo;
     if (!id || !password) {
-      console.log('아이디와 비밀번호를 입력하세요');
+      setErrorMessage('아이디와 비밀번호를 입력하세요.');
       return;
     }
 
@@ -54,13 +54,14 @@ const Login = () => {
         axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
           'accessToken',
         )}`;
+        setErrorMessage('');
         navigate('/');
         window.location.reload();
       })
       .catch(err => {
         console.log(err);
+        setErrorMessage('로그인에 실패했습니다.');
         if (err.response.status === 401) {
-          setErrorMessage('로그인에 실패했습니다.');
           navigate('/404');
         }
       });
@@ -108,6 +109,11 @@ const Login = () => {
             로그인
           </HeaderBtn>
         </div>
+        {errorMessage ? (
+          <p className=" mb-4 font-medium text-xs text-red-600 text-right mr-2">
+            {errorMessage}
+          </p>
+        ) : null}
 
         <div className="flex flex-row justify-between my-4">
           <Link

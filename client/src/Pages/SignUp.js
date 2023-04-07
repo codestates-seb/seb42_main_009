@@ -34,8 +34,7 @@ const SignUp = () => {
 
   // 유효성 검사 함수
   const isValidPassword = str => {
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d$@$!%*#?&]{8,}$/;
     return regex.test(str);
   };
 
@@ -50,7 +49,7 @@ const SignUp = () => {
     }
     if (!isValidPassword(password)) {
       setErrorMessage(
-        '최소 8글자, 문자 1개, 숫자 1개가 들어간 비밀번호를 입력해주세요',
+        '최소 8자리, 숫자, 문자가 들어간 비밀번호를 입력해주세요',
       );
       return;
     }
