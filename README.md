@@ -15,7 +15,7 @@
 
 ## 💊Deployed Link
 
-> [PharmPalm](http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com/)
+> [PharmPalm](http://pharmpalm-bucket-deploy.s3-website.ap-northeast-2.amazonaws.com/)
 
 ---------------------------------------------------
 
