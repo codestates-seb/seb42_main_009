@@ -1,6 +1,6 @@
 # seb42_main_009_슬기로운 약국생활
 
-<p align="center"><a href="http://pharm-palm-deploy.s3-website.ap-northeast-2.amazonaws.com"><img height="200" width="300" src="https://user-images.githubusercontent.com/77083074/228701085-358530b5-6f17-425a-a48a-baeac2eda5af.png" /> <a/>
+<p align="center"><a href="http://pharmpalm-bucket-deploy.s3-website.ap-northeast-2.amazonaws.com"><img height="200" width="300" src="https://user-images.githubusercontent.com/77083074/228701085-358530b5-6f17-425a-a48a-baeac2eda5af.png" /> <a/>
 
 --------------------------------------------------
 
